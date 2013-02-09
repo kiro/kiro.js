@@ -204,6 +204,12 @@
             return el.html(elements);
           });
           return this;
+        },
+        addClassAndItems: function() {
+          var items, name;
+          name = arguments[0], items = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+          this.addClass(name);
+          return this.addItems.apply(this, items);
         }
       };
     };
@@ -216,7 +222,7 @@
     return el;
   };
 
-  common.curry = function() {
+  common.partial = function() {
     var fixedArgs, fn;
     fn = arguments[0], fixedArgs = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
     return function() {

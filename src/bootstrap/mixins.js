@@ -13,8 +13,7 @@
       return function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        this.addClass("span" + size);
-        return this.addItems.apply(this, args);
+        return this.addClassAndItems.apply(this, ['span' + size].concat(__slice.call(args)));
       };
     };
     return {
@@ -39,8 +38,7 @@
       return function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        this.addClass("offset" + size);
-        return this.addItems.apply(this, args);
+        return this.addClassAndItems.apply(this, ["offset" + size].concat(__slice.call(args)));
       };
     };
     return {
@@ -67,28 +65,27 @@
         if (prefix) {
           prefix = prefix + "-";
         }
-        this.addClass(prefix + suffix);
-        return this.addItems.apply(this, args);
+        return this.addClassAndItems.apply(this, [prefix + suffix].concat(__slice.call(args)));
       },
       info: function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context('info', args);
+        return this.context.apply(this, ['info'].concat(__slice.call(args)));
       },
       warning: function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context('warning', args);
+        return this.context.apply(this, ['warning'].concat(__slice.call(args)));
       },
       error: function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context('error', args);
+        return this.context.apply(this, ['error'].concat(__slice.call(args)));
       },
       success: function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context('success', args);
+        return this.context.apply(this, ['success'].concat(__slice.call(args)));
       }
     };
   };

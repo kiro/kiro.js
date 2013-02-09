@@ -109,18 +109,22 @@ common.tag = (name, classes = "") ->
       )
       this
 
+    addClassAndItems: (name, items...) ->
+      this.addClass(name)
+      this.addItems(items...)
+
 # Constructs a DOM element from composite.
 common.element = (composite) ->
   el = $(composite.html())
   composite.init(el)
   el
 
-# Currying a function.
+# Partial application of a function.
 #
 # For example
 #
 # add = (a, b) -> a + b
 # plus3 = curry(add, 3)
 # plus3(4) == 7
-common.curry = (fn, fixedArgs...) ->
+common.partial = (fn, fixedArgs...) ->
   (args...) -> fn(fixedArgs.concat(args)...)

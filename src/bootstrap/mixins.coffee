@@ -3,9 +3,7 @@ common = window.BC.namespace("common")
 
 ns.spannable = ->
   span = (size) ->
-    (args...) ->
-      this.addClass("span" + size)
-      this.addItems(args...)
+    (args...) -> this.addClassAndItems('span' + size, args...)
 
   span1: span(1)
   span2: span(2)
@@ -22,9 +20,7 @@ ns.spannable = ->
 
 ns.offsetable = ->
   offset = (size) ->
-    (args...) ->
-      this.addClass("offset" + size)
-      this.addItems(args...)
+    (args...) -> this.addClassAndItems("offset" + size, args...)
 
   offset1: offset(1)
   offset2: offset(2)
@@ -42,13 +38,12 @@ ns.offsetable = ->
 ns.contextual = (prefix) ->
   context: (suffix, args...) ->
     if prefix then prefix = prefix + "-"
-    this.addClass(prefix + suffix)
-    this.addItems(args...)
+    this.addClassAndItems(prefix + suffix, args...)
 
-  info: (args...) -> this.context('info', args)
-  warning: (args...) -> this.context('warning', args)
-  error: (args...) -> this.context('error', args)
-  success: (args...) -> this.context('success', args)
+  info: (args...) -> this.context('info', args...)
+  warning: (args...) -> this.context('warning', args...)
+  error: (args...) -> this.context('error', args...)
+  success: (args...) -> this.context('success', args...)
 
 ns.textContextual = -> $.extend(ns.contextual('text'),
   muted: (args...) ->

@@ -18,26 +18,22 @@
       stripped: function() {
         var items;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        this.addClass('table-striped');
-        return this.addItems.apply(this, items);
+        return this.addClassAndItems.apply(this, ['table-striped'].concat(__slice.call(items)));
       },
       bordered: function() {
         var items;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        this.addClass('table-bordered');
-        return this.addItems.apply(this, items);
+        return this.addClassAndItems.apply(this, ['table-bordered'].concat(__slice.call(items)));
       },
       hover: function() {
         var items;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        this.addClass('table-hover');
-        return this.addItems.apply(this, items);
+        return this.addClassAndItems.apply(this, ['table-hover'].concat(__slice.call(items)));
       },
       condensed: function() {
         var items;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        this.addClass('table-condensed');
-        return this.addItems.apply(this, items);
+        return this.addClassAndItems.apply(this, ['table-condensed'].concat(__slice.call(items)));
       }
     });
   };
