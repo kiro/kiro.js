@@ -43,7 +43,7 @@
   ns.collection = function() {
     var args;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return ko.observableArray.apply(ko, args);
+    return ko.observableArray(args);
   };
 
 }).call(this);

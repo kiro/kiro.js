@@ -18,7 +18,7 @@ describe("Table tests", ->
 
   it("Stripped table", ->
     $('.suite').last().append(element(
-      table().stripped().build(
+      table().stripped(
         thead(tr( (th("Column " + i) for i in [1 .. 5])) ),
         (tr( (td(i + "," + j) for j in [1..5]) ) for i in [1..5])
       )
@@ -27,7 +27,7 @@ describe("Table tests", ->
 
   it("Mega table", ->
     $('.suite').last().append(element(
-      table().stripped().condensed().hover().bordered().build(
+      table().stripped().condensed().hover().bordered(
         thead(tr( (th("Column " + i) for i in [1 .. 5])) ),
         (tr( (td(i + "," + j) for j in [1..5]) ) for i in [1..5])
       )

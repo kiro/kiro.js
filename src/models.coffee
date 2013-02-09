@@ -13,4 +13,4 @@ ns.model = (arg) ->
     for key, value in object
       obj[key] = model(value)
 
-ns.collection = (args...) -> ko.observableArray(args...)
+ns.collection = (args...) -> ko.observableArray(args)

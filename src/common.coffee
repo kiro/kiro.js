@@ -18,37 +18,46 @@ common.init = (item, context) ->
   else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
   else throw Error(item + " is expected to be String, Number, Array, undefined or have .init() function")
 
-common.tag = (name) ->
-  (classes, items...) ->
-    bind = (setter, observable, map = (x) -> x) ->
-      setter(map(observable(), observable))
-      observable.subscribe( (newValue) ->
-        setter(map(newValue, observable))
-      )
-      return this
+nextId = ( ->
+  id = 0
+  -> ++id
+)()
 
-    nextId = ( ->
-      id = 0
-      -> ++id
-    )()
-
-    initialized = false
+common.tag = (name, classes = "") ->
+  (items...) ->
     id = 0
-    element = null
+    el = null
     initializers = []
 
-    id: id
-    el: (args...) ->
-      if initialized
-        if args.length == 0
-          return element
+    addInitializer = (args...) ->
+      if !id then id = nextId()
+      initializers.push(args)
+      this
+
+    binder = (f) ->
+      (observable, map = (x) -> x) ->
+        addInitializer(f, map(observable()))
+        observable.subscribe( (newValue) -> el[f](map(newValue)) )
+        this
+
+    addClass = (name) ->
+      if name
+        if classes
+          classes += " " + name
         else
-          element[args[0]](_.rest(args))
+          classes = name
+
+    if items.length > 0 and _.isObject(items[0]) and _.keys(items[0]).length == 1 and items[0].class
+      addClass(items[0].class)
+      items = _.rest(items)
+
+    id: (value) ->
+      if value
+        id = value
       else
-        if !id
-          id = nextId()
-        initializers.push(args)
-        return this
+        id = nextId() if !id
+      this
+
     html: () ->
       _.template("""
         <#{name} <% if (classes) { %><%='class="' + classes + '"' %> <% } %> <% if (id) { %><%='id="' + id + '"'%><% } %>><% _.each(items, function(item) { %>
@@ -57,27 +66,48 @@ common.tag = (name) ->
       """, {items: items, toHtml: common.toHtml, classes: classes, id: id})
     init: (context) ->
       common.init(items, context)
+      el = context.find('#' + id).first() if id
 
-      if initializers
-        element = context.find('#' + id).first()
-        for initializer in initializers
-          method = initializer[0]
-          params = _.rest(initializer)
-          console.log(element)
-          console.log(method)
-          console.log(params)
-          console.log(element[method].apply(element, params))
+      for initializer in initializers
+        method = initializer[0]
+        params = _.rest(initializer)
+        el[method](params...)
 
-      initialized = true
+    addClass: (name) ->
+      addClass(name)
+      this
+    addItems: (newItems...) ->
+      items = items.concat(newItems)
+      this
 
-    bind: common.curry(bind, (value) => this.el('val', value))
-    bindText: common.curry(bind, (value) => this.el('text', value))
-    bindVisible: common.curry(bind, (value) => if value then this.el('show') else this.el('hide'))
-    bindHtml: common.curry(bind, (value) => this.el('html', value))
-    bindCss: common.curry(bind, (value) => this.el('css', value))
-    bindStyle: common.curry(bind, (value) => this.el('style', value))
-    bindAttr: common.curry(bind, (value) => this.el('attr', value))
-    on: (args...) -> this.el('on', args...)
+    bindValue: binder('val')
+    bindText: binder('text')
+    bindHtml: binder('html')
+    bindCss: binder('css')
+    bindStyle: binder('style')
+    bindClass: binder('class')
+    bindVisible: (observable, condition) ->
+      this.bindCss(observable, (value) ->
+         display: if condition(value) then "" else "none"
+      )
+    bindDisabled: (observable, condition) ->
+      this.bindProp(observable, (value) -> disabled: condition(value))
+    bindAttr: binder('attr')
+    bindProp: binder('prop')
+
+    on: (args...) ->
+      addInitializer('on', args...)
+      this
+
+    foreach: (collection, render) ->
+      this.id() # initialize id
+      items.push(render(item)) for item in collection()
+
+      collection.subscribe( (newItems) =>
+        elements = (common.element(render(item)) for item in newItems)
+        el.html(elements)
+      )
+      this
 
 # Constructs a DOM element from composite.
 common.element = (composite) ->
@@ -94,7 +124,3 @@ common.element = (composite) ->
 # plus3(4) == 7
 common.curry = (fn, fixedArgs...) ->
   (args...) -> fn(fixedArgs.concat(args)...)
-
-common.list = (collection, render) ->
-
-

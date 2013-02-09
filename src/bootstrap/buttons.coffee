@@ -4,7 +4,8 @@ common = window.BC.namespace("common")
 
 $.extend(this, common)
 
-buttonElement = (classes, name, click) ->
-  tag('button')(classes, name).on('click', click)
+button = (classes) ->
+  (name, click) ->
+    tag('button')(name).addClass(classes).on('click', click)
 
-controls.button = curry(buttonElement, 'btn')
+controls.button = button('btn')

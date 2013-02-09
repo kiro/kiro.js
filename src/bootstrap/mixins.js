@@ -7,26 +7,6 @@
 
   common = window.BC.namespace("common");
 
-  ns.control = function() {
-    return {
-      classes: "",
-      addClass: function(className) {
-        this.classes += className + " ";
-        return this;
-      }
-    };
-  };
-
-  ns.composite = function(build) {
-    return {
-      build: function() {
-        var items;
-        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return build(this.classes, items);
-      }
-    };
-  };
-
   ns.spannable = function() {
     var span;
     span = function(size) {
@@ -34,11 +14,7 @@
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         this.addClass("span" + size);
-        if (args.length !== 0) {
-          return this.build.apply(this, args);
-        } else {
-          return this;
-        }
+        return this.addItems.apply(this, args);
       };
     };
     return {
@@ -64,11 +40,7 @@
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         this.addClass("offset" + size);
-        if (args.length !== 0) {
-          return this.build.apply(this, args);
-        } else {
-          return this;
-        }
+        return this.addItems.apply(this, args);
       };
     };
     return {
@@ -96,9 +68,7 @@
           prefix = prefix + "-";
         }
         this.addClass(prefix + suffix);
-        if (args.length !== 0) {
-          return this.build.apply(this, args);
-        }
+        return this.addItems.apply(this, args);
       },
       info: function() {
         var args;
@@ -129,9 +99,7 @@
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         this.addClass("muted");
-        if (args.length !== 0) {
-          return this.build.apply(this, args);
-        }
+        return this.addItems.apply(this, args);
       }
     });
   };

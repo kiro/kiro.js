@@ -37,7 +37,7 @@
     });
     it("Stripped table", function() {
       var i, j;
-      return $('.suite').last().append(element(table().stripped().build(thead(tr((function() {
+      return $('.suite').last().append(element(table().stripped(thead(tr((function() {
         var _i, _results;
         _results = [];
         for (i = _i = 1; _i <= 5; i = ++_i) {
@@ -62,7 +62,7 @@
     });
     it("Mega table", function() {
       var i, j;
-      return $('.suite').last().append(element(table().stripped().condensed().hover().bordered().build(thead(tr((function() {
+      return $('.suite').last().append(element(table().stripped().condensed().hover().bordered(thead(tr((function() {
         var _i, _results;
         _results = [];
         for (i = _i = 1; _i <= 5; i = ++_i) {

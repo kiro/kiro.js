@@ -7,7 +7,7 @@ describe("Type tests", ->
 
   it("Headings test", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
+      div(class: "bs-docs-example",
         h1("Heading 1"),
         h2("Heading 2"),
         h3("Heading 3"),
@@ -20,7 +20,7 @@ describe("Type tests", ->
 
   it("Emphasis test", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
+      div(class: "bs-docs-example",
         p(small("Small text")),
         p(bold("Bold text")),
         p(italic("Italics text")),
@@ -31,7 +31,7 @@ describe("Type tests", ->
 
   it("Text context test", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
+      div(class: "bs-docs-example",
         p().muted("Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh."),
         p().warning("Etiam porta sem malesuada magna mollis euismod."),
         p().error("Donec ullamcorper nulla non metus auctor fringilla."),
@@ -43,7 +43,7 @@ describe("Type tests", ->
 
   it("Address", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
+      div(class: "bs-docs-example",
         address(
           bold("Full Name"),
           "Address line 1",
@@ -55,7 +55,7 @@ describe("Type tests", ->
 
   it("Blockquote", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
+      div(class: "bs-docs-example",
         blockquote(
           p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."),
           small("Kiril Minkov")
@@ -132,15 +132,15 @@ describe("Type tests", ->
 
   it("Code", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
-        span(null, "For example,", code('System.out.pintln("Hello World")'), 'should be wrapped as inline.')
+      div(class: "bs-docs-example",
+        span("For example,", code('System.out.pintln("Hello World")'), 'should be wrapped as inline.')
       )
     ))
   )
 
   it("Pre", ->
     $('.suite').last().append(element(
-      div("bs-docs-example",
+      div(class: "bs-docs-example",
         pre(
           "code",
           "code"

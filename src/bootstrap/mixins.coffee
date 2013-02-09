@@ -1,24 +1,11 @@
 ns = window.BC.namespace("mixins")
 common = window.BC.namespace("common")
 
-ns.control = ->
-  classes: ""
-  addClass: (className) ->
-    this.classes += className + " "
-    return this
-
-ns.composite = (build) ->
-  build: (items...) ->
-    build(this.classes, items)
-
 ns.spannable = ->
   span = (size) ->
     (args...) ->
       this.addClass("span" + size)
-      if args.length != 0
-        this.build(args...)
-      else
-        this
+      this.addItems(args...)
 
   span1: span(1)
   span2: span(2)
@@ -37,10 +24,7 @@ ns.offsetable = ->
   offset = (size) ->
     (args...) ->
       this.addClass("offset" + size)
-      if args.length != 0
-        this.build(args...)
-      else
-        this
+      this.addItems(args...)
 
   offset1: offset(1)
   offset2: offset(2)
@@ -59,7 +43,8 @@ ns.contextual = (prefix) ->
   context: (suffix, args...) ->
     if prefix then prefix = prefix + "-"
     this.addClass(prefix + suffix)
-    this.build(args...) if args.length != 0
+    this.addItems(args...)
+
   info: (args...) -> this.context('info', args)
   warning: (args...) -> this.context('warning', args)
   error: (args...) -> this.context('error', args)
@@ -68,5 +53,5 @@ ns.contextual = (prefix) ->
 ns.textContextual = -> $.extend(ns.contextual('text'),
   muted: (args...) ->
     this.addClass("muted")
-    this.build(args...) if args.length != 0
+    this.addItems(args...)
 )

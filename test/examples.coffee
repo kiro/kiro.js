@@ -9,14 +9,14 @@ todoText = model()
 
 div(
   input.checkbox("", -> todo.done = this.val() for todo in todos),
-  input.text().bind(todoText, 'text'),
+  input.text().val(todoText),
   button('Add', ->
     todos.add(todo(todoText())),
     todoText("")
   ),
   list(todos, (todo) ->
-    input.checkbox().bind(todo.done),
-    input.text().bind(todo.text)
+    input.checkbox().val(todo.done),
+    input.text().val(todo.text)
   )
   div(
     left(
