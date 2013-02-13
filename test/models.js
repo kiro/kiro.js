@@ -10,6 +10,37 @@
 
   describe("Models test", function() {
     it("", function() {});
+    it("Tests select with foreach", function() {
+      var text, value, values;
+      values = collection('One', 'Two', 'Three', 'Four');
+      value = model("X");
+      text = model("");
+      return $('.suite').append(element(div(select.multiple().foreach(values, function(value) {
+        return option(value, value);
+      }).bindValue(value), span().bindText(value), input.text().bindValue(text), button('Add', function() {
+        values.push(text());
+        return text("");
+      }))));
+    });
+    it("Tests select", function() {
+      var value;
+      value = model("value2");
+      return $('.suite').append(element(div(select(option('Value 1', 'value1'), option('Value 2', 'value2'), option('Value 3', 'value3')).bindValue(value), span().bindText(value))));
+    });
+    it("Tests radio", function() {
+      var value;
+      value = model('value2');
+      return $('.suite').append(element(div(input.radio('name', 'value1').bindValue(value), input.radio('name', 'value2').bindValue(value), input.radio('name', 'value3').bindValue(value), span().bindText(value, function() {
+        return value().toString();
+      }))));
+    });
+    it("Tests checkbox", function() {
+      var value;
+      value = model(true);
+      return $('.suite').append(element(div(input.checkbox().bindValue(value), input.checkbox().bindValue(value), span().bindText(value, function() {
+        return value().toString();
+      }))));
+    });
     it("Tests attr, css and text bindings", function() {
       var number, selectColor;
       number = model(0);
@@ -71,11 +102,15 @@
         });
       }), button("x^2", function() {
         return f(function(x) {
-          return x * x / 100;
+          return (x - 50) * (x - 50) / 30;
         });
       }), button("log", function() {
         return f(function(x) {
           return Math.log(x) * 20;
+        });
+      }), button("sin", function() {
+        return f(function(x) {
+          return Math.sin((x - 50) / 10) * 50 + 50;
         });
       }), div({
         "class": 'area'

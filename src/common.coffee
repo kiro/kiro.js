@@ -2,19 +2,19 @@ common = window.BC.namespace("common")
 
 # Converts an item to HTML
 common.toHtml = (item) ->
-  if _.isFunction(item.html) then item.html()
+  if _.isUndefined(item) then ""
+  else if _.isFunction(item.html) then item.html()
   else if _.isString(item) then item
   else if _.isNumber(item) then item
-  else if _.isUndefined(item) then ""
   else if _.isArray(item) then (common.toHtml(subitem) for subitem in item).join(" ")
   else throw Error(item + " is expected to be String, Number, Array, undefined or have .html() function")
 
 # Initializes the item with context.
 common.init = (item, context) ->
-  if _.isFunction(item.init) then item.init(context)
+  if _.isUndefined(item)
+  else if _.isFunction(item.init) then item.init(context)
   else if _.isString(item)
   else if _.isNumber(item)
-  else if _.isUndefined(item)
   else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
   else throw Error(item + " is expected to be String, Number, Array, undefined or have .init() function")
 
@@ -106,12 +106,17 @@ common.tag = (name, classes = "") ->
     bindAttr: binder('attr')
     bindProp: binder('prop')
 
-    on: (args...) ->
-      addInitializer('on', args...)
+    on: (events, selector, handler) ->
+      if !handler
+        handler = selector
+        selector = ""
+
+      addInitializer('on', events, selector, this, handler)
       this
 
     foreach: (collection, render) ->
       this.id(nextId())
+      initialItems = items.slice(0)
 
       collectionItems = if _.isFunction(collection) then collection() else collection
 
@@ -119,7 +124,7 @@ common.tag = (name, classes = "") ->
 
       if _.isFunction(collection)
         collection.subscribe( (newItems) =>
-          elements = (common.element(item) for item in items)
+          elements = (common.element(item) for item in initialItems)
           elements = elements.concat (common.element(render(item)) for item in newItems)
           el.html(elements)
         )
@@ -140,8 +145,12 @@ common.tag = (name, classes = "") ->
 # Observable
 common.observable = () ->
   listeners = []
-  subscribe: (listener) -> listeners.push(listener)
-  publish: (newValue) -> listener(newValue) for listener in listeners
+  subscribe: (listener) ->
+    listeners.push(listener)
+    this
+  publish: (newValue) ->
+    listener(newValue) for listener in listeners
+    this
 
 # Constructs a DOM element from composite.
 common.element = (composite) ->

@@ -7,14 +7,14 @@
 
   common.toHtml = function(item) {
     var subitem;
-    if (_.isFunction(item.html)) {
+    if (_.isUndefined(item)) {
+      return "";
+    } else if (_.isFunction(item.html)) {
       return item.html();
     } else if (_.isString(item)) {
       return item;
     } else if (_.isNumber(item)) {
       return item;
-    } else if (_.isUndefined(item)) {
-      return "";
     } else if (_.isArray(item)) {
       return ((function() {
         var _i, _len, _results;
@@ -32,13 +32,13 @@
 
   common.init = function(item, context) {
     var subitem;
-    if (_.isFunction(item.init)) {
+    if (_.isUndefined(item)) {
+
+    } else if (_.isFunction(item.init)) {
       return item.init(context);
     } else if (_.isString(item)) {
 
     } else if (_.isNumber(item)) {
-
-    } else if (_.isUndefined(item)) {
 
     } else if (_.isArray(item)) {
       return ((function() {
@@ -200,16 +200,19 @@
         },
         bindAttr: binder('attr'),
         bindProp: binder('prop'),
-        on: function() {
-          var args;
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          addInitializer.apply(null, ['on'].concat(__slice.call(args)));
+        on: function(events, selector, handler) {
+          if (!handler) {
+            handler = selector;
+            selector = "";
+          }
+          addInitializer('on', events, selector, this, handler);
           return this;
         },
         foreach: function(collection, render) {
-          var collectionItems, item, _i, _len,
+          var collectionItems, initialItems, item, _i, _len,
             _this = this;
           this.id(nextId());
+          initialItems = items.slice(0);
           collectionItems = _.isFunction(collection) ? collection() : collection;
           for (_i = 0, _len = collectionItems.length; _i < _len; _i++) {
             item = collectionItems[_i];
@@ -221,8 +224,8 @@
               elements = (function() {
                 var _j, _len1, _results;
                 _results = [];
-                for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
-                  item = items[_j];
+                for (_j = 0, _len1 = initialItems.length; _j < _len1; _j++) {
+                  item = initialItems[_j];
                   _results.push(common.element(item));
                 }
                 return _results;
@@ -264,16 +267,16 @@
     listeners = [];
     return {
       subscribe: function(listener) {
-        return listeners.push(listener);
+        listeners.push(listener);
+        return this;
       },
       publish: function(newValue) {
-        var listener, _i, _len, _results;
-        _results = [];
+        var listener, _i, _len;
         for (_i = 0, _len = listeners.length; _i < _len; _i++) {
           listener = listeners[_i];
-          _results.push(listener(newValue));
+          listener(newValue);
         }
-        return _results;
+        return this;
       }
     };
   };
