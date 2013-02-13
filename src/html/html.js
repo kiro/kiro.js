@@ -14,12 +14,7 @@
 
   single = ['br', 'hr'];
 
-  html.img;
+  html;
 
-  html.input;
-
-  html.select;
-
-  html.textarea;
 
 }).call(this);

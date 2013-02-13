@@ -32,7 +32,7 @@ controls.address = (values...) ->
     elements.push('<br>')
   elements.pop()
 
-  tag('address')('', elements)
+  tag('address')(elements)
 
 # Text
 controls.blockquote = tag('blockquote')
@@ -52,7 +52,6 @@ controls.dl = tag('dl')
 controls.dl.horizontal = tag('dl', 'dl-horizontal')
 controls.dt = tag('dt')
 controls.dd = tag('dd')
-
 
 # Code
 controls.code = tag('code')

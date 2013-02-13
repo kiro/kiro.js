@@ -9,7 +9,11 @@ composite = ['abbr', 'address', 'b', 'blockquote', 'caption', 'cite', 'code', 'd
 clickable = ['a', 'button']
 single = ['br', 'hr', ]
 
-html.img
-html.input
-html.select
-html.textarea
+#html.img
+html
+#html.select
+#html.textarea
+
+
+
+

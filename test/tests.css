@@ -1,0 +1,13 @@
+.area {
+    width: 100px;
+    height: 110px;
+    position: relative;
+}
+
+.point {
+    width: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: black;
+    position: absolute;
+}

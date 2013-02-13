@@ -33,7 +33,7 @@ describe("Scaffolding test", ->
     $('.suite').append(element(
       div.container(
         div.row(
-          div("span12", "12")
+          div(class:"span12", "12")
         )
       )
     ))

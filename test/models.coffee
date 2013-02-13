@@ -3,8 +3,6 @@ m = window.BC.namespace("model")
 
 $.extend(this, controls, m)
 
-$('body').append(element(button('test', -> console.log('test'))))
-
 describe("Models test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
 
@@ -43,4 +41,49 @@ describe("Models test", ->
     ))
   )
 
+  it("Tests input element", ->
+    value = model("test")
+
+    $('.suite').append(element(
+      div(
+        input.text().bindValue(value),
+        span().bindText(value)
+      )
+    ))
+  )
+
+  it("Tests simple list", ->
+    item = model("")
+    items = collection()
+
+    $('.suite').append(element(
+      div(
+        input.text().bindValue(item),
+        button('Add', ->
+          items.push(item())
+          item("")
+        ),
+        table(thead(tr(th("Value")))).foreach(items, (item) ->
+          tr(td(item))
+        )
+      )
+    ))
+  )
+
+  it("Displays different functions", ->
+    f = model((x) -> x)
+
+    $('.suite').append(element(div(
+      button("x", -> f((x) -> x)),
+      button("x^2", -> f((x) -> x*x / 100)),
+      button("log", -> f((x) -> Math.log(x) * 20)),
+
+      div(class: 'area').foreach([1..100], (x) ->
+        div(class: 'point').bindCss(f, (fn) ->
+          left: x + 'px'
+          bottom: fn(x) + 'px'
+        )
+      )
+    )))
+  )
 )

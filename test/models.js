@@ -8,10 +8,6 @@
 
   $.extend(this, controls, m);
 
-  $('body').append(element(button('test', function() {
-    return console.log('test');
-  })));
-
   describe("Models test", function() {
     it("", function() {});
     it("Tests attr, css and text bindings", function() {
@@ -36,7 +32,7 @@
         };
       }))));
     });
-    return it("Tests visible and html bindings", function() {
+    it("Tests visible and html bindings", function() {
       var isThree, number;
       number = model(0);
       isThree = function() {
@@ -47,6 +43,56 @@
       }).bindDisabled(number, isThree), p("That's too many clicks! Please stop before you wear out your fingers. ", button('Reset Clicks', function() {
         return number(0);
       })).bindVisible(number, isThree))));
+    });
+    it("Tests input element", function() {
+      var value;
+      value = model("test");
+      return $('.suite').append(element(div(input.text().bindValue(value), span().bindText(value))));
+    });
+    it("Tests simple list", function() {
+      var item, items;
+      item = model("");
+      items = collection();
+      return $('.suite').append(element(div(input.text().bindValue(item), button('Add', function() {
+        items.push(item());
+        return item("");
+      }), table(thead(tr(th("Value")))).foreach(items, function(item) {
+        return tr(td(item));
+      }))));
+    });
+    return it("Displays different functions", function() {
+      var f, _i, _results;
+      f = model(function(x) {
+        return x;
+      });
+      return $('.suite').append(element(div(button("x", function() {
+        return f(function(x) {
+          return x;
+        });
+      }), button("x^2", function() {
+        return f(function(x) {
+          return x * x / 100;
+        });
+      }), button("log", function() {
+        return f(function(x) {
+          return Math.log(x) * 20;
+        });
+      }), div({
+        "class": 'area'
+      }).foreach((function() {
+        _results = [];
+        for (_i = 1; _i <= 100; _i++){ _results.push(_i); }
+        return _results;
+      }).apply(this), function(x) {
+        return div({
+          "class": 'point'
+        }).bindCss(f, function(fn) {
+          return {
+            left: x + 'px',
+            bottom: fn(x) + 'px'
+          };
+        });
+      }))));
     });
   });
 

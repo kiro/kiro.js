@@ -53,7 +53,7 @@
       elements.push('<br>');
     }
     elements.pop();
-    return tag('address')('', elements);
+    return tag('address')(elements);
   };
 
   controls.blockquote = tag('blockquote');

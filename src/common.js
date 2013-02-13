@@ -67,12 +67,14 @@
     if (classes == null) {
       classes = "";
     }
+    classes = [classes];
     return function() {
-      var addClass, addInitializer, binder, el, id, initializers, items;
+      var addClass, addInitializer, attr, binder, el, id, initializers, items, render, renderAttr;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       id = 0;
       el = null;
       initializers = [];
+      attr = {};
       addInitializer = function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -98,11 +100,29 @@
       };
       addClass = function(name) {
         if (name) {
-          if (classes) {
-            return classes += " " + name;
+          return classes.push(name);
+        }
+      };
+      renderAttr = function(attr) {
+        var key, result, value;
+        result = [];
+        for (key in attr) {
+          value = attr[key];
+          if (_.isBoolean(value)) {
+            if (value) {
+              result.push(key);
+            }
           } else {
-            return classes = name;
+            result.push(render(key, value));
           }
+        }
+        return result.join(" ");
+      };
+      render = function(name, value) {
+        if (value) {
+          return "" + name + "=\"" + value + "\"";
+        } else {
+          return "";
         }
       };
       if (items.length > 0 && _.isObject(items[0]) && _.keys(items[0]).length === 1 && items[0]["class"]) {
@@ -111,21 +131,18 @@
       }
       return {
         id: function(value) {
-          if (value) {
+          if (!id) {
             id = value;
-          } else {
-            if (!id) {
-              id = nextId();
-            }
           }
           return this;
         },
         html: function() {
-          return _.template("<" + name + " <% if (classes) { %><%='class=\"' + classes + '\"' %> <% } %> <% if (id) { %><%='id=\"' + id + '\"'%><% } %>><% _.each(items, function(item) { %>\n  <%=toHtml(item)%>\n<% }) %></" + name + ">", {
+          return _.template("<" + name + " <%= classes %> <%= id %> <%= attr %>><% _.each(items, function(item) { %>\n  <%=toHtml(item)%>\n<% }) %></" + name + ">", {
             items: items,
             toHtml: common.toHtml,
-            classes: classes,
-            id: id
+            classes: render('class', classes.join(" ")),
+            id: render('id', id),
+            attr: renderAttr(attr)
           });
         },
         init: function(context) {
@@ -153,7 +170,15 @@
           items = items.concat(newItems);
           return this;
         },
-        bindValue: binder('val'),
+        bindValue: function(observable) {
+          if (this.subscribe) {
+            this.subscribe(function(newValue) {
+              return observable(newValue);
+            });
+          }
+          binder('val')(observable);
+          return this;
+        },
         bindText: binder('text'),
         bindHtml: binder('html'),
         bindCss: binder('css'),
@@ -182,27 +207,38 @@
           return this;
         },
         foreach: function(collection, render) {
-          var item, _i, _len, _ref,
+          var collectionItems, item, _i, _len,
             _this = this;
-          this.id();
-          _ref = collection();
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            item = _ref[_i];
+          this.id(nextId());
+          collectionItems = _.isFunction(collection) ? collection() : collection;
+          for (_i = 0, _len = collectionItems.length; _i < _len; _i++) {
+            item = collectionItems[_i];
             items.push(render(item));
           }
-          collection.subscribe(function(newItems) {
-            var elements;
-            elements = (function() {
-              var _j, _len1, _results;
-              _results = [];
-              for (_j = 0, _len1 = newItems.length; _j < _len1; _j++) {
-                item = newItems[_j];
-                _results.push(common.element(render(item)));
-              }
-              return _results;
-            })();
-            return el.html(elements);
-          });
+          if (_.isFunction(collection)) {
+            collection.subscribe(function(newItems) {
+              var elements;
+              elements = (function() {
+                var _j, _len1, _results;
+                _results = [];
+                for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+                  item = items[_j];
+                  _results.push(common.element(item));
+                }
+                return _results;
+              })();
+              elements = elements.concat((function() {
+                var _j, _len1, _results;
+                _results = [];
+                for (_j = 0, _len1 = newItems.length; _j < _len1; _j++) {
+                  item = newItems[_j];
+                  _results.push(common.element(render(item)));
+                }
+                return _results;
+              })());
+              return el.html(elements);
+            });
+          }
           return this;
         },
         addClassAndItems: function() {
@@ -210,8 +246,35 @@
           name = arguments[0], items = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
           this.addClass(name);
           return this.addItems.apply(this, items);
+        },
+        attr: function(value) {
+          attr = value;
+          return this;
+        },
+        observable: function() {
+          $.extend(this, common.observable());
+          return this;
         }
       };
+    };
+  };
+
+  common.observable = function() {
+    var listeners;
+    listeners = [];
+    return {
+      subscribe: function(listener) {
+        return listeners.push(listener);
+      },
+      publish: function(newValue) {
+        var listener, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = listeners.length; _i < _len; _i++) {
+          listener = listeners[_i];
+          _results.push(listener(newValue));
+        }
+        return _results;
+      }
     };
   };
 

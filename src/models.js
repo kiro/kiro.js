@@ -16,7 +16,7 @@
     } else if (_.isBoolean(arg)) {
       return ko.observable(arg);
     } else if (_.isFunction(arg)) {
-      return arg;
+      return ko.observable(arg);
     } else if (_.isArray(arg)) {
       return ko.observableArray((function() {
         var _i, _len, _results;

@@ -8,7 +8,7 @@ todos = collection(todo('first todo'))
 todoText = model()
 
 div(
-  input.checkbox("", -> todo.done = this.val() for todo in todos),
+  input.checkbox("", (value) -> todo.done = value for todo in todos),
   input.text().val(todoText),
   button('Add', ->
     todos.add(todo(todoText())),
@@ -47,14 +47,14 @@ showFolder = (folder) ->
   )
 
 showEmail = (email) ->
-  currentPanel(
+  currentPanel(element(
     form(
       'From' : email.from,
       'To' : email.to,
       'Subject' : email.subject,
       'Content' : textArea(email.content).editable(false)
     )
-  )
+  ))
 
 navbar((a(folder, -> showFolder(folder)) for folder in folders)),
 panel().bindHtml(currentPanel)
@@ -83,4 +83,10 @@ select.multi(list(items, (item) -> option(item))).bind(selected)
 
 button('Remove', -> items.remove(selected())).bindEnabled(selected, -> selected())
 button('Sort', items.sort()).bindEnabled(items, -> items.count() > 0)
+
+todoList
+  todos
+  name
+  tags() =
+
 
