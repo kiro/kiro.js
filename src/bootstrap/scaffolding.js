@@ -32,4 +32,10 @@
 
   controls.div.container.fluid = div("container-fluid");
 
+  controls.left = div("pull-left");
+
+  controls.right = div("pull-right");
+
+  controls.center = div();
+
 }).call(this);

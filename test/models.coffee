@@ -6,6 +6,67 @@ $.extend(this, controls, m)
 describe("Models test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
 
+  it("Tests todo app", ->
+    todo = (text, done = false) -> model(
+      text: ko.observable(text)
+      done: ko.observable(done)
+    )
+
+    todos = collection(todo('first todo'))
+    todoText = model("")
+
+    header = () -> div(
+      input.checkbox().on('click', -> todoItem.done($(this).is(':checked')) for todoItem in todos()),
+      input.text().bindValue(todoText),
+      button('Add', ->
+        todos.push(todo(todoText()))
+        todoText("")
+      )
+    )
+
+    todoList = () ->
+      table().foreach(todos, (todo) ->
+        todoTextView = ko.observable(span(todo.text()))
+
+        tr(
+          td(input.checkbox().bindValue(todo.done)),
+          td()
+            .bindHtml(todoTextView)
+            .on('dblclick', ->
+              todoTextView( div(input.text()
+                .bindValue(todo.text)
+                .on('blur', -> todoTextView( div(span(todo.text())) ))
+                .trigger('focus')
+              ))
+            ),
+          td(button("Remove", -> todos.remove(todo)))
+        )
+      )
+
+    footer = () ->
+      div(
+        left(
+          span().bindText(todos, -> todos.length),
+          " of ",
+          span().bindText(todos, -> todos.length)
+        ),
+        center(
+          a('All', -> todos.filter(-> true)),
+          a('Done', -> todos.filter((todo) -> todo.done)),
+          a('Left', -> todos.filter((todo) -> !todo.done))
+        ),
+        right(a('Remove all', -> todos.removeAll()))
+      )
+
+    $('.suite').append(element(
+      div(
+        header(),
+        todoList(),
+        footer()
+      )
+    ))
+  )
+
   it("Tests select with foreach", ->
     values = collection('One', 'Two', 'Three', 'Four')
     value = model("X")

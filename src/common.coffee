@@ -37,8 +37,8 @@ common.tag = (name, classes = "") ->
       initializers.push(args)
       this
 
-    binder = (f) ->
-      (observable, map = (x) -> x) ->
+    binder = (f, defaultMap = (x) -> x) ->
+      (observable, map = defaultMap) ->
         addInitializer(f, map(observable()))
         observable.subscribe( (newValue) -> el[f](map(newValue)) )
         this
@@ -93,7 +93,7 @@ common.tag = (name, classes = "") ->
       this
 
     bindText: binder('text')
-    bindHtml: binder('html')
+    bindHtml: binder('html', (x) -> element(x))
     bindCss: binder('css')
     bindStyle: binder('style')
     bindClass: binder('class')
@@ -112,6 +112,10 @@ common.tag = (name, classes = "") ->
         selector = ""
 
       addInitializer('on', events, selector, this, handler)
+      this
+
+    trigger: (args...) ->
+      addInitializer('trigger', args...)
       this
 
     foreach: (collection, render) ->

@@ -10,6 +10,70 @@
 
   describe("Models test", function() {
     it("", function() {});
+    it("Tests todo app", function() {
+      var footer, header, todo, todoList, todoText, todos;
+      todo = function(text, done) {
+        if (done == null) {
+          done = false;
+        }
+        return model({
+          text: ko.observable(text),
+          done: ko.observable(done)
+        });
+      };
+      todos = collection(todo('first todo'));
+      todoText = model("");
+      header = function() {
+        return div(input.checkbox().on('click', function() {
+          var todoItem, _i, _len, _ref, _results;
+          _ref = todos();
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            todoItem = _ref[_i];
+            _results.push(todoItem.done($(this).is(':checked')));
+          }
+          return _results;
+        }), input.text().bindValue(todoText), button('Add', function() {
+          todos.push(todo(todoText()));
+          return todoText("");
+        }));
+      };
+      todoList = function() {
+        return table().foreach(todos, function(todo) {
+          var todoTextView;
+          todoTextView = ko.observable(span(todo.text()));
+          return tr(td(input.checkbox().bindValue(todo.done)), td().bindHtml(todoTextView).on('dblclick', function() {
+            return todoTextView(div(input.text().bindValue(todo.text).on('blur', function() {
+              return todoTextView(div(span(todo.text())));
+            }).trigger('focus')));
+          }), td(button("Remove", function() {
+            return todos.remove(todo);
+          })));
+        });
+      };
+      footer = function() {
+        return div(left(span().bindText(todos, function() {
+          return todos.length;
+        }), " of ", span().bindText(todos, function() {
+          return todos.length;
+        })), center(a('All', function() {
+          return todos.filter(function() {
+            return true;
+          });
+        }), a('Done', function() {
+          return todos.filter(function(todo) {
+            return todo.done;
+          });
+        }), a('Left', function() {
+          return todos.filter(function(todo) {
+            return !todo.done;
+          });
+        })), right(a('Remove all', function() {
+          return todos.removeAll();
+        })));
+      };
+      return $('.suite').append(element(div(header(), todoList(), footer())));
+    });
     it("Tests select with foreach", function() {
       var text, value, values;
       values = collection('One', 'Two', 'Three', 'Four');

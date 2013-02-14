@@ -9,3 +9,4 @@ button = (classes) ->
     tag('button')(name).addClass(classes).on('click', click)
 
 controls.button = button('btn')
+controls.a = (name, click) -> tag('a')(name).on('click', click)

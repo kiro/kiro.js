@@ -84,12 +84,15 @@
         initializers.push(args);
         return this;
       };
-      binder = function(f) {
+      binder = function(f, defaultMap) {
+        if (defaultMap == null) {
+          defaultMap = function(x) {
+            return x;
+          };
+        }
         return function(observable, map) {
           if (map == null) {
-            map = function(x) {
-              return x;
-            };
+            map = defaultMap;
           }
           addInitializer(f, map(observable()));
           observable.subscribe(function(newValue) {
@@ -180,7 +183,9 @@
           return this;
         },
         bindText: binder('text'),
-        bindHtml: binder('html'),
+        bindHtml: binder('html', function(x) {
+          return element(x);
+        }),
         bindCss: binder('css'),
         bindStyle: binder('style'),
         bindClass: binder('class'),
@@ -206,6 +211,12 @@
             selector = "";
           }
           addInitializer('on', events, selector, this, handler);
+          return this;
+        },
+        trigger: function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          addInitializer.apply(null, ['trigger'].concat(__slice.call(args)));
           return this;
         },
         foreach: function(collection, render) {

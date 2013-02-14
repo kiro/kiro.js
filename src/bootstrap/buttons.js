@@ -18,4 +18,8 @@
 
   controls.button = button('btn');
 
+  controls.a = function(name, click) {
+    return tag('a')(name).on('click', click);
+  };
+
 }).call(this);
