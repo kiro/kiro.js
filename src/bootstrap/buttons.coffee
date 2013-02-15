@@ -5,10 +5,17 @@ common = window.BC.namespace("common")
 $.extend(this, common)
 
 button = (init) ->
-  (name, click) ->
+  (args...) ->
+    last = _.last(args)
+    click = ->
+    if _.isFunction(last)
+      click = last
+      args = args.slice(0, args.length - 1)
+
     $.extend(
-      tag('button')(init, name).on('click', click),
+      tag('button')(init, args).on('click', click),
       mixins.sizeable('btn'),
+      block: -> this.addClass("btn-block")
     )
 
 controls.button = button(class: 'btn')
@@ -23,7 +30,13 @@ controls.button.danger = button(class: 'btn btn-danger')
 
 # TODO(kiro): add attr to the config object
 controls.button.submit = button(class: 'btn')
-controls.a = (name, click) -> tag('a')(name).on('click', click)
+controls.a = (args...) ->
+  last = _.last(args)
+  click = ->
+  if _.isFunction(last)
+    click = last
+    args = args.slice(0, args.length - 1)
+  tag('a')(args).on('click', click)
 
 controls.divider = () -> isDivider:true
 
@@ -39,10 +52,12 @@ dropdown = (button, items...) ->
     else
       controls.li(item)
 
-  [ button,
-  controls.ul(class: "dropdown-menu",
-    (toLi(item) for item in items)
-  ) ]
+  [
+    button,
+    controls.ul(class: "dropdown-menu",
+      (toLi(item) for item in items)
+    )
+  ]
 
 controls.dropdown = (button, items...) ->
   div(class: "btn-group",

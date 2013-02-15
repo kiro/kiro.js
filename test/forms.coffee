@@ -145,4 +145,35 @@ describe("Models test", ->
       )
     )))
   )
+
+  it("Shows different image styles", ->
+    $('.suite').append(element(div(class: "bs-docs-example",
+      img(class:'image', src: 'img.jpeg')
+      img.polaroid(class:'image', src: 'img.jpeg')
+      img.circle(class:'image', src: 'img.jpeg')
+      img.rounded(class:'image', src: 'img.jpeg')
+    )))
+  )
+
+  it("Shows icons", ->
+    $('.suite').append(element(div(class: "bs-docs-example",
+      [value for name, value of icon]
+    )))
+  )
+
+  it("Shows buttons with icons", ->
+    $('.suite').append(element(div(class: "bs-docs-example",
+      button(icon.asterisk, "Asterisk"),
+      form(
+        "Email" : prepend(icon.envelope, input.text())
+      )
+
+      ul(class: "nav nav-list",
+        li({class: "active"}, a(icon.home, 'Home')),
+        li(a(icon.book, 'Library')),
+        li(a(icon.pencil, "Applications")),
+        li(a("Misc"))
+      )
+    )))
+  )
 )

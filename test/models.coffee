@@ -15,12 +15,13 @@ describe("Models test", ->
     todos = collection(todo('first todo'))
     todoText = model("")
 
-    header = () -> div(
-      input.checkbox().on('click', -> todoItem.done($(this).is(':checked')) for todoItem in todos()),
-      input.text().bindValue(todoText),
-      button('Add', ->
-        todos.push(todo(todoText()))
-        todoText("")
+    header = () -> div(form.inline(
+        input.checkbox().on('click', -> todoItem.done($(this).is(':checked')) for todoItem in todos()),
+        input.text().bindValue(todoText),
+        button('Add', ->
+          todos.push(todo(todoText()))
+          todoText("")
+        )
       )
     )
 

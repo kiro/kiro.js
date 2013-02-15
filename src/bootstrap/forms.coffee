@@ -25,7 +25,7 @@ controls.input =
         .observable()
         .on('click', (e) -> e.data.publish($(this).is(':checked')))),
       bindValue: (observable) ->
-        this.bindProp(observable, -> checked:observable())
+        this.bindProp(observable, -> checked: observable())
         this.subscribe((value) -> observable(value))
       isCheckbox: true
     )
@@ -138,6 +138,15 @@ controls.prepend = (items...) ->
   items = (toAddOn(item) for item in items)
   div(class: "input-prepend", items)
 
+img = (initialClass) ->
+  (config) ->
+    tag('img')(config)
+      .addClass(initialClass)
+
+controls.img = img()
+controls.img.rounded = img('img-rounded')
+controls.img.circle = img('img-circle')
+controls.img.polaroid = img('img-polaroid')
 # TODO(kiro): Add validations
 
 ###

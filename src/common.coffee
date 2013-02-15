@@ -56,9 +56,11 @@ common.tag = (name, initialClasses = "") ->
 
     render = (name, value) -> if value then "#{name}=\"#{value}\"" else ""
 
-    if items.length > 0 and _.isObject(items[0]) and _.keys(items[0]).length == 1 and items[0].class
-      addClass(items[0].class)
-      items = _.rest(items)
+    if items.length > 0 and _.isObject(items[0]) and _.keys(items[0]).length <= 2
+      if items[0].class or items[0].src
+        addClass(items[0].class) if items[0].class
+        $.extend(attr, src: items[0].src) if items[0].src
+        items = _.rest(items)
 
     id: (value) ->
       id = value if !id
@@ -101,7 +103,7 @@ common.tag = (name, initialClasses = "") ->
       this.bindCss(observable, (value) ->
          display: if condition(value) then "" else "none"
       )
-    bindDisabled: (observable, condition) ->
+    bindDisabled: (observable, condition = (x) -> x) ->
       this.bindProp(observable, (value) -> disabled: condition(value))
     bindAttr: binder('attr')
     bindProp: binder('prop')

@@ -24,7 +24,7 @@
       todos = collection(todo('first todo'));
       todoText = model("");
       header = function() {
-        return div(input.checkbox().on('click', function() {
+        return div(form.inline(input.checkbox().on('click', function() {
           var todoItem, _i, _len, _ref, _results;
           _ref = todos();
           _results = [];
@@ -36,7 +36,7 @@
         }), input.text().bindValue(todoText), button('Add', function() {
           todos.push(todo(todoText()));
           return todoText("");
-        }));
+        })));
       };
       todoList = function() {
         return table().foreach(todos, function(todo) {

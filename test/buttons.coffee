@@ -33,4 +33,29 @@ describe("Buttons test", ->
         a("Is it going?"))
     )))
   )
+
+  it("Shows different button sizes", ->
+    $('.suite').append(element(div(class: "bs-docs-example",
+      button.primary("Large").large()
+      button.info("Default")
+      button.warning("Small").small()
+      button.danger("Mini").mini()
+    )))
+  )
+
+  it("Shows block level button", ->
+    $('.suite').append(element(div(class: "bs-docs-example",
+      button.primary("Block").block().large()
+      button("Block").block()
+    )))
+  )
+
+  it("Shows disabled button", ->
+    disabled = model(true)
+    $('.suite').append(element(div(class: "bs-docs-example",
+      button.danger("Disable", -> disabled(true))
+      button.success("Enable", -> disabled(false))
+      button("Disabled").bindDisabled(disabled)
+    )))
+  )
 )

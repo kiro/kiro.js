@@ -15,7 +15,7 @@
         "class": "bs-docs-example"
       }, button("Default"), button.primary("Primary"), button.info("Info"), button.warning("Warning"), button.success("Success"), button.danger("Danger"), button.inverse("Inverse"), button.link())));
     });
-    return it("Shows a dropdown buttons", function() {
+    it("Shows a dropdown buttons", function() {
       return $('.suite').append(element(div({
         "class": "bs-docs-example"
       }, dropdown(button.info("Hello"), a("Hi"), a("How"), divider(), a("Is it going?")), dropdown.segmented(button.info("Hello", function() {
@@ -23,6 +23,27 @@
       }), a("Hi", function() {
         return console.log("Hi");
       }), a("How"), divider(), a("Is it going?")))));
+    });
+    it("Shows different button sizes", function() {
+      return $('.suite').append(element(div({
+        "class": "bs-docs-example"
+      }, button.primary("Large").large(), button.info("Default"), button.warning("Small").small(), button.danger("Mini").mini())));
+    });
+    it("Shows block level button", function() {
+      return $('.suite').append(element(div({
+        "class": "bs-docs-example"
+      }, button.primary("Block").block().large(), button("Block").block())));
+    });
+    return it("Shows disabled button", function() {
+      var disabled;
+      disabled = model(true);
+      return $('.suite').append(element(div({
+        "class": "bs-docs-example"
+      }, button.danger("Disable", function() {
+        return disabled(true);
+      }), button.success("Enable", function() {
+        return disabled(false);
+      }), button("Disabled").bindDisabled(disabled))));
     });
   });
 

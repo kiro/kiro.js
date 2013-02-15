@@ -12,8 +12,20 @@
   $.extend(this, common);
 
   button = function(init) {
-    return function(name, click) {
-      return $.extend(tag('button')(init, name).on('click', click), mixins.sizeable('btn'));
+    return function() {
+      var args, click, last;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      last = _.last(args);
+      click = function() {};
+      if (_.isFunction(last)) {
+        click = last;
+        args = args.slice(0, args.length - 1);
+      }
+      return $.extend(tag('button')(init, args).on('click', click), mixins.sizeable('btn'), {
+        block: function() {
+          return this.addClass("btn-block");
+        }
+      });
     };
   };
 
@@ -57,8 +69,16 @@
     "class": 'btn'
   });
 
-  controls.a = function(name, click) {
-    return tag('a')(name).on('click', click);
+  controls.a = function() {
+    var args, click, last;
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    last = _.last(args);
+    click = function() {};
+    if (_.isFunction(last)) {
+      click = last;
+      args = args.slice(0, args.length - 1);
+    }
+    return tag('a')(args).on('click', click);
   };
 
   controls.divider = function() {

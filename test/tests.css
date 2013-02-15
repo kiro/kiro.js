@@ -11,3 +11,8 @@
     background-color: black;
     position: absolute;
 }
+
+.image {
+    width: 140px;
+    height: 140px;
+}

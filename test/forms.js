@@ -123,13 +123,57 @@
         "class": "controls bs-docs-example docs-input-sizes"
       }, div.controls.row(input.text().span1(), input.text().span5()), div.controls.row(input.text().span3(), input.text().span3()), div.controls.row(input.text().span5(), input.text().span1()))));
     });
-    return it("Shows form actions in aciton", function() {
+    it("Shows form actions in aciton", function() {
       return $('.suite').append(element(div({
         "class": "bs-docs-example"
       }, form.horizontal({
         "First Name": input.text(),
         "Last Name": input.text()
       }, button("Submit"), button("Remove")))));
+    });
+    it("Shows different image styles", function() {
+      return $('.suite').append(element(div({
+        "class": "bs-docs-example"
+      }, img({
+        "class": 'image',
+        src: 'img.jpeg'
+      }), img.polaroid({
+        "class": 'image',
+        src: 'img.jpeg'
+      }), img.circle({
+        "class": 'image',
+        src: 'img.jpeg'
+      }), img.rounded({
+        "class": 'image',
+        src: 'img.jpeg'
+      }))));
+    });
+    it("Shows icons", function() {
+      var name, value;
+      return $('.suite').append(element(div({
+        "class": "bs-docs-example"
+      }, [
+        (function() {
+          var _results;
+          _results = [];
+          for (name in icon) {
+            value = icon[name];
+            _results.push(value);
+          }
+          return _results;
+        })()
+      ])));
+    });
+    return it("Shows buttons with icons", function() {
+      return $('.suite').append(element(div({
+        "class": "bs-docs-example"
+      }, button(icon.asterisk, "Asterisk"), form({
+        "Email": prepend(icon.envelope, input.text())
+      }), ul({
+        "class": "nav nav-list"
+      }, li({
+        "class": "active"
+      }, a(icon.home, 'Home')), li(a(icon.book, 'Library')), li(a(icon.pencil, "Applications")), li(a("Misc"))))));
     });
   });
 

@@ -128,9 +128,18 @@
           return "";
         }
       };
-      if (items.length > 0 && _.isObject(items[0]) && _.keys(items[0]).length === 1 && items[0]["class"]) {
-        addClass(items[0]["class"]);
-        items = _.rest(items);
+      if (items.length > 0 && _.isObject(items[0]) && _.keys(items[0]).length <= 2) {
+        if (items[0]["class"] || items[0].src) {
+          if (items[0]["class"]) {
+            addClass(items[0]["class"]);
+          }
+          if (items[0].src) {
+            $.extend(attr, {
+              src: items[0].src
+            });
+          }
+          items = _.rest(items);
+        }
       }
       return {
         id: function(value) {
@@ -197,6 +206,11 @@
           });
         },
         bindDisabled: function(observable, condition) {
+          if (condition == null) {
+            condition = function(x) {
+              return x;
+            };
+          }
           return this.bindProp(observable, function(value) {
             return {
               disabled: condition(value)
