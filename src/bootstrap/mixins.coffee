@@ -36,17 +36,32 @@ ns.offsetable = ->
   offset12: offset(12)
 
 ns.contextual = (prefix) ->
-  context: (suffix, args...) ->
-    if prefix then prefix = prefix + "-"
-    this.addClassAndItems(prefix + suffix, args...)
+  context = (suffix) ->
+    (args...) ->
+      if prefix then prefix = prefix + "-"
+      this.addClassAndItems(prefix + suffix, args...)
 
-  info: (args...) -> this.context('info', args...)
-  warning: (args...) -> this.context('warning', args...)
-  error: (args...) -> this.context('error', args...)
-  success: (args...) -> this.context('success', args...)
+  info: context('info')
+  warning: context('warning')
+  error: context('error')
+  success: context('success')
 
 ns.textContextual = -> $.extend(ns.contextual('text'),
   muted: (args...) ->
     this.addClass("muted")
     this.addItems(args...)
 )
+
+ns.sizeable = (prefix) ->
+  size = (suffix) ->
+    () ->
+      if prefix then prefix = prefix + "-"
+      this.addClass(prefix + suffix)
+
+  mini: size("mini")
+  small: size("small")
+  medium: size("medium")
+  large: size("large")
+  xlarge: size("xlarge")
+  xxlarge: size("xxlarge")
+

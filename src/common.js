@@ -63,14 +63,14 @@
     };
   })();
 
-  common.tag = function(name, classes) {
-    if (classes == null) {
-      classes = "";
+  common.tag = function(name, initialClasses) {
+    if (initialClasses == null) {
+      initialClasses = "";
     }
-    classes = [classes];
     return function() {
-      var addClass, addInitializer, attr, binder, el, id, initializers, items, render, renderAttr;
+      var addClass, addInitializer, attr, binder, classes, el, id, initializers, items, render, renderAttr;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      classes = [initialClasses];
       id = 0;
       el = null;
       initializers = [];
@@ -262,12 +262,15 @@
           return this.addItems.apply(this, items);
         },
         attr: function(value) {
-          attr = value;
+          $.extend(attr, value);
           return this;
         },
         observable: function() {
           $.extend(this, common.observable());
           return this;
+        },
+        classes: function() {
+          return classes.join(" ");
         }
       };
     };

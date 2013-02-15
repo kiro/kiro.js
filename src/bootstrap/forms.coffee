@@ -5,14 +5,18 @@ common = window.BC.namespace("common")
 $.extend(this, common)
 
 controls.input =
-  text : () ->
+  text: (config, type = 'text') ->
     $.extend(
-      tag('input')()
-        .attr(type: 'text')
+      tag('input')(config)
+        .attr(type: type)
         .observable()
         .on('keyup', (e) -> e.data.publish($(this).val())),
-      placeholder: (value) -> this.attr('placeholder', value)
+      placeholder: (value) -> this.attr('placeholder' : value),
+      mixins.sizeable("input"),
+      mixins.spannable()
     )
+
+  password: (config) -> this.text(config, 'password')
 
   checkbox : () ->
     $.extend(
@@ -23,6 +27,7 @@ controls.input =
       bindValue: (observable) ->
         this.bindProp(observable, -> checked:observable())
         this.subscribe((value) -> observable(value))
+      isCheckbox: true
     )
 
   radio: (name, value) ->
@@ -34,17 +39,106 @@ controls.input =
       bindValue: (observable) ->
         this.bindProp(observable, -> checked:(observable() == value))
         this.subscribe((value) -> observable(value))
+      isRadio: true
     )
 
+  submit: (name, click) -> tag('input')(name).attr(type: 'submit').on('click', click)
+
 controls.select = (items...) ->
+  $.extend(
     tag('select')(items...)
       .observable()
-      .on('change', (e) -> e.data.publish($(this).val()) )
+      .on('change', (e) -> e.data.publish($(this).val()) ),
+    mixins.spannable()
+  )
 
 controls.select.multiple = (items...) ->
   controls.select(items...).attr(multiple: 'multiple')
 
 controls.option = (text, value) -> tag('option')(text).attr(value: value)
+
+controls.textarea = (rows) ->
+  result = tag('textarea')()
+  result.attr(rows: rows) if rows
+  result
+    .observable()
+    .on('keyup', (e) -> e.data.publish($(this).val()))
+
+form = tag('form')
+
+controls.form = (items, actions...) ->
+  content = []
+  for key, value of items
+    if key == 'legend'
+      content.push(legend(value))
+    else if value.isCheckbox
+      content.push(label(class: 'checkbox', value, key))
+    else if key == ""
+      content.push(value)
+    else
+      content.push(label(key))
+      content.push(value)
+
+  form(
+    fieldset(
+      content,
+      div(class: "form-actions", actions)
+    )
+  )
+
+controls.form.search = (items...) -> form(class: "form-search", items)
+# TODO(kiro) : FIX ME
+controls.form.inline = (items...) -> form(class: "form-inline", items)
+controls.form.horizontal = (items, actions...) ->
+  group = (items...) -> div(class: 'control-group', items)
+  control = (items...) -> div(class: 'controls', items)
+
+  content = []
+
+  for key, value of items
+    if key == 'legend'
+      content.push(legend(value))
+    else if value.isCheckbox
+      content.push(group(control(label(class: 'checkbox', value, key))))
+    else if key == ""
+      content.push(group(control(value)))
+    else
+      content.push(
+        group(
+          label(class: "control-label", key),
+          control(value)
+        )
+      )
+
+  form(class: 'form-horizontal',
+    content,
+    div(class: "form-actions", actions)
+  )
+
+controls.help =
+  block: (text) -> controls.span(class: 'help-block', text)
+  inline: (text) -> controls.span(class: 'help-inline', text)
+
+controls.legend = tag('legend')
+controls.fieldset = tag('fieldset')
+controls.label = tag('label')
+controls.label.inline = tag('label', 'inline')
+
+toAddOn = (item) ->
+  if _.isString(item)
+    controls.span(class:'add-on', item)
+  else
+    item
+
+controls.append = (input, items...) ->
+  items = (toAddOn(item) for item in items)
+  div(class: "input-append", input, items)
+
+controls.prepend = (items...) ->
+  items = (toAddOn(item) for item in items)
+  div(class: "input-prepend", items)
+
+# TODO(kiro): Add validations
 
 ###
 button

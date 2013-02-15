@@ -23,9 +23,9 @@ nextId = ( ->
   -> ++id
 )()
 
-common.tag = (name, classes = "") ->
-  classes = [classes]
+common.tag = (name, initialClasses = "") ->
   (items...) ->
+    classes = [initialClasses]
     id = 0
     el = null
     initializers = []
@@ -139,12 +139,14 @@ common.tag = (name, classes = "") ->
       this.addItems(items...)
 
     attr: (value) ->
-      attr = value
+      $.extend(attr, value)
       this
 
     observable: () ->
       $.extend(this, common.observable())
       this
+
+    classes: () -> classes.join(" ")
 
 # Observable
 common.observable = () ->

@@ -58,35 +58,22 @@
   };
 
   ns.contextual = function(prefix) {
-    return {
-      context: function() {
-        var args, suffix;
-        suffix = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    var context;
+    context = function(suffix) {
+      return function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         if (prefix) {
           prefix = prefix + "-";
         }
         return this.addClassAndItems.apply(this, [prefix + suffix].concat(__slice.call(args)));
-      },
-      info: function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context.apply(this, ['info'].concat(__slice.call(args)));
-      },
-      warning: function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context.apply(this, ['warning'].concat(__slice.call(args)));
-      },
-      error: function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context.apply(this, ['error'].concat(__slice.call(args)));
-      },
-      success: function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.context.apply(this, ['success'].concat(__slice.call(args)));
-      }
+      };
+    };
+    return {
+      info: context('info'),
+      warning: context('warning'),
+      error: context('error'),
+      success: context('success')
     };
   };
 
@@ -99,6 +86,26 @@
         return this.addItems.apply(this, args);
       }
     });
+  };
+
+  ns.sizeable = function(prefix) {
+    var size;
+    size = function(suffix) {
+      return function() {
+        if (prefix) {
+          prefix = prefix + "-";
+        }
+        return this.addClass(prefix + suffix);
+      };
+    };
+    return {
+      mini: size("mini"),
+      small: size("small"),
+      medium: size("medium"),
+      large: size("large"),
+      xlarge: size("xlarge"),
+      xxlarge: size("xxlarge")
+    };
   };
 
 }).call(this);
