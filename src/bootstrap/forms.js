@@ -134,9 +134,9 @@
         content.push(value);
       }
     }
-    return form(fieldset(content, div({
+    return form(fieldset(content, actions.length ? div({
       "class": "form-actions"
-    }, actions)));
+    }, actions) : void 0));
   };
 
   controls.form.search = function() {
@@ -191,9 +191,9 @@
     }
     return form({
       "class": 'form-horizontal'
-    }, content, div({
+    }, content, actions.length ? div({
       "class": "form-actions"
-    }, actions));
+    }, actions) : void 0);
   };
 
   controls.help = {

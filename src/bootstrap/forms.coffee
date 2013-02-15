@@ -82,7 +82,7 @@ controls.form = (items, actions...) ->
   form(
     fieldset(
       content,
-      div(class: "form-actions", actions)
+      div(class: "form-actions", actions) if actions.length
     )
   )
 
@@ -112,7 +112,7 @@ controls.form.horizontal = (items, actions...) ->
 
   form(class: 'form-horizontal',
     content,
-    div(class: "form-actions", actions)
+    div(class: "form-actions", actions) if actions.length
   )
 
 controls.help =

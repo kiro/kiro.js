@@ -8,17 +8,21 @@
 
   $.extend(this, controls, m);
 
-  describe("Models test", function() {
+  describe("Buttons test", function() {
     it("", function() {});
-    it("Shows a standart form", function() {
+    it("Shows different buttons", function() {
       return $('.suite').append(element(div({
         "class": "bs-docs-example"
       }, button("Default"), button.primary("Primary"), button.info("Info"), button.warning("Warning"), button.success("Success"), button.danger("Danger"), button.inverse("Inverse"), button.link())));
     });
-    return it("Shows a dropdown button", function() {
+    return it("Shows a dropdown buttons", function() {
       return $('.suite').append(element(div({
         "class": "bs-docs-example"
-      }, dropdown(button.info("Hello"), a("Hi"), a("How"), divider(), a("Is it going?")), dropdown.segmented(button.info("Hello"), a("Hi"), a("How"), divider(), a("Is it going?")))));
+      }, dropdown(button.info("Hello"), a("Hi"), a("How"), divider(), a("Is it going?")), dropdown.segmented(button.info("Hello", function() {
+        return console.log("Hello");
+      }), a("Hi", function() {
+        return console.log("Hi");
+      }), a("How"), divider(), a("Is it going?")))));
     });
   });
 
