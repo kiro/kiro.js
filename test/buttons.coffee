@@ -1,13 +1,14 @@
+util = window.BC.namespace("test.util")
 controls = window.BC.namespace("controls")
 m = window.BC.namespace("model")
 
-$.extend(this, controls, m)
+$.extend(this, controls, m, util)
 
 describe("Buttons test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
 
   it("Shows different buttons", ->
-    $('.suite').append(element(div(class: "bs-docs-example",
+    show(
       button("Default"),
       button.primary("Primary"),
       button.info("Info"),
@@ -16,11 +17,11 @@ describe("Buttons test", ->
       button.danger("Danger"),
       button.inverse("Inverse"),
       button.link()
-    )))
+    )
   )
 
   it("Shows a dropdown buttons", ->
-    $('.suite').append(element(div(class: "bs-docs-example",
+    show(
       dropdown(button.info("Hello"),
         a("Hi"),
         a("How"),
@@ -31,31 +32,31 @@ describe("Buttons test", ->
         a("How"),
         divider(),
         a("Is it going?"))
-    )))
+    )
   )
 
   it("Shows different button sizes", ->
-    $('.suite').append(element(div(class: "bs-docs-example",
+    show(
       button.primary("Large").large()
       button.info("Default")
       button.warning("Small").small()
       button.danger("Mini").mini()
-    )))
+    )
   )
 
   it("Shows block level button", ->
-    $('.suite').append(element(div(class: "bs-docs-example",
+    show(
       button.primary("Block").block().large()
       button("Block").block()
-    )))
+    )
   )
 
   it("Shows disabled button", ->
     disabled = model(true)
-    $('.suite').append(element(div(class: "bs-docs-example",
+    show(
       button.danger("Disable", -> disabled(true))
       button.success("Enable", -> disabled(false))
       button("Disabled").bindDisabled(disabled)
-    )))
+    )
   )
 )

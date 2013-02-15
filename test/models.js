@@ -72,38 +72,38 @@
           return todos.removeAll();
         })));
       };
-      return $('.suite').append(element(div(header(), todoList(), footer())));
+      return show(div(header(), todoList(), footer()));
     });
     it("Tests select with foreach", function() {
       var text, value, values;
       values = collection('One', 'Two', 'Three', 'Four');
       value = model("X");
       text = model("");
-      return $('.suite').append(element(div(select.multiple().foreach(values, function(value) {
+      return show(div(select.multiple().foreach(values, function(value) {
         return option(value, value);
       }).bindValue(value), span().bindText(value), input.text().bindValue(text), button('Add', function() {
         values.push(text());
         return text("");
-      }))));
+      })));
     });
     it("Tests select", function() {
       var value;
       value = model("value2");
-      return $('.suite').append(element(div(select(option('Value 1', 'value1'), option('Value 2', 'value2'), option('Value 3', 'value3')).bindValue(value), span().bindText(value))));
+      return show(div(select(option('Value 1', 'value1'), option('Value 2', 'value2'), option('Value 3', 'value3')).bindValue(value), span().bindText(value)));
     });
     it("Tests radio", function() {
       var value;
       value = model('value2');
-      return $('.suite').append(element(div(input.radio('name', 'value1').bindValue(value), input.radio('name', 'value2').bindValue(value), input.radio('name', 'value3').bindValue(value), span().bindText(value, function() {
+      return show(div(input.radio('name', 'value1').bindValue(value), input.radio('name', 'value2').bindValue(value), input.radio('name', 'value3').bindValue(value), span().bindText(value, function() {
         return value().toString();
-      }))));
+      })));
     });
     it("Tests checkbox", function() {
       var value;
       value = model(true);
-      return $('.suite').append(element(div(input.checkbox().bindValue(value), input.checkbox().bindValue(value), span().bindText(value, function() {
+      return show(div(input.checkbox().bindValue(value), input.checkbox().bindValue(value), span().bindText(value, function() {
         return value().toString();
-      }))));
+      })));
     });
     it("Tests attr, css and text bindings", function() {
       var number, selectColor;
@@ -117,7 +117,7 @@
           return 'green';
         }
       };
-      return $('.suite').append(element(div(button("Test", function() {
+      return show(div(button("Test", function() {
         return number(number() + 1);
       }).bindDisabled(number, function() {
         return number() === 10;
@@ -125,7 +125,7 @@
         return {
           color: selectColor(number())
         };
-      }))));
+      })));
     });
     it("Tests visible and html bindings", function() {
       var isThree, number;
@@ -133,34 +133,34 @@
       isThree = function() {
         return number() === 3;
       };
-      return $('.suite').append(element(div(p("You've clicked ", span("").bindText(number), " times"), button("Click me", function() {
+      return show(div(p("You've clicked ", span("").bindText(number), " times"), button("Click me", function() {
         return number(number() + 1);
       }).bindDisabled(number, isThree), p("That's too many clicks! Please stop before you wear out your fingers. ", button('Reset Clicks', function() {
         return number(0);
-      })).bindVisible(number, isThree))));
+      })).bindVisible(number, isThree)));
     });
     it("Tests input element", function() {
       var value;
       value = model("test");
-      return $('.suite').append(element(div(input.text().bindValue(value), span().bindText(value))));
+      return show(div(input.text().bindValue(value), span().bindText(value)));
     });
     it("Tests simple list", function() {
       var item, items;
       item = model("");
       items = collection();
-      return $('.suite').append(element(div(input.text().bindValue(item), button('Add', function() {
+      return show(div(input.text().bindValue(item), button('Add', function() {
         items.push(item());
         return item("");
       }), table(thead(tr(th("Value")))).foreach(items, function(item) {
         return tr(td(item));
-      }))));
+      })));
     });
     return it("Displays different functions", function() {
       var f, _i, _results;
       f = model(function(x) {
         return x;
       });
-      return $('.suite').append(element(div(button("x", function() {
+      return show(div(button("x", function() {
         return f(function(x) {
           return x;
         });
@@ -191,7 +191,7 @@
             bottom: fn(x) + 'px'
           };
         });
-      }))));
+      })));
     });
   });
 

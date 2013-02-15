@@ -59,13 +59,13 @@ describe("Models test", ->
         right(a('Remove all', -> todos.removeAll()))
       )
 
-    $('.suite').append(element(
+    show(
       div(
         header(),
         todoList(),
         footer()
       )
-    ))
+    )
   )
 
   it("Tests select with foreach", ->
@@ -73,7 +73,7 @@ describe("Models test", ->
     value = model("X")
     text = model("")
 
-    $('.suite').append(element(div(
+    show(div(
       select.multiple().foreach(values, (value) -> option(value, value)).bindValue(value),
       span().bindText(value),
       input.text().bindValue(text),
@@ -81,41 +81,41 @@ describe("Models test", ->
         values.push(text())
         text("")
       )
-    )))
+    ))
   )
 
   it("Tests select", ->
     value = model("value2")
 
-    $('.suite').append(element(div(
+    show(div(
       select(
         option('Value 1', 'value1'),
         option('Value 2', 'value2'),
         option('Value 3', 'value3')
       ).bindValue(value),
       span().bindText(value)
-    )))
+    ))
   )
 
   it("Tests radio", ->
     value = model('value2')
 
-    $('.suite').append(element(div(
+    show(div(
       input.radio('name', 'value1').bindValue(value),
       input.radio('name', 'value2').bindValue(value),
       input.radio('name', 'value3').bindValue(value),
       span().bindText(value, -> value().toString())
-    )))
+    ))
   )
 
   it("Tests checkbox", ->
     value = model(true)
 
-    $('.suite').append(element(div(
+    show(div(
       input.checkbox().bindValue(value),
       input.checkbox().bindValue(value),
       span().bindText(value, -> value().toString())
-    )))
+    ))
   )
 
   it("Tests attr, css and text bindings", ->
@@ -126,14 +126,14 @@ describe("Models test", ->
         else if value > 3 then 'orange'
         else 'green'
 
-    $('.suite').append(element(
+    show(
       div(
         button("Test", -> number(number() + 1))
           .bindDisabled(number, -> number() == 10),
         span()
           .bindText(number)
           .bindCss(number, -> color: selectColor(number()))
-      ))
+      )
     )
   )
 
@@ -142,7 +142,7 @@ describe("Models test", ->
 
     isThree = -> number() == 3
 
-    $('.suite').append(element(
+    show(
       div(
         p("You've clicked ", span("").bindText(number), " times"),
         button("Click me", -> number(number() + 1)).bindDisabled(number, isThree),
@@ -150,25 +150,25 @@ describe("Models test", ->
           button('Reset Clicks', -> number(0)))
             .bindVisible(number, isThree)
       )
-    ))
+    )
   )
 
   it("Tests input element", ->
     value = model("test")
 
-    $('.suite').append(element(
+    show(
       div(
         input.text().bindValue(value),
         span().bindText(value)
       )
-    ))
+    )
   )
 
   it("Tests simple list", ->
     item = model("")
     items = collection()
 
-    $('.suite').append(element(
+    show(
       div(
         input.text().bindValue(item),
         button('Add', ->
@@ -179,13 +179,13 @@ describe("Models test", ->
           tr(td(item))
         )
       )
-    ))
+    )
   )
 
   it("Displays different functions", ->
     f = model((x) -> x)
 
-    $('.suite').append(element(div(
+    show(div(
       button("x", -> f((x) -> x)),
       button("x^2", -> f((x) -> (x-50)*(x-50) / 30)),
       button("log", -> f((x) -> Math.log(x) * 20)),
@@ -197,6 +197,6 @@ describe("Models test", ->
           bottom: fn(x) + 'px'
         )
       )
-    )))
+    ))
   )
 )

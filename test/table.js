@@ -12,7 +12,7 @@
     it("", function() {});
     it("5x5 Table", function() {
       var i, j;
-      return $('.suite').last().append(element(table(thead(tr((function() {
+      return show(table(thead(tr((function() {
         var _i, _results;
         _results = [];
         for (i = _i = 1; _i <= 5; i = ++_i) {
@@ -33,11 +33,11 @@
           })()));
         }
         return _results;
-      })())));
+      })()));
     });
     it("Stripped table", function() {
       var i, j;
-      return $('.suite').last().append(element(table().stripped(thead(tr((function() {
+      return show(table().stripped(thead(tr((function() {
         var _i, _results;
         _results = [];
         for (i = _i = 1; _i <= 5; i = ++_i) {
@@ -58,11 +58,11 @@
           })()));
         }
         return _results;
-      })())));
+      })()));
     });
     it("Mega table", function() {
       var i, j;
-      return $('.suite').last().append(element(table().stripped().condensed().hover().bordered(thead(tr((function() {
+      return show(table().stripped().condensed().hover().bordered(thead(tr((function() {
         var _i, _results;
         _results = [];
         for (i = _i = 1; _i <= 5; i = ++_i) {
@@ -83,10 +83,10 @@
           })()));
         }
         return _results;
-      })())));
+      })()));
     });
     return it("Row classes", function() {
-      return $('.suite').last().append(element(table(tr().info(td(1), td(2)), tr().warning(td(3), td(4)), tr().success(td(5), td(6)), tr().error(td(7), td(8)))));
+      return show(table(tr().info(td(1), td(2)), tr().warning(td(3), td(4)), tr().success(td(5), td(6)), tr().error(td(7), td(8))));
     });
   });
 
