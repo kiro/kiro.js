@@ -1,8 +1,8 @@
 util = window.BC.namespace("test.util")
-controls = window.BC.namespace("controls")
-m = window.BC.namespace("model")
+bootstrap = window.BC.namespace("bootstrap")
+models = window.BC.namespace("models")
 
-$.extend(this, controls, m, util)
+$.extend(this, bootstrap, models, util)
 
 describe("Models test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
@@ -24,7 +24,7 @@ describe("Models test", ->
   it("Shows a search form", ->
     show(
       form.search(
-        input.text(class: "input-medium search-query"),
+        input.text(class: "search-query").medium(),
         button.submit('Search')
       )
     )
@@ -33,8 +33,8 @@ describe("Models test", ->
   it("Shows inline form", ->
     show(
       form.inline(
-        input.text(class: "input-small").placeholder("Email"),
-        input.password(class: "input-small").placeholder("Password"),
+        input.text().small().placeholder("Email"),
+        input.text(type: 'password').small().placeholder("Password"),
         label({class: 'checkbox'}, input.checkbox(), "Remember me"),
         button.submit("Sign in")
       )
@@ -55,7 +55,7 @@ describe("Models test", ->
     value = model("text")
 
     show(
-      textarea(3).bindValue(value),
+      textarea(rows: 3).bindValue(value),
       span().bindText(value)
     )
   )

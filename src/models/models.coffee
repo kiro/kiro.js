@@ -1,7 +1,7 @@
-ns = window.BC.namespace("model")
+models = window.BC.namespace("models")
 common = window.BC.namespace("common")
 
-ns.model = (arg) ->
+models.model = (arg) ->
   if _.isString(arg) then return ko.observable(arg)
   else if _.isNumber(arg) then return ko.observable(arg)
   else if _.isBoolean(arg) then return ko.observable(arg)
@@ -13,4 +13,4 @@ ns.model = (arg) ->
     for key, value in object
       obj[key] = model(value)
 
-ns.collection = (args...) -> ko.observableArray(args)
+models.collection = (args...) -> ko.observableArray(args)

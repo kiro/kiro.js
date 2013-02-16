@@ -1,17 +1,16 @@
-controls = window.BC.namespace("controls")
-mixins = window.BC.namespace("mixins")
+bootstrap = window.BC.namespace("bootstrap")
+mixins = window.BC.namespace("bootstrap.mixins")
 common = window.BC.namespace("common")
 
 $.extend(this, common)
 
-controls.input =
+bootstrap.input =
   text: (config, type = 'text') ->
     $.extend(
-      tag('input')(config)
-        .attr(type: type)
+      tag('input', type: type)(config)
         .observable()
-        .on('keyup', (e) -> e.data.publish($(this).val())),
-      placeholder: (value) -> this.attr('placeholder' : value),
+        .on('keyup change', (e) -> e.data.publish($(this).val())),
+      placeholder: (value) -> this.addAttr('placeholder' : value),
       mixins.sizeable("input"),
       mixins.spannable()
     )
@@ -21,30 +20,29 @@ controls.input =
   checkbox : () ->
     $.extend(
       (tag('input')()
-        .attr(type: 'checkbox')
+        .addAttr(type: 'checkbox')
         .observable()
         .on('click', (e) -> e.data.publish($(this).is(':checked')))),
       bindValue: (observable) ->
-        this.bindProp(observable, -> checked: observable())
+        this.bindAttr(observable, -> checked: observable())
         this.subscribe((value) -> observable(value))
       isCheckbox: true
     )
 
   radio: (name, value) ->
     $.extend(
-      tag('input')()
-        .attr({type: 'radio', name: name, value: value})
+      tag('input', type: 'radio', name: name, value: value)()
         .observable()
         .on('click', (e) -> e.data.publish(value)),
       bindValue: (observable) ->
-        this.bindProp(observable, -> checked:(observable() == value))
+        this.bindAttr(observable, -> checked:(observable() == value))
         this.subscribe((value) -> observable(value))
       isRadio: true
     )
 
-  submit: (name, click) -> tag('input')(name).attr(type: 'submit').on('click', click)
+  submit: (name, click) -> tag('input')(name).addAttr(type: 'submit').on('click', click)
 
-controls.select = (items...) ->
+bootstrap.select = (items...) ->
   $.extend(
     tag('select')(items...)
       .observable()
@@ -52,21 +50,19 @@ controls.select = (items...) ->
     mixins.spannable()
   )
 
-controls.select.multiple = (items...) ->
-  controls.select(items...).attr(multiple: 'multiple')
+bootstrap.select.multiple = (items...) ->
+  bootstrap.select(multiple: 'multiple', items)
 
-controls.option = (text, value) -> tag('option')(text).attr(value: value)
+bootstrap.option = (text, value) -> tag('option', value: value)(text)
 
-controls.textarea = (rows) ->
-  result = tag('textarea')()
-  result.attr(rows: rows) if rows
-  result
+bootstrap.textarea = (init) ->
+  tag('textarea', init)()
     .observable()
     .on('keyup', (e) -> e.data.publish($(this).val()))
 
 form = tag('form')
 
-controls.form = (items, actions...) ->
+bootstrap.form = (items, actions...) ->
   content = []
   for key, value of items
     if key == 'legend'
@@ -86,10 +82,10 @@ controls.form = (items, actions...) ->
     )
   )
 
-controls.form.search = (items...) -> form(class: "form-search", items)
+bootstrap.form.search = (items...) -> form(class: "form-search", items)
 # TODO(kiro) : FIX ME
-controls.form.inline = (items...) -> form(class: "form-inline", items)
-controls.form.horizontal = (items, actions...) ->
+bootstrap.form.inline = (items...) -> form(class: "form-inline", items)
+bootstrap.form.horizontal = (items, actions...) ->
   group = (items...) -> div(class: 'control-group', items)
   control = (items...) -> div(class: 'controls', items)
 
@@ -115,38 +111,37 @@ controls.form.horizontal = (items, actions...) ->
     div(class: "form-actions", actions) if actions.length
   )
 
-controls.help =
-  block: (text) -> controls.span(class: 'help-block', text)
-  inline: (text) -> controls.span(class: 'help-inline', text)
+bootstrap.help =
+  block: (text) -> bootstrap.span(class: 'help-block', text)
+  inline: (text) -> bootstrap.span(class: 'help-inline', text)
 
-controls.legend = tag('legend')
-controls.fieldset = tag('fieldset')
-controls.label = tag('label')
-controls.label.inline = tag('label', 'inline')
+bootstrap.legend = tag('legend')
+bootstrap.fieldset = tag('fieldset')
+bootstrap.label = tag('label')
+bootstrap.label.inline = tag('label', 'inline')
 
 toAddOn = (item) ->
   if _.isString(item)
-    controls.span(class:'add-on', item)
+    bootstrap.span(class:'add-on', item)
   else
     item
 
-controls.append = (input, items...) ->
+bootstrap.append = (input, items...) ->
   items = (toAddOn(item) for item in items)
   div(class: "input-append", input, items)
 
-controls.prepend = (items...) ->
+bootstrap.prepend = (items...) ->
   items = (toAddOn(item) for item in items)
   div(class: "input-prepend", items)
 
-img = (initialClass) ->
+img = (initialConfig = {}) ->
   (config) ->
-    tag('img')(config)
-      .addClass(initialClass)
+    tag('img', initialConfig)(config)
 
-controls.img = img()
-controls.img.rounded = img('img-rounded')
-controls.img.circle = img('img-circle')
-controls.img.polaroid = img('img-polaroid')
+bootstrap.img = img()
+bootstrap.img.rounded = img(class: 'img-rounded')
+bootstrap.img.circle = img(class: 'img-circle')
+bootstrap.img.polaroid = img(class: 'img-polaroid')
 # TODO(kiro): Add validations
 
 ###

@@ -1,7 +1,6 @@
-ns = window.BC.namespace("mixins")
-common = window.BC.namespace("common")
+mixins = window.BC.namespace("bootstrap.mixins")
 
-ns.spannable = ->
+mixins.spannable = ->
   span = (size) ->
     (args...) -> this.addClassAndItems('span' + size, args...)
 
@@ -18,7 +17,7 @@ ns.spannable = ->
   span11: span(11)
   span12: span(12)
 
-ns.offsetable = ->
+mixins.offsetable = ->
   offset = (size) ->
     (args...) -> this.addClassAndItems("offset" + size, args...)
 
@@ -35,7 +34,7 @@ ns.offsetable = ->
   offset11: offset(11)
   offset12: offset(12)
 
-ns.contextual = (prefix) ->
+mixins.contextual = (prefix) ->
   context = (suffix) ->
     (args...) ->
       if prefix then prefix = prefix + "-"
@@ -46,13 +45,11 @@ ns.contextual = (prefix) ->
   error: context('error')
   success: context('success')
 
-ns.textContextual = -> $.extend(ns.contextual('text'),
-  muted: (args...) ->
-    this.addClass("muted")
-    this.addItems(args...)
+mixins.textContextual = -> $.extend(mixins.contextual('text'),
+  muted: (args...) -> this.addClassAndItems("muted", args)
 )
 
-ns.sizeable = (prefix) ->
+mixins.sizeable = (prefix) ->
   size = (suffix) ->
     () ->
       if prefix then prefix = prefix + "-"

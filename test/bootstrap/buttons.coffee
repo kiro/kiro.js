@@ -1,8 +1,8 @@
 util = window.BC.namespace("test.util")
-controls = window.BC.namespace("controls")
-m = window.BC.namespace("model")
+bootstrap = window.BC.namespace("bootstrap")
+models = window.BC.namespace("models")
 
-$.extend(this, controls, m, util)
+$.extend(this, bootstrap, models, util)
 
 describe("Buttons test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached

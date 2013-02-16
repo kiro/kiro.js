@@ -1,7 +1,7 @@
-controls = window.BC.namespace("controls")
-m = window.BC.namespace("model")
+bootstrap = window.BC.namespace("bootstrap")
+models = window.BC.namespace("models")
 
-$.extend(this, controls, m)
+$.extend(this, bootstrap, models)
 
 describe("Models test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
@@ -21,6 +21,7 @@ describe("Models test", ->
         button('Add', ->
           todos.push(todo(todoText()))
           todoText("")
+          return false
         )
       )
     )
@@ -170,11 +171,14 @@ describe("Models test", ->
 
     show(
       div(
-        input.text().bindValue(item),
-        button('Add', ->
-          items.push(item())
-          item("")
-        ),
+        form.inline(
+          input.text().bindValue(item),
+          button('Add', ->
+            items.push(item())
+            item("")
+            return false
+          )
+        )
         table(thead(tr(th("Value")))).foreach(items, (item) ->
           tr(td(item))
         )

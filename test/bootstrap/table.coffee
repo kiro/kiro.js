@@ -1,6 +1,6 @@
-controls = window.BC.namespace("controls")
+bootstrap = window.BC.namespace("bootstrap")
 
-$.extend(this, controls)
+$.extend(this, bootstrap)
 
 element(table(tr(td(1), td(2), td(3))))
 

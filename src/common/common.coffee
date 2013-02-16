@@ -18,11 +18,11 @@ common.init = (item, context) ->
   else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
   else throw Error(item + " is expected to be String, Number, Array, undefined or have .init() function")
 
-nextId = ( ->
+common.nextId = ( ->
   id = 0
   -> ++id
 )()
-
+###
 common.tag = (name, initialClasses = "") ->
   (items...) ->
     classes = [initialClasses]
@@ -56,10 +56,11 @@ common.tag = (name, initialClasses = "") ->
 
     render = (name, value) -> if value then "#{name}=\"#{value}\"" else ""
 
-    if items.length > 0 and _.isObject(items[0]) and _.keys(items[0]).length <= 2
+    if items.length > 0 and _.isObject(items[0]) and _.keys(items[0]).length <= 3
       if items[0].class or items[0].src
         addClass(items[0].class) if items[0].class
         $.extend(attr, src: items[0].src) if items[0].src
+        $.extend(attr, type: items[0].type) if items[0].type
         items = _.rest(items)
 
     id: (value) ->
@@ -140,7 +141,7 @@ common.tag = (name, initialClasses = "") ->
       this.addClass(name)
       this.addItems(items...)
 
-    attr: (value) ->
+    addAttr: (value) ->
       $.extend(attr, value)
       this
 
@@ -149,7 +150,7 @@ common.tag = (name, initialClasses = "") ->
       this
 
     classes: () -> classes.join(" ")
-
+###
 # Observable
 common.observable = () ->
   listeners = []
@@ -160,11 +161,19 @@ common.observable = () ->
     listener(newValue) for listener in listeners
     this
 
-# Constructs a DOM element from composite.
+# Constructs a DOM element from composite, string, number, array.
 common.element = (composite) ->
-  el = $(composite.html())
-  composite.init(el)
-  el
+  console.log(composite)
+  if _.isString(composite)
+    composite
+  else if _.isNumber(composite)
+    composite
+  else if _.isFunction(composite.html)
+    el = $(composite.html())
+    composite.init(el)
+    el
+  else
+    throw Error(composite + " is expected to be string, number of composite")
 
 # Partial application of a function.
 #

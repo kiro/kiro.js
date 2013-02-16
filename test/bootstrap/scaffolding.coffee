@@ -1,6 +1,6 @@
-controls = window.BC.namespace("controls")
+bootstrap = window.BC.namespace("bootstrap")
 
-$.extend(this, controls)
+$.extend(this, bootstrap)
 
 describe("Scaffolding test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
