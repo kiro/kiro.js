@@ -2,45 +2,57 @@ models = window.BC.namespace("models")
 common = window.BC.namespace("common")
 
 models.collection = (allItems...) ->
+  if allItems.length == 1
+    allItems = allItems[0]
   items = allItems
+
+  o = common.observable()
 
   filter = () -> true
   collection = (args...) ->
     if args.length == 0
       items
     else
-      allItems = args
+      allItems = toArray(args...)
       update()
 
   update = () ->
     items = _.filter(allItems, filter)
-    this.publish(items)
+    o.publish(items)
 
   toPredicate = (arg) ->
-    if not _.isFunction(arg)
-      (item) -> item == arg
-    else
+    if _.isFunction(arg)
       arg
+    else
+      (item) -> item == arg
+
+  toArray = (args...) ->
+    if args.length == 1 and _.isArray(args[0])
+      args[0]
+    else
+      args
 
   # Adds to the collection
   #
   # if arg is an array it concats it to the colection,
   # otherwise it pushes it at the end of the collection
-  collection.add = (arg) ->
-    if _.isArray(arg)
-      allItems = allItems.concat(arg)
-    else
-      allItems.push(arg)
-
-    update()
+  collection.add = (args...) ->
+    allItems = allItems.concat(toArray(args...))
+    update.call(collection)
 
   # Removes elements from the collection
   #
   # It can accept an element and remove all values that are equal
   # or a predicate function and removes all values that satisfy it
   collection.remove = (arg) ->
-    allItems = _.filter(allItems, toPredicate(arg))
-    update()
+    predicate = toPredicate(arg)
+    allItems = _.filter(allItems, (item) -> !predicate(item))
+    update.call(collection)
+
+  # Removes all elements from the collection
+  collection.removeAll = () ->
+    allItems = []
+    update.call(collection)
 
   # It filters the elements in the collection. The operation does not remove
   # the filtered elements, so if a new filter is set the collection will be
@@ -49,7 +61,7 @@ models.collection = (allItems...) ->
   # arg can be a function or a value
   collection.filter = (arg) ->
     filter = toPredicate(arg)
-    update()
+    update.call(collection)
 
   # Counts the elements in the collection
   #
@@ -69,24 +81,29 @@ models.collection = (allItems...) ->
   # If old value is an object it looks for an equal objects in the collection.
   # If old value is a function, it's expected to be a predicate and it replaces
   # all elements that match it.
-  colleciton.replace = (oldValue, newValue) ->
+  collection.replace = (oldValue, newValue) ->
     predicate = toPredicate(oldValue)
 
     for i in [0..allItems.length]
       if predicate(allItems[i])
         allItems[i] = newValue
 
-    update()
+    update.call(collection)
 
   # Replaces all elements in the collection with new values.
   collection.replaceAll = (newItems...) ->
-    allItems = newItems
-    update()
+    allItems = toArray(newItems...)
+    console.log(allItems)
+    update.call(collection)
 
-  # Replaces a new value in the collection at certain index
-  collection.put = (index, item) ->
-    allItems[index] = item
-    update()
+  # Returns a value with index arg, or if arg is function all values that
+  # match the predicate
+  collection.get = (arg) ->
+    if _.isFunction(arg)
+      _.filter(items, arg)
+    else
+      items[arg]
 
-  $.extend(collection, common.observable())
+  collection.subscribe = (listener) -> o.subscribe(listener)
 
+  collection

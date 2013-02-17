@@ -92,6 +92,7 @@ common.bindings = (initialItems) ->
 
     if _.isFunction(collection)
       collection.subscribe( (newItems) =>
+        console.log(newItems)
         elements = (common.element(item) for item in initialItems)
         elements = elements.concat (common.element(render(item)) for item in newItems)
         el.html(elements)

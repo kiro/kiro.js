@@ -6,60 +6,23 @@
 
   common = window.BC.namespace("common");
 
-  models.model = function(arg, deep) {
-    var item, key, model, obj, objModel, value, _i, _j, _len, _len1, _results;
-    if (deep == null) {
-      deep = false;
-    }
-    model = function(arg) {
-      var oldValue, value;
-      value = "";
-      if (_.isUndefined(arg)) {
+  models.model = function(arg) {
+    var model, o, value;
+    value = arg;
+    o = common.observable();
+    model = function(newValue) {
+      if (_.isUndefined(newValue)) {
         return value;
       } else {
-        oldValue = value;
-        value = arg;
-        this.publish(value);
-        return oldValue;
+        value = newValue;
+        o.publish(value);
+        return value;
       }
     };
-    $.extend(model, observable);
-    if (_.isArray(arg)) {
-      if (deep) {
-        return model((function() {
-          var _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = arg.length; _i < _len; _i++) {
-            item = arg[_i];
-            _results.push(models.model(item));
-          }
-          return _results;
-        })());
-      } else {
-        return model(arg);
-      }
-    } else if (_.isObject(arg)) {
-      if (deep) {
-        obj = {};
-        for (value = _i = 0, _len = arg.length; _i < _len; value = ++_i) {
-          key = arg[value];
-          obj[key] = models.model(value, deep);
-        }
-        objModel = common.observable(obj);
-        _results = [];
-        for (value = _j = 0, _len1 = arg.length; _j < _len1; value = ++_j) {
-          key = arg[value];
-          _results.push(objModel.subscribe(objModel[key], function() {
-            return objModel.publish(objModel);
-          }));
-        }
-        return _results;
-      } else {
-        return model(arg);
-      }
-    } else {
-      return model(arg);
-    }
+    model.subscribe = function(listener) {
+      return o.subscribe(listener);
+    };
+    return model;
   };
 
 }).call(this);

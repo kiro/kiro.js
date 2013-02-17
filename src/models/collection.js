@@ -8,9 +8,13 @@
   common = window.BC.namespace("common");
 
   models.collection = function() {
-    var allItems, collection, filter, items, toPredicate, update;
+    var allItems, collection, filter, items, o, toArray, toPredicate, update;
     allItems = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    if (allItems.length === 1) {
+      allItems = allItems[0];
+    }
     items = allItems;
+    o = common.observable();
     filter = function() {
       return true;
     };
@@ -20,38 +24,53 @@
       if (args.length === 0) {
         return items;
       } else {
-        allItems = args;
+        allItems = toArray.apply(null, args);
         return update();
       }
     };
     update = function() {
       items = _.filter(allItems, filter);
-      return this.publish(items);
+      return o.publish(items);
     };
     toPredicate = function(arg) {
-      if (!_.isFunction(arg)) {
+      if (_.isFunction(arg)) {
+        return arg;
+      } else {
         return function(item) {
           return item === arg;
         };
-      } else {
-        return arg;
       }
     };
-    collection.add = function(arg) {
-      if (_.isArray(arg)) {
-        allItems = allItems.concat(arg);
+    toArray = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (args.length === 1 && _.isArray(args[0])) {
+        return args[0];
       } else {
-        allItems.push(arg);
+        return args;
       }
-      return update();
+    };
+    collection.add = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      allItems = allItems.concat(toArray.apply(null, args));
+      return update.call(collection);
     };
     collection.remove = function(arg) {
-      allItems = _.filter(allItems, toPredicate(arg));
-      return update();
+      var predicate;
+      predicate = toPredicate(arg);
+      allItems = _.filter(allItems, function(item) {
+        return !predicate(item);
+      });
+      return update.call(collection);
+    };
+    collection.removeAll = function() {
+      allItems = [];
+      return update.call(collection);
     };
     collection.filter = function(arg) {
       filter = toPredicate(arg);
-      return update();
+      return update.call(collection);
     };
     collection.count = function(arg) {
       if (_.isUndefined(arg)) {
@@ -68,7 +87,7 @@
         throw Error(arg + " is expected to be function or undefined");
       }
     };
-    colleciton.replace = function(oldValue, newValue) {
+    collection.replace = function(oldValue, newValue) {
       var i, predicate, _i, _ref;
       predicate = toPredicate(oldValue);
       for (i = _i = 0, _ref = allItems.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
@@ -76,19 +95,26 @@
           allItems[i] = newValue;
         }
       }
-      return update();
+      return update.call(collection);
     };
     collection.replaceAll = function() {
       var newItems;
       newItems = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      allItems = newItems;
-      return update();
+      allItems = toArray.apply(null, newItems);
+      console.log(allItems);
+      return update.call(collection);
     };
-    collection.put = function(index, item) {
-      allItems[index] = item;
-      return update();
+    collection.get = function(arg) {
+      if (_.isFunction(arg)) {
+        return _.filter(items, arg);
+      } else {
+        return items[arg];
+      }
     };
-    return $.extend(collection, common.observable());
+    collection.subscribe = function(listener) {
+      return o.subscribe(listener);
+    };
+    return collection;
   };
 
 }).call(this);
