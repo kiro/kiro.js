@@ -100,4 +100,10 @@
     "class": '.pre-scrollable'
   });
 
+  bootstrap.section = tag('section');
+
+  bootstrap.pageHeader = tag('div', {
+    "class": 'page-header'
+  });
+
 }).call(this);

@@ -3,7 +3,7 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models)
 
-describe("Models test", ->
+describe("Examples test", ->
   it("", ->) # Empty test, so that the result of the first test can be attached
 
   it("Tests todo app", ->

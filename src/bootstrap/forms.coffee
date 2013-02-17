@@ -118,7 +118,7 @@ bootstrap.help =
 bootstrap.legend = tag('legend')
 bootstrap.fieldset = tag('fieldset')
 bootstrap.label = tag('label')
-bootstrap.label.inline = tag('label', 'inline')
+bootstrap.label.inline = tag('label', class: 'inline')
 
 toAddOn = (item) ->
   if _.isString(item)
@@ -142,30 +142,3 @@ bootstrap.img = img()
 bootstrap.img.rounded = img(class: 'img-rounded')
 bootstrap.img.circle = img(class: 'img-circle')
 bootstrap.img.polaroid = img(class: 'img-polaroid')
-# TODO(kiro): Add validations
-
-###
-button
-checkbox
-color
-date
-datetime
-datetime-local
-email
-file
-hidden
-image
-month
-number
-password
-radio
-range
-reset
-search
-submit
-tel
-text
-time
-url
-week
-###

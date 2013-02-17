@@ -1,12 +1,11 @@
+docs = window.BC.namespace("docs")
 bootstrap = window.BC.namespace("bootstrap")
 
-$.extend(this, bootstrap)
+$.extend(this, bootstrap, docs)
 
-describe("Scaffolding test", ->
-  it("", ->) # Empty test, so that the result of the first test can be attached
-
-  it("Shows a grid", ->
-    show(
+section("Scaffolding",
+  example("Grid building", "Div has fields for different grid styles", ->
+    body(
       div.container(
         div.row(
           div().span2("2"),
@@ -27,8 +26,8 @@ describe("Scaffolding test", ->
     )
   )
 
-  it("Tests creating div without the builder", ->
-    show(
+  example("Creating div with passing classes directly", "Div has set of predefined styles for ease of use.", ->
+    body(
       div.container(
         div.row(
           div(class:"span12", "12")
@@ -37,8 +36,8 @@ describe("Scaffolding test", ->
     )
   )
 
-  it("Shows a grid with offset", ->
-    show(
+  example("Grid with offset", "Using spanX and offsetX builder methods, they can take as additional paramters the content of the div", ->
+    body(
       div.container(
         div.row(
           div().span3().offset2("3,2"),
@@ -53,8 +52,8 @@ describe("Scaffolding test", ->
     )
   )
 
-  it("Shows a grid with nested columns", ->
-    show(
+  example("Grid with nested columns", "Using nesting", ->
+    body(
       div.container(
         div.row(
           div().span12(
@@ -69,8 +68,8 @@ describe("Scaffolding test", ->
     )
   )
 
-  it("Shows a fluid layout", ->
-    show(
+  example("Fluid layout", "Using div.container.fluid and div.row.fluid", ->
+    body(
       div.container.fluid(
         div.row.fluid(
           div().span2().offset4("2,4"),

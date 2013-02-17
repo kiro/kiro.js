@@ -76,3 +76,10 @@ bootstrap.dropdown.segmented = (btn, items...) ->
     dropdown(toggle, items...)
   )
 
+bootstrap.button.group = tag('div', class: 'btn-group')
+bootstrap.button.group.vertical = tag('div', class: 'btn-group btn-group-vertical')
+bootstrap.button.toolbar = tag('div', class: 'btn-toolbar')
+
+
+
+

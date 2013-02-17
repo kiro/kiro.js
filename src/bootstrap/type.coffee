@@ -58,4 +58,8 @@ bootstrap.code = tag('code')
 bootstrap.pre = tag('pre')
 bootstrap.pre.scrollable = tag('pre', class: '.pre-scrollable')
 
+# Section
+bootstrap.section = tag('section')
+bootstrap.pageHeader = tag('div', class: 'page-header')
+
 

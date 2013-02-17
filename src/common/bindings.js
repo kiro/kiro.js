@@ -162,7 +162,6 @@
               }
               return _results;
             })();
-            console.log(elements);
             elements = elements.concat((function() {
               var _i, _len, _results;
               _results = [];
@@ -172,7 +171,6 @@
               }
               return _results;
             })());
-            console.log(elements);
             return el.html(elements);
           });
         }

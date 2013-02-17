@@ -1,12 +1,11 @@
+docs = window.BC.namespace("docs")
 bootstrap = window.BC.namespace("bootstrap")
 
-$.extend(this, bootstrap)
+$.extend(this, bootstrap, docs)
 
-describe("Type tests", ->
-  it("", ->) # Empty test, so that the result of the first test can be attached
-
-  it("Headings test", ->
-    show(
+section("Typography",
+  example("Headings", "Heading styles, correspond to the html tags.", ->
+    body(
       h1("Heading 1")
       h2("Heading 2")
       h3("Heading 3")
@@ -16,8 +15,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Emphasis test", ->
-    show(
+  example("Emphasis", "Emphasis methods.", ->
+    body(
       p(small("Small text"))
       p(bold("Bold text"))
       p(italic("Italics text"))
@@ -25,8 +24,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Text context test", ->
-    show(
+  example("Text context", "Using builder methods for highlighting the content of a p, each of them can accept the content.", ->
+    body(
       p().muted("Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.")
       p().warning("Etiam porta sem malesuada magna mollis euismod.")
       p().error("Donec ullamcorper nulla non metus auctor fringilla.")
@@ -35,8 +34,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Address", ->
-    show(
+  example("Address", "Address building", ->
+    body(
       address(
         bold("Full Name")
         "Address line 1"
@@ -45,8 +44,8 @@ describe("Type tests", ->
       )
     ))
 
-  it("Blockquote", ->
-    show(
+  example("Blockquote", "Using blockquotes.", ->
+    body(
       blockquote(
         p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.")
         small("Kiril Minkov")
@@ -54,8 +53,8 @@ describe("Type tests", ->
     )
   )
 
-  it("List", ->
-    show(
+  example("List", "", ->
+    body(
       ul(
         li('Item 1')
         li('Item 2')
@@ -65,8 +64,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Ordered list", ->
-    show(
+  example("Ordered list", "", ->
+    body(
       ol(
         li('Item 1')
         li('Item 2')
@@ -76,8 +75,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Unstyled list", ->
-    show(
+  example("Unstyled list", "", ->
+    body(
       ul.unstyled(
         li('Item 1')
         li('Item 2')
@@ -87,8 +86,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Inline list", ->
-    show(
+  example("Inline list", "The ul element has predefined class for inline list.", ->
+    body(
       ul.inline(
         li('Item 1')
         li('Item 2')
@@ -98,8 +97,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Description list", ->
-    show(
+  example("Description list", "Direct corrspondance with the html elements.", ->
+    body(
       dl(
         dt('Description 1')
         dd(span().success('Item 2'))
@@ -109,8 +108,8 @@ describe("Type tests", ->
     )
   )
 
-  it("Horizontal description list", ->
-    show(
+  example("Horizontal description list", "dl has predefined class for horizontal list.", ->
+    body(
       dl.horizontal(
         dt('Description 1')
         dd(span().success('Item 2'))
@@ -120,14 +119,14 @@ describe("Type tests", ->
     )
   )
 
-  it("Code", ->
-    show(
+  example("Code", "Code inlining.", ->
+    body(
       span("For example,", code('System.out.pintln("Hello World")'), 'should be wrapped as inline.')
     )
   )
 
-  it("Pre", ->
-    show(
+  example("Pre", "Pre", ->
+    body(
       pre(
         "code",
         "code"

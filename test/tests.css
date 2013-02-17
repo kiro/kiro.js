@@ -26,3 +26,17 @@
 .orange {
     background-color: orange;
 }
+
+.big-area {
+    width: 1000px;
+    height: 500px;
+    position: relative;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    position: absolute;
+    background-color: orange;
+}

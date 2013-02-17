@@ -8,7 +8,7 @@
 
   $.extend(this, bootstrap, models);
 
-  describe("Models test", function() {
+  describe("Examples test", function() {
     it("", function() {});
     it("Tests todo app", function() {
       var footer, header, todo, todoList, todoText, todos;

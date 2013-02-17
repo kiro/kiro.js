@@ -208,7 +208,9 @@
 
   bootstrap.label = tag('label');
 
-  bootstrap.label.inline = tag('label', 'inline');
+  bootstrap.label.inline = tag('label', {
+    "class": 'inline'
+  });
 
   toAddOn = function(item) {
     if (_.isString(item)) {
@@ -276,32 +278,5 @@
   bootstrap.img.polaroid = img({
     "class": 'img-polaroid'
   });
-
-  /*
-  button
-  checkbox
-  color
-  date
-  datetime
-  datetime-local
-  email
-  file
-  hidden
-  image
-  month
-  number
-  password
-  radio
-  range
-  reset
-  search
-  submit
-  tel
-  text
-  time
-  url
-  week
-  */
-
 
 }).call(this);
