@@ -32,7 +32,7 @@ section("Forms",
     body(
       form.inline(
         input.text().small().placeholder("Email")
-        input.text(type: 'password').small().placeholder("Password")
+        input.password().small().placeholder("Password")
         label({class: 'checkbox'}, input.checkbox(), "Remember me")
         button.submit("Sign in")
       )

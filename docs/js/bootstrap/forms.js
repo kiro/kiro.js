@@ -22,9 +22,7 @@
       "class": "search-query"
     }).medium(), button.submit('Search')));
   }), example("Inline form", "Usage of form.inline", function() {
-    return body(form.inline(input.text().small().placeholder("Email"), input.text({
-      type: 'password'
-    }).small().placeholder("Password"), label({
+    return body(form.inline(input.text().small().placeholder("Email"), input.password().small().placeholder("Password"), label({
       "class": 'checkbox'
     }, input.checkbox(), "Remember me"), button.submit("Sign in")));
   }), example("Horizontal form", "Creating horizontal form, it can have field without label", function() {
