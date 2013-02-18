@@ -12,7 +12,7 @@
 
   section("Buttons", example("Button styles", "Button styles for different actions", function() {
     var text;
-    text = function() {};
+    text = model("");
     return body(button("Default", function() {
       return text("I'm default");
     }), button.primary("Primary", function() {
@@ -29,7 +29,7 @@
       return text("Inverse");
     }), button.link("Link", function() {
       return text("Link");
-    }));
+    }), span().bindText(text));
   }), example("Dropdown buttons", "Creating dropdown and segmented dropdown buttons", function() {
     return body(dropdown(button.info("Hello"), a("Hi"), a("How"), divider(), a("Is it going?")), dropdown.segmented(button.info("Hello", function() {
       return console.log("Hello");
@@ -42,12 +42,18 @@
     return body(button.primary("Block").block().large(), button("Block").block());
   }), example("Disabled button", "Binding the disabled property of a button", function() {
     var disabled;
-    disabled = function() {};
+    disabled = model(true);
     return body(button.danger("Disable", function() {
       return disabled(true);
     }), button.success("Enable", function() {
       return disabled(false);
-    }), button("Disabled"));
+    }), button("Disabled").bindDisabled(disabled).bindText(disabled, function() {
+      if (disabled()) {
+        return "Disabled";
+      } else {
+        return "Enabled";
+      }
+    }));
   }));
 
 }).call(this);

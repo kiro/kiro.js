@@ -4,13 +4,15 @@ common = window.BC.namespace("common")
 
 $.extend(this, common)
 
-# Button types
+# Buttons
 button = (init) ->
   (args...) ->
     last = _.last(args)
-    click = ->
+    click = -> return false
     if _.isFunction(last)
-      click = last
+      click = (args...) ->
+        last(args...)
+        return false
       args = args.slice(0, args.length - 1)
 
     $.extend(
@@ -30,7 +32,11 @@ bootstrap.button.success = button(class: 'btn btn-success')
 bootstrap.button.danger = button(class: 'btn btn-danger')
 bootstrap.button.submit = button(class: 'btn', type: 'submit')
 
-# a
+bootstrap.button.group = tag('div', class: 'btn-group')
+bootstrap.button.group.vertical = tag('div', class: 'btn-group btn-group-vertical')
+bootstrap.button.toolbar = tag('div', class: 'btn-toolbar')
+
+# Link
 bootstrap.a = (args...) ->
   last = _.last(args)
   click = ->
@@ -39,10 +45,7 @@ bootstrap.a = (args...) ->
     args = args.slice(0, args.length - 1)
   tag('a')(args).on('click', click)
 
-# dropdown divider
-bootstrap.divider = () -> isDivider:true
-
-#
+# Dropdown
 dropdown = (button, items...) ->
   button
     .addItems(span(class: 'caret'))
@@ -76,9 +79,7 @@ bootstrap.dropdown.segmented = (btn, items...) ->
     dropdown(toggle, items...)
   )
 
-bootstrap.button.group = tag('div', class: 'btn-group')
-bootstrap.button.group.vertical = tag('div', class: 'btn-group btn-group-vertical')
-bootstrap.button.toolbar = tag('div', class: 'btn-toolbar')
+bootstrap.divider = () -> isDivider:true
 
 
 

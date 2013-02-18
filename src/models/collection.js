@@ -10,9 +10,16 @@
   models.collection = function() {
     var allItems, collection, filter, items, o, toArray, toPredicate, update;
     allItems = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    if (allItems.length === 1) {
-      allItems = allItems[0];
-    }
+    toArray = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (args.length === 1 && _.isArray(args[0])) {
+        return args[0];
+      } else {
+        return args;
+      }
+    };
+    allItems = toArray.apply(null, allItems);
     items = allItems;
     o = common.observable();
     filter = function() {
@@ -39,15 +46,6 @@
         return function(item) {
           return item === arg;
         };
-      }
-    };
-    toArray = function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (args.length === 1 && _.isArray(args[0])) {
-        return args[0];
-      } else {
-        return args;
       }
     };
     collection.add = function() {

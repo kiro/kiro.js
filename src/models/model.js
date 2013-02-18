@@ -11,12 +11,14 @@
     value = arg;
     o = common.observable();
     model = function(newValue) {
+      var oldValue;
       if (_.isUndefined(newValue)) {
         return value;
       } else {
+        oldValue = value;
         value = newValue;
         o.publish(value);
-        return value;
+        return oldValue;
       }
     };
     model.subscribe = function(listener) {

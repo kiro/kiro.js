@@ -4,6 +4,7 @@ common = window.BC.namespace("common")
 
 $.extend(this, common)
 
+# Input
 bootstrap.input =
   text: (config, type = 'text') ->
     $.extend(
@@ -42,6 +43,7 @@ bootstrap.input =
 
   submit: (name, click) -> tag('input')(name).addAttr(type: 'submit').on('click', click)
 
+# Select
 bootstrap.select = (items...) ->
   $.extend(
     tag('select')(items...)
@@ -49,17 +51,16 @@ bootstrap.select = (items...) ->
       .on('change', (e) -> e.data.publish($(this).val()) ),
     mixins.spannable()
   )
-
-bootstrap.select.multiple = (items...) ->
-  bootstrap.select(multiple: 'multiple', items)
-
+bootstrap.select.multiple = (items...) -> bootstrap.select(multiple: 'multiple', items)
 bootstrap.option = (text, value) -> tag('option', value: value)(text)
 
+# Textarea
 bootstrap.textarea = (init) ->
   tag('textarea', init)()
     .observable()
     .on('keyup', (e) -> e.data.publish($(this).val()))
 
+# Forms
 form = tag('form')
 
 bootstrap.form = (items, actions...) ->
@@ -83,7 +84,6 @@ bootstrap.form = (items, actions...) ->
   )
 
 bootstrap.form.search = (items...) -> form(class: "form-search", items)
-# TODO(kiro) : FIX ME
 bootstrap.form.inline = (items...) -> form(class: "form-inline", items)
 bootstrap.form.horizontal = (items, actions...) ->
   group = (items...) -> div(class: 'control-group', items)
@@ -120,6 +120,7 @@ bootstrap.fieldset = tag('fieldset')
 bootstrap.label = tag('label')
 bootstrap.label.inline = tag('label', class: 'inline')
 
+# Prepend and append
 toAddOn = (item) ->
   if _.isString(item)
     bootstrap.span(class:'add-on', item)
@@ -134,6 +135,7 @@ bootstrap.prepend = (items...) ->
   items = (toAddOn(item) for item in items)
   div(class: "input-prepend", items)
 
+# Images
 img = (initialConfig = {}) ->
   (config) ->
     tag('img', initialConfig)(config)

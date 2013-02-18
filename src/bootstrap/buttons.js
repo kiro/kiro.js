@@ -16,9 +16,16 @@
       var args, click, last;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       last = _.last(args);
-      click = function() {};
+      click = function() {
+        return false;
+      };
       if (_.isFunction(last)) {
-        click = last;
+        click = function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          last.apply(null, args);
+          return false;
+        };
         args = args.slice(0, args.length - 1);
       }
       return $.extend(tag('button', init)(args).on('click', click), mixins.sizeable('btn'), {
@@ -70,6 +77,18 @@
     type: 'submit'
   });
 
+  bootstrap.button.group = tag('div', {
+    "class": 'btn-group'
+  });
+
+  bootstrap.button.group.vertical = tag('div', {
+    "class": 'btn-group btn-group-vertical'
+  });
+
+  bootstrap.button.toolbar = tag('div', {
+    "class": 'btn-toolbar'
+  });
+
   bootstrap.a = function() {
     var args, click, last;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -80,12 +99,6 @@
       args = args.slice(0, args.length - 1);
     }
     return tag('a')(args).on('click', click);
-  };
-
-  bootstrap.divider = function() {
-    return {
-      isDivider: true
-    };
   };
 
   dropdown = function() {
@@ -137,16 +150,10 @@
     }, btn, dropdown.apply(null, [toggle].concat(__slice.call(items))));
   };
 
-  bootstrap.button.group = tag('div', {
-    "class": 'btn-group'
-  });
-
-  bootstrap.button.group.vertical = tag('div', {
-    "class": 'btn-group btn-group-vertical'
-  });
-
-  bootstrap.button.toolbar = tag('div', {
-    "class": 'btn-toolbar'
-  });
+  bootstrap.divider = function() {
+    return {
+      isDivider: true
+    };
+  };
 
 }).call(this);

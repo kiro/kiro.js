@@ -1,94 +1,113 @@
+docs = window.BC.namespace("docs")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
 
-$.extend(this, bootstrap, models)
+$.extend(this, bootstrap, models, docs)
 
-describe("Examples test", ->
-  it("", ->) # Empty test, so that the result of the first test can be attached
+section("Examples",
+  example("Simple todo", "", ->
+    todo = (text, done = false) ->
+      console.log("--" + text)
+      text: model(text)
+      done: model(done)
 
-  it("Tests todo app", ->
-    todo = (text, done = false) -> model(
-      text: ko.observable(text)
-      done: ko.observable(done)
+    todos = collection(todo('first todo'))
+
+    notDone = (todo) -> !todo.done()
+    done = (todo) -> todo.done()
+    remaining = -> todos.count(notDone) + " of " + todos.count() + " remaining"
+
+    todoText = model("")
+    div(
+      h2("Todo"),
+      span().bindText(todos, remaining),
+      " [", button.link("archive", -> todos.remove(done)), "]",
+      div().foreach(todos, (todo) ->
+        form.inline(
+          input.checkbox().bindValue(todo.done),
+          span().bindText(todo.text)
+        )
+      ),
+      form.inline(
+        input.text().bindValue(todoText),
+        button.primary('Add', -> todos.add(todo(todoText("")))
+      )
     )
+  )
+
+  example("Todo app", "", ->
+    todo = (text, done = false) ->
+      text: model(text)
+      done: model(done)
 
     todos = collection(todo('first todo'))
     todoText = model("")
 
-    header = () -> div(form.inline(
-        input.checkbox().on('click', -> todoItem.done($(this).is(':checked')) for todoItem in todos()),
-        input.text().bindValue(todoText),
-        button('Add', ->
-          todos.push(todo(todoText()))
-          todoText("")
-          return false
-        )
-      )
+    selectAll = model(false)
+    header = form.inline(
+      input.checkbox()
+        .bindValue(selectAll)
+        .on('click', -> todoItem.done(selectAll()) for todoItem in todos()),
+      input.text().bindValue(todoText),
+      button('Add', -> todos.add(todo(todoText(""))))
     )
 
-    todoList = () ->
+    todoList =
       table().foreach(todos, (todo) ->
-        todoTextView = ko.observable(span(todo.text()))
-
         tr(
           td(input.checkbox().bindValue(todo.done)),
-          td()
-            .bindHtml(todoTextView)
-            .on('dblclick', ->
-              todoTextView( div(input.text()
-                .bindValue(todo.text)
-                .on('blur', -> todoTextView( div(span(todo.text())) ))
-                .trigger('focus')
-              ))
-            ),
+          td(todo.text())
           td(button("Remove", -> todos.remove(todo)))
         )
       )
 
-    footer = () ->
-      div(
-        left(
-          span().bindText(todos, -> todos.length),
-          " of ",
-          span().bindText(todos, -> todos.length)
+    notDone = (todo) -> !todo.done()
+    done = (todo) -> todo.done()
+    all = -> true
+
+    footer =
+      div.row.fluid(
+        div().span3(
+          span().bindText(todos, -> todos.count(notDone) + " of " + todos.count())
         ),
-        center(
-          a('All', -> todos.filter(-> true)),
-          a('Done', -> todos.filter((todo) -> todo.done)),
-          a('Left', -> todos.filter((todo) -> !todo.done))
+        div().span6(
+          button.link('All', -> todos.filter(all)),
+          button.link('Done', -> todos.filter(done)),
+          button.link('Left', -> todos.filter(notDone))
         ),
-        right(a('Remove all', -> todos.removeAll()))
+        div().span3(
+          a('Remove all', -> todos.removeAll())
+        )
       )
 
-    show(
-      div(
-        header(),
-        todoList(),
-        footer()
-      )
+    body(
+      div.container(div().span6(
+        header
+        todoList
+        footer
+      ))
     )
   )
 
-  it("Tests select with foreach", ->
+  example("Tests select with foreach", "", ->
     values = collection('One', 'Two', 'Three', 'Four')
     value = model("X")
     text = model("")
 
-    show(div(
+    body(div(
       select.multiple().foreach(values, (value) -> option(value, value)).bindValue(value),
       span().bindText(value),
       input.text().bindValue(text),
       button('Add', ->
-        values.push(text())
-        text("")
+        values.add(text(""))
       )
     ))
   )
 
-  it("Tests select", ->
+  example("Tests select", "", ->
     value = model("value2")
 
-    show(div(
+    body(div(
       select(
         option('Value 1', 'value1'),
         option('Value 2', 'value2'),
@@ -98,10 +117,10 @@ describe("Examples test", ->
     ))
   )
 
-  it("Tests radio", ->
+  example("Tests radio", "", ->
     value = model('value2')
 
-    show(div(
+    body(div(
       input.radio('name', 'value1').bindValue(value),
       input.radio('name', 'value2').bindValue(value),
       input.radio('name', 'value3').bindValue(value),
@@ -109,17 +128,17 @@ describe("Examples test", ->
     ))
   )
 
-  it("Tests checkbox", ->
+  example("Tests checkbox", "", ->
     value = model(true)
 
-    show(div(
+    body(div(
       input.checkbox().bindValue(value),
       input.checkbox().bindValue(value),
       span().bindText(value, -> value().toString())
     ))
   )
 
-  it("Tests attr, css and text bindings", ->
+  example("Tests attr, css and text bindings", "", ->
     number = model(0)
 
     selectColor = (value) ->
@@ -127,7 +146,7 @@ describe("Examples test", ->
         else if value > 3 then 'orange'
         else 'green'
 
-    show(
+    body(
       div(
         button("Test", -> number(number() + 1))
           .bindDisabled(number, -> number() == 10),
@@ -138,12 +157,12 @@ describe("Examples test", ->
     )
   )
 
-  it("Tests visible and html bindings", ->
+  example("Tests visible and html bindings", "", ->
     number = model(0)
 
     isThree = -> number() == 3
 
-    show(
+    body(
       div(
         p("You've clicked ", span("").bindText(number), " times"),
         button("Click me", -> number(number() + 1)).bindDisabled(number, isThree),
@@ -154,28 +173,27 @@ describe("Examples test", ->
     )
   )
 
-  it("Tests input element", ->
+  example("Tests input element", "", ->
     value = model("test")
 
-    show(
-      div(
+    body(
+      form.inline(
         input.text().bindValue(value),
-        span().bindText(value)
+        h1().bindText(value)
       )
     )
   )
 
-  it("Tests simple list", ->
+  example("Tests simple list", "", ->
     item = model("")
     items = collection()
 
-    show(
+    body(
       div(
         form.inline(
           input.text().bindValue(item),
           button('Add', ->
-            items.push(item())
-            item("")
+            items.add(item(""))
             return false
           )
         )
@@ -186,14 +204,17 @@ describe("Examples test", ->
     )
   )
 
-  it("Displays different functions", ->
+  example("Displays different functions", "", ->
     f = model((x) -> x)
 
-    show(div(
-      button("x", -> f((x) -> x)),
-      button("x^2", -> f((x) -> (x-50)*(x-50) / 30)),
-      button("log", -> f((x) -> Math.log(x) * 20)),
-      button("sin", -> f((x) -> Math.sin((x-50)/10) * 50 + 50 ))
+    body(
+
+      button.group(
+        button("x", -> f((x) -> x)),
+        button("x^2", -> f((x) -> (x-50)*(x-50) / 30)),
+        button("log", -> f((x) -> Math.log(x) * 20)),
+        button("sin", -> f((x) -> Math.sin((x-50)/10) * 50 + 50 ))
+      )
 
       div(class: 'area').foreach([1..100], (x) ->
         div(class: 'point').bindCss(f, (fn) ->
@@ -201,6 +222,6 @@ describe("Examples test", ->
           bottom: fn(x) + 'px'
         )
       )
-    ))
+    )
   )
 )

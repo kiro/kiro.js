@@ -6,6 +6,7 @@ $.extend(this, common)
 
 h = (size) -> tag("h" + size)
 
+# Headings
 bootstrap.h1 = h(1)
 bootstrap.h2 = h(2)
 bootstrap.h3 = h(3)
@@ -13,18 +14,20 @@ bootstrap.h4 = h(4)
 bootstrap.h5 = h(5)
 bootstrap.h6 = h(6)
 
-# TODO(kiro): how to deal with different parameters, maybe pass an object
+# Paragraph
 bootstrap.p = (args...) -> $.extend(
   tag("p")(args...)
   mixins.textContextual()
   lead: -> this.addClass('lead')
 )
 
+# Span
 bootstrap.span = (args...) -> $.extend(
   tag("span")(args...)
   mixins.textContextual()
 )
 
+# Address
 bootstrap.address = (values...) ->
   elements = []
   for value in values

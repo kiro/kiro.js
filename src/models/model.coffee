@@ -11,9 +11,10 @@ models.model = (arg) ->
     if _.isUndefined(newValue)
       value
     else
+      oldValue = value
       value = newValue
       o.publish(value)
-      value
+      oldValue
 
   model.subscribe = (listener) -> o.subscribe(listener)
 

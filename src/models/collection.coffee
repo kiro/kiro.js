@@ -2,8 +2,13 @@ models = window.BC.namespace("models")
 common = window.BC.namespace("common")
 
 models.collection = (allItems...) ->
-  if allItems.length == 1
-    allItems = allItems[0]
+  toArray = (args...) ->
+    if args.length == 1 and _.isArray(args[0])
+      args[0]
+    else
+      args
+
+  allItems = toArray(allItems...)
   items = allItems
 
   o = common.observable()
@@ -25,12 +30,6 @@ models.collection = (allItems...) ->
       arg
     else
       (item) -> item == arg
-
-  toArray = (args...) ->
-    if args.length == 1 and _.isArray(args[0])
-      args[0]
-    else
-      args
 
   # Adds to the collection
   #

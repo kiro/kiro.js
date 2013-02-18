@@ -6,7 +6,7 @@ $.extend(this, bootstrap, models, docs)
 
 section("Buttons",
   example("Button styles", "Button styles for different actions", ->
-    text = () ->
+    text = model("")
 
     body(
       button("Default", -> text("I'm default"))
@@ -17,7 +17,7 @@ section("Buttons",
       button.danger("Danger", -> text("Danger"))
       button.inverse("Inverse", -> text("Inverse"))
       button.link("Link", -> text("Link"))
-      #span().bindText(text)
+      span().bindText(text)
     )
   )
 
@@ -55,15 +55,14 @@ section("Buttons",
   )
 
   example("Disabled button", "Binding the disabled property of a button", ->
-   # disabled = model(true)
-    disabled = ->
+    disabled = model(true)
 
     body(
       button.danger("Disable", -> disabled(true))
       button.success("Enable", -> disabled(false))
       button("Disabled")
-      #  .bindDisabled(disabled)
-      #  .bindText(disabled, -> (if disabled() then "Disabled" else "Enabled"))
+        .bindDisabled(disabled)
+        .bindText(disabled, -> (if disabled() then "Disabled" else "Enabled"))
     )
   )
 )

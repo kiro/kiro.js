@@ -1,3 +1,46 @@
 .gray {
     background-color: #d3d3d3;
 }
+
+.area {
+    width: 100px;
+    height: 110px;
+    position: relative;
+}
+
+.point {
+    width: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: black;
+    position: absolute;
+}
+
+.image {
+    width: 140px;
+    height: 140px;
+}
+
+.box {
+    height: 10px;
+    width: 10px;
+    background-color: #808080;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.big-area {
+    width: 1000px;
+    height: 500px;
+    position: relative;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    position: absolute;
+    background-color: orange;
+}

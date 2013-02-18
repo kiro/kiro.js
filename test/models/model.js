@@ -28,7 +28,9 @@
       expect(subscriptionCalls).toBe(2);
       expectedValue = "test";
       flag("test");
-      return expect(subscriptionCalls).toBe(3);
+      expect(subscriptionCalls).toBe(3);
+      expectedValue = "new";
+      return expect(flag("new")).toEqual("test");
     });
   });
 

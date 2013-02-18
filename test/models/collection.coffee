@@ -14,6 +14,7 @@ describe("Collection tests", ->
     expect(numbers()).toEqual([4, 5, 6])
     numbers(7, 8, 9)
     expect(numbers()).toEqual([7, 8, 9])
+    expect(collection(1)()).toEqual([1])
   )
 
   it("Tests add", ->

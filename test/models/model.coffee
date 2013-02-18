@@ -28,5 +28,7 @@ describe("Model tests", ->
     expectedValue = "test"
     flag("test")
     expect(subscriptionCalls).toBe(3)
+    expectedValue = "new"
+    expect(flag("new")).toEqual("test")
   )
 )
