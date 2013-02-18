@@ -21,7 +21,7 @@ section("Examples",
     div(
       h2("Todo"),
       span().bindText(todos, remaining),
-      " [", button.link("archive", -> todos.remove(done)), "]",
+      button.link("archive", -> todos.remove(done)),
       div().foreach(todos, (todo) ->
         form.inline(
           input.checkbox().bindValue(todo.done),
@@ -30,7 +30,9 @@ section("Examples",
       ),
       form.inline(
         input.text().bindValue(todoText),
-        button.primary('Add', -> todos.add(todo(todoText("")))
+        button.primary('Add', ->
+          todos.add(todo(todoText("")))
+        )
       )
     )
   )

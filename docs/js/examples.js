@@ -33,15 +33,13 @@
       return todos.count(notDone) + " of " + todos.count() + " remaining";
     };
     todoText = model("");
-    return [
-      div(h2("Todo"), span().bindText(todos, remaining), " [", button.link("archive", function() {
-        return todos.remove(done);
-      }), "]", div().foreach(todos, function(todo) {
-        return form.inline(input.checkbox().bindValue(todo.done), span().bindText(todo.text));
-      }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
-        return todos.add(todo(todoText()));
-      }))), code("todo = (text, done = false) ->\n  text: model(text)\n  done: model(done)\n\ntodos = collection(todo('first todo'))\n\nnotDone = (todo) -> !todo.done()\ndone = (todo) -> todo.done()\nremaining = -> todos.count(notDone) + \" of \" + todos.count() + \" remaining\"\n\ntodoText = model(\"\")\n[div(\n  h2(\"Todo\"),\n  span().bindText(todos, remaining),\n  \" [\", button.link(\"archive\", -> todos.remove(done)), \"]\",\n  div().foreach(todos, (todo) ->\n    form.inline(\n      input.checkbox().bindValue(todo.done),\n      span().bindText(todo.text)\n    )\n  ),\n  form.inline(\n    input.text().bindText(todoText),\n    button.primary('Add', -> todos.add(todo(todoText(\"\"))))\n  )\n),")
-    ];
+    return div(h2("Todo"), span().bindText(todos, remaining), button.link("archive", function() {
+      return todos.remove(done);
+    }), div().foreach(todos, function(todo) {
+      return form.inline(input.checkbox().bindValue(todo.done), span().bindText(todo.text));
+    }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
+      return todos.add(todo(todoText("")));
+    })));
   }), example("Todo app", "", function() {
     var all, done, footer, header, notDone, selectAll, todo, todoList, todoText, todos;
     todo = function(text, done) {

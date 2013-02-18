@@ -30,7 +30,10 @@
       flag("test");
       expect(subscriptionCalls).toBe(3);
       expectedValue = "new";
-      return expect(flag("new")).toEqual("test");
+      expect(flag("new")).toEqual("test");
+      expectedValue = "";
+      expect(flag("")).toEqual("new");
+      return expect(flag()).toEqual("");
     });
   });
 
