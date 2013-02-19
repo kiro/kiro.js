@@ -10,7 +10,7 @@
     }
     return {
       isAttributes: function(obj) {
-        return obj && !_.isArray(obj) && _.isObject(obj) && !obj['html'] && !obj['init'];
+        return obj && !_.isArray(obj) && _.isObject(obj) && !_.isFunction(obj['html']) && !_.isFunction(obj['init']);
       },
       merge: function(attr2) {
         var key, value, _results;
@@ -31,6 +31,8 @@
               _results.push(attr[key] = attr[key] + " " + attr2[key]);
             } else if (_.isNumber(value)) {
               _results.push(attr[key] = attr2[key]);
+            } else if (_.isUndefined(value)) {
+
             } else {
               throw Error("Unexpected value " + value);
             }

@@ -15,8 +15,8 @@
     return $('#examples').append(element(bootstrap.section(h1(title), items)));
   };
 
-  docs.example = function(title, description, example) {
-    return [h2(title), p(description), example()];
+  docs.example = function(title, description, content) {
+    return div(h2(title), p(description), content(), docs.code());
   };
 
   docs.body = function() {

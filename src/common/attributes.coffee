@@ -2,7 +2,7 @@ common = window.BC.namespace("common")
 
 common.attributes = (attr = {}) ->
   isAttributes: (obj) ->
-    obj and not _.isArray(obj) and _.isObject(obj) and !obj['html'] and !obj['init']
+    obj and not _.isArray(obj) and _.isObject(obj) and !_.isFunction(obj['html']) and !_.isFunction(obj['init'])
 
   merge: (attr2) ->
     if !this.isAttributes(attr2)
@@ -16,6 +16,7 @@ common.attributes = (attr = {}) ->
           attr[key] = attr[key] + " " + attr2[key]
         else if _.isNumber(value)
           attr[key] = attr2[key]
+        else if _.isUndefined(value)
         else
           throw Error("Unexpected value " + value)
       else

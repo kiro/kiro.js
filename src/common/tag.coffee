@@ -10,7 +10,6 @@ common.tag = (name, initialAttr = {}) ->
       items = _.rest(items)
 
     bindings = common.bindings(_.clone(items))
-
     $.extend(bindings,
       id: () -> attr.get('id')
       html: () ->

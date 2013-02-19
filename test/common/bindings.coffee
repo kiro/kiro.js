@@ -120,5 +120,8 @@ describe("Bindings test", ->
     expect(list.el().text()).toBe("Test123")
     values([4, 5, 6])
     expect(list.el().text()).toBe("Test456")
+
+    expectedIndex = 0
+    list = div("Mente").foreach(values, (value, index) -> expect(index).toEqual(expectedIndex++))
   )
 )

@@ -6,10 +6,13 @@ $.extend(this, bootstrap)
 docs.section = (title, items...) ->
   $('#examples').append(element(bootstrap.section(h1(title), items)))
 
-docs.example = (title, description, example) ->
-  [h2(title),
+docs.example = (title, description, content) ->
+  div(
+   h2(title),
    p(description),
-   example()]
+   content(),
+   docs.code()
+  )
 
 docs.body = (items...) ->
   div({class: 'bs-docs-example'}, items)

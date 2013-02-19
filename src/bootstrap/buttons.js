@@ -28,7 +28,7 @@
         };
         args = args.slice(0, args.length - 1);
       }
-      return $.extend(tag('button', init)(args).on('click', click), mixins.sizeable('btn'), {
+      return $.extend(tag('button', init).apply(null, args).on('click', click), mixins.sizeable('btn'), {
         block: function() {
           return this.addClass("btn-block");
         }
@@ -92,13 +92,21 @@
   bootstrap.a = function() {
     var args, click, last;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    console.log(args);
     last = _.last(args);
-    click = function() {};
+    click = function() {
+      return false;
+    };
     if (_.isFunction(last)) {
-      click = last;
+      click = function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        last.apply(null, args);
+        return false;
+      };
       args = args.slice(0, args.length - 1);
     }
-    return tag('a')(args).on('click', click);
+    return tag('a').apply(null, args).on('click', click);
   };
 
   dropdown = function() {

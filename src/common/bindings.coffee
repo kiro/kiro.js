@@ -88,13 +88,15 @@ common.bindings = (initialItems) ->
       else if _.isArray(collection) then collection
       else throw Error(collection + " is expected to be an Array or model")
 
-    this.addItems((render(item) for item in collectionItems)...)
+    index = 0
+    this.addItems((render(item, index++) for item in collectionItems)...)
 
     if _.isFunction(collection)
       collection.subscribe( (newItems) =>
         console.log(newItems)
         elements = (common.element(item) for item in initialItems)
-        elements = elements.concat (common.element(render(item)) for item in newItems)
+        index = 0
+        elements = elements.concat (common.element(render(item, index++)) for item in newItems)
         el.html(elements)
       )
     this

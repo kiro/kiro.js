@@ -65,4 +65,46 @@ section("Buttons",
         .bindText(disabled, -> (if disabled() then "Disabled" else "Enabled"))
     )
   )
+
+  example("Single button group", "Group button together", ->
+    body(
+      button.group(
+        button("One")
+        button.success("Two")
+        button.danger("Three")
+      )
+    )
+  )
+
+  example("Button toolbar", "Put groups of button together", ->
+    body(
+      button.toolbar(
+        button.group(
+          button("1")
+          button("2")
+          button("3")
+        )
+        button.group(
+          button("4")
+          button("5")
+        )
+        button.group(
+          button("6")
+        )
+      )
+    )
+  )
+
+  example("Button group vertical", "Stack buttons vertically", ->
+    body(
+      button.group.vertical(
+        button(icon.arrow_down)
+        button(icon.arrow_left)
+        button(icon.arrow_right)
+        button(icon.arrow_up)
+      )
+    )
+  )
+
+
 )

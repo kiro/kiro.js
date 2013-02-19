@@ -112,7 +112,7 @@
       return expect(box.el().css('display')).toBe("block");
     });
     return it("Tests foreach binding", function() {
-      var list, values;
+      var expectedIndex, list, values;
       values = collection(1, 2, 3);
       list = div("Test").foreach(values, function(value) {
         return value;
@@ -120,7 +120,11 @@
       show(list);
       expect(list.el().text()).toBe("Test123");
       values([4, 5, 6]);
-      return expect(list.el().text()).toBe("Test456");
+      expect(list.el().text()).toBe("Test456");
+      expectedIndex = 0;
+      return list = div("Mente").foreach(values, function(value, index) {
+        return expect(index).toEqual(expectedIndex++);
+      });
     });
   });
 

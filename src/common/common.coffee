@@ -55,3 +55,12 @@ common.element = (composite) ->
 # plus3(4) == 7
 common.partial = (fn, fixedArgs...) ->
   (args...) -> fn(fixedArgs.concat(args)...)
+
+common.once = (value) ->
+  first = true
+  () ->
+    if first
+      first = false
+      return value
+    else
+      return undefined

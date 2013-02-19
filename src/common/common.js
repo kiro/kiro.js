@@ -107,4 +107,17 @@
     };
   };
 
+  common.once = function(value) {
+    var first;
+    first = true;
+    return function() {
+      if (first) {
+        first = false;
+        return value;
+      } else {
+        return void 0;
+      }
+    };
+  };
+
 }).call(this);

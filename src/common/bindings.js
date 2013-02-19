@@ -125,7 +125,7 @@
         return this;
       },
       foreach: function(collection, render) {
-        var collectionItems, item,
+        var collectionItems, index, item,
           _this = this;
         if (!this.id()) {
           this.addAttr({
@@ -141,12 +141,13 @@
             throw Error(collection + " is expected to be an Array or model");
           }
         })();
+        index = 0;
         this.addItems.apply(this, (function() {
           var _i, _len, _results;
           _results = [];
           for (_i = 0, _len = collectionItems.length; _i < _len; _i++) {
             item = collectionItems[_i];
-            _results.push(render(item));
+            _results.push(render(item, index++));
           }
           return _results;
         })());
@@ -163,12 +164,13 @@
               }
               return _results;
             })();
+            index = 0;
             elements = elements.concat((function() {
               var _i, _len, _results;
               _results = [];
               for (_i = 0, _len = newItems.length; _i < _len; _i++) {
                 item = newItems[_i];
-                _results.push(common.element(render(item)));
+                _results.push(common.element(render(item, index++)));
               }
               return _results;
             })());

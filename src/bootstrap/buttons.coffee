@@ -16,7 +16,7 @@ button = (init) ->
       args = args.slice(0, args.length - 1)
 
     $.extend(
-      tag('button', init)(args).on('click', click),
+      tag('button', init)(args...).on('click', click),
       mixins.sizeable('btn'),
       block: -> this.addClass("btn-block")
     )
@@ -38,12 +38,15 @@ bootstrap.button.toolbar = tag('div', class: 'btn-toolbar')
 
 # Link
 bootstrap.a = (args...) ->
+  console.log(args)
   last = _.last(args)
-  click = ->
+  click = -> return false
   if _.isFunction(last)
-    click = last
+    click = (args...) ->
+      last(args...)
+      return false
     args = args.slice(0, args.length - 1)
-  tag('a')(args).on('click', click)
+  tag('a')(args...).on('click', click)
 
 # Dropdown
 dropdown = (button, items...) ->

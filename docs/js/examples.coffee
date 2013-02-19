@@ -7,7 +7,6 @@ $.extend(this, bootstrap, models, docs)
 section("Examples",
   example("Simple todo", "", ->
     todo = (text, done = false) ->
-      console.log("--" + text)
       text: model(text)
       done: model(done)
 

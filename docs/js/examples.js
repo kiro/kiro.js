@@ -16,7 +16,6 @@
       if (done == null) {
         done = false;
       }
-      console.log("--" + text);
       return {
         text: model(text),
         done: model(done)
