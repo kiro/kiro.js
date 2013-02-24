@@ -44,6 +44,7 @@ mixins.contextual = (prefix) ->
   warning: context('warning')
   error: context('error')
   success: context('success')
+  inverse: context('inverse')
 
 mixins.textContextual = -> $.extend(mixins.contextual('text'),
   muted: (args...) -> this.addClassAndItems("muted", args)

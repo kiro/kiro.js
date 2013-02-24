@@ -17,6 +17,7 @@ bootstrap.input =
     )
 
   password: (config) -> this.text(config, 'password')
+  search: (config) -> this.text({class: "search-query"}, 'text')
 
   checkbox : () ->
     $.extend(
@@ -110,6 +111,8 @@ bootstrap.form.horizontal = (items, actions...) ->
     content,
     div(class: "form-actions", actions) if actions.length
   )
+
+bootstrap.form.actions = (items...) -> div(class: "form-actions", items)
 
 bootstrap.help =
   block: (text) -> bootstrap.span(class: 'help-block', text)

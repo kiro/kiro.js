@@ -38,7 +38,6 @@ bootstrap.button.toolbar = tag('div', class: 'btn-toolbar')
 
 # Link
 bootstrap.a = (args...) ->
-  console.log(args)
   last = _.last(args)
   click = -> return false
   if _.isFunction(last)

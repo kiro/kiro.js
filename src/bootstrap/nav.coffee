@@ -4,16 +4,27 @@ common = window.BC.namespace("common")
 
 $.extend(this, common, bootstrap)
 
+activate = (el) ->
+  console.log("test")
+  $(el).parent('li').removeClass('active')
+  $(el).addClass('active')
+
+bootstrap.nav = (items...) ->
+  items = (li(item) for item in items)
+
+  items[0].addClass('active')
+  ul().foreach(items, (item) ->
+    item.on('click', -> activate(this))
+  ).addClass('nav')
+
+# tabs
 bootstrap.tabs = (tabs...) ->
   id = nextId()
-
   active = once("active")
-  tabList = ul(class: "nav nav-tabs")
-    .foreach(tabs, (tab, index) ->
-      li(
-        a({id: id + "_" + index, 'data-toggle': 'tab'}, tab.name)
-      ).addClass(active())
-    )
+  links = _.map(tabs, (tab, index) ->
+    a({id: id + "_" + index, 'data-toggle': 'tab'}, tab.name).on('click', tab.click)
+  )
+  tabList = bootstrap.nav(links...).addClass('nav-tabs')
 
   active = once("active")
   content = div(class: 'tab-content')
@@ -21,8 +32,42 @@ bootstrap.tabs = (tabs...) ->
       div({id: id + "_" + index, class: 'tab-pane'}, tab.content).addClass(active())
     )
 
-  div(class:'tabbable', tabList, content)
+  $.extend(
+    div(class:'tabbable', tabList, content)
+    left: -> this.addClass('tabs-left')
+    right: -> this.addClass('tabs-right')
+    below: -> this.addClass('tabs-below')
+    stacked: -> tabList.addClass('nav-stacked')
+  )
 
-bootstrap.tab = (name, content...) ->
-  name: name
-  content: content
+# Single tab it can accept an object with fields name, content and click or two parameters for name and content.
+bootstrap.tab = (args...) ->
+  if _.isObject(args[0]) and args.length == 1 then return args[0]
+
+  {name: args[0]
+  content: _.rest(args)}
+
+# pills
+bootstrap.pills = (items...) -> bootstrap.nav(items...).addClass('nav-pills')
+bootstrap.pills.stacked = (items...) -> bootstrap.nav(items...).addClass('nav-pills nav-stacked')
+bootstrap.pill = (name, click) ->
+  li(a(name)).on('click', click)
+
+# navbar
+bootstrap.navbar = (items...) ->
+  $.extend(
+    div(class: 'navbar',
+      div(class: 'navbar-inner',
+        items
+      )
+    ),
+    fixedTop: () -> this.addClass('navbar-fixed-top')
+    fixedBottom: () -> this.addClass('navbar-fixed-bottom')
+    staticTop: () -> this.addClass('navbar-static-top')
+    inverse: () -> this.addClass('navbar-inverse')
+  )
+
+bootstrap.navbar.brand = (items...) -> a({class: 'brand'}, items...)
+bootstrap.navbar.divider = () -> li(class: 'divider-vertical')
+bootstrap.navbar.form = (items...) -> form.inline(items...).addClass('navbar-form')
+bootstrap.navbar.search = (items...) -> form.inline(items...).addClass('navbar-search')

@@ -71,7 +71,8 @@
       info: context('info'),
       warning: context('warning'),
       error: context('error'),
-      success: context('success')
+      success: context('success'),
+      inverse: context('inverse')
     };
   };
 

@@ -39,9 +39,11 @@
           return bindings.initBindings(el);
         },
         addClass: function(name) {
-          attr.merge({
-            "class": name
-          });
+          if (name) {
+            attr.merge({
+              "class": name
+            });
+          }
           return this;
         },
         addItems: function() {

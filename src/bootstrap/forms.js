@@ -31,6 +31,11 @@
     password: function(config) {
       return this.text(config, 'password');
     },
+    search: function(config) {
+      return this.text({
+        "class": "search-query"
+      }, 'text');
+    },
     checkbox: function() {
       return $.extend(tag('input')().addAttr({
         type: 'checkbox'
@@ -187,6 +192,14 @@
     }, content, actions.length ? div({
       "class": "form-actions"
     }, actions) : void 0);
+  };
+
+  bootstrap.form.actions = function() {
+    var items;
+    items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return div({
+      "class": "form-actions"
+    }, items);
   };
 
   bootstrap.help = {

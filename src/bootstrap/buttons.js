@@ -92,7 +92,6 @@
   bootstrap.a = function() {
     var args, click, last;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    console.log(args);
     last = _.last(args);
     click = function() {
       return false;

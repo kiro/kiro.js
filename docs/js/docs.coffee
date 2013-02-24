@@ -8,10 +8,10 @@ docs.section = (title, items...) ->
 
 docs.example = (title, description, content) ->
   div(
-   h2(title),
-   p(description),
-   content(),
-   docs.code()
+    h2(title),
+    p(description),
+    content(),
+    docs.code()
   )
 
 docs.body = (items...) ->

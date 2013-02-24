@@ -23,7 +23,8 @@ common.tag = (name, initialAttr = {}) ->
         bindings.initBindings(el)
 
       addClass: (name) ->
-        attr.merge(class: name)
+        if name
+          attr.merge(class: name)
         this
 
       addItems: (newItems...) ->

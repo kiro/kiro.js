@@ -106,4 +106,16 @@
     "class": 'page-header'
   });
 
+  bootstrap.badge = function() {
+    var items;
+    items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return $.extend(bootstrap.span.apply(bootstrap, items).addClass('badge'), mixins.contextual('badge'));
+  };
+
+  bootstrap.label = function() {
+    var items;
+    items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return $.extend(bootstrap.span.apply(bootstrap, items).addClass('label'), mixins.contextual('label'));
+  };
+
 }).call(this);
