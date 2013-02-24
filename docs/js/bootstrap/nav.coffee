@@ -87,7 +87,7 @@ section("Navigation",
           )
           left(
             navbar.search(
-              input.search()
+              input.search().placeholder("Search")
             )
           )
         )

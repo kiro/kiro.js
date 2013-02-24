@@ -44,7 +44,7 @@
   }), example("Basic navbar", "Displays basic navbar, with brand and dividers", function() {
     return body(div.container.fluid(navbar(navbar.brand('Sample brand'), nav(navbar.divider(), a("Home"), a("Examples"), navbar.divider(), a("About")))));
   }), example("Navbar forms", "navbar.form and navbar.search can be used for normal\nand search styled forms respectively. The can be aligned\nusing left and right", function() {
-    return body(div.container.fluid(navbar(right(navbar.form(input.text().span2().placeholder("Username"), input.password().span2().placeholder("Password"), button.success("Login"))), left(navbar.search(input.search())))));
+    return body(div.container.fluid(navbar(right(navbar.form(input.text().span2().placeholder("Username"), input.password().span2().placeholder("Password"), button.success("Login"))), left(navbar.search(input.search().placeholder("Search"))))));
   }), example("Navbar positioning", "The builder methods <code>fixedTop()</code>\n<code>fixedBottom()</code> <code>staticTop()</code>\ncan be used to set the navbar positioning.\nAnd <code>inverse()</code> to set inverse color scheme.", function() {
     return body(div.container.fluid(navbar(navbar.brand("Brand"), nav(a("Home"))).inverse()));
   }));
