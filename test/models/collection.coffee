@@ -197,4 +197,13 @@ describe("Collection tests", ->
     numbers.removeAll()
     expect(numbers()).toEqual([])
   )
+
+  it("Tests total", ->
+    numbers = colection(1, 2, 3, 4)
+    numbers.filter(betweenThreeAndFive)
+
+    expect(numbers.total()).toBe(4)
+    expect(numbers.count()).toBe(2)
+    expect(numbers.total(betweenThreeAndFive())).toBe(2)
+  )
 )

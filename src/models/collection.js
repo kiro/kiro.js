@@ -85,6 +85,21 @@
         throw Error(arg + " is expected to be function or undefined");
       }
     };
+    collection.total = function(arg) {
+      if (_.isUndefined(arg)) {
+        return allItems.length;
+      } else if (_.isFunction(arg)) {
+        return _.reduce(allItems, (function(memo, item) {
+          if (arg(item)) {
+            return 1 + memo;
+          } else {
+            return memo;
+          }
+        }), 0);
+      } else {
+        throw Error(arg + " is expected to be function or undefined");
+      }
+    };
     collection.replace = function(oldValue, newValue) {
       var i, predicate, _i, _ref;
       predicate = toPredicate(oldValue);

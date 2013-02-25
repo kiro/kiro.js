@@ -197,7 +197,7 @@
       numbers.replaceAll([1, 2, 3]);
       return expect(numbers()).toEqual([3]);
     });
-    return it("Tests filter with remove and removeAll", function() {
+    it("Tests filter with remove and removeAll", function() {
       var numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       numbers.filter(betweenThreeAndFive);
@@ -207,6 +207,14 @@
       expect(numbers()).toEqual([4, 5]);
       numbers.removeAll();
       return expect(numbers()).toEqual([]);
+    });
+    return it("Tests total", function() {
+      var numbers;
+      numbers = colection(1, 2, 3, 4);
+      numbers.filter(betweenThreeAndFive);
+      expect(numbers.total()).toBe(4);
+      expect(numbers.count()).toBe(2);
+      return expect(numbers.total(betweenThreeAndFive())).toBe(2);
     });
   });
 

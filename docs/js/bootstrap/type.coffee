@@ -133,4 +133,26 @@ section("Typography",
       )
     )
   )
+
+  example('Labels', 'Use label to specify different label classes', ->
+    body(
+      label('default')
+      label().info("info")
+      label().warning('warning')
+      label().inverse('inverse')
+      label().error('error')
+      label().success('success')
+    )
+  )
+
+  example('Badge', 'Use badge to specify different badge classes', ->
+    body(
+      badge('default')
+      badge().info("info")
+      badge().warning('warning')
+      badge().inverse('inverse')
+      badge().error('error')
+      badge().success('success')
+    )
+  )
 )

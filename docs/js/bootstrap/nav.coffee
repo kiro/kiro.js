@@ -95,10 +95,10 @@ section("Navigation",
     )
   )
 
-  example("Navbar positioning", """The builder methods <code>fixedTop()</code>
+  example("Navbar positioning", """<code>fixedTop()</code>
                                 <code>fixedBottom()</code> <code>staticTop()</code>
                                 can be used to set the navbar positioning.
-                                And <code>inverse()</code> to set inverse color scheme.""", ->
+                                <code>inverse()</code> sets inverse color scheme.""", ->
     body(
       div.container.fluid(
         navbar(

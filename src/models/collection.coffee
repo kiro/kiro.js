@@ -75,6 +75,19 @@ models.collection = (allItems...) ->
     else
       throw Error(arg + " is expected to be function or undefined")
 
+  # Counts all element in the collection including the filtered elements.
+  #
+  # if no arguments is passed it returns the number of elements in the collection
+  # if arg is function it's expected to be a predicate an it returns the number of
+  # elements in the collection that satisfy it.
+  collection.total = (arg) ->
+    if _.isUndefined(arg)
+      allItems.length
+    else if _.isFunction(arg)
+      _.reduce(allItems, ((memo, item) -> if arg(item) then 1 + memo else memo), 0);
+    else
+      throw Error(arg + " is expected to be function or undefined")
+
   # Replaces an element in the collection
   #
   # If old value is an object it looks for an equal objects in the collection.
