@@ -81,7 +81,7 @@ bootstrap.dropdown.segmented = (btn, items...) ->
     dropdown(toggle, items...)
   )
 
-bootstrap.divider = () -> isDivider:true
+bootstrap.dropdown.divider = () -> isDivider:true
 
 
 

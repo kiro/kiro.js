@@ -4,7 +4,7 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-section("Colection",
+docs.models = -> section("Model",
   example("Add", "It need the tabs bootstrap javascript to run correctly.", ->
     body(
     )

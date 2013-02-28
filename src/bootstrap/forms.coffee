@@ -80,10 +80,11 @@ bootstrap.form = (items, actions...) ->
   form(
     fieldset(
       content,
-      div(class: "form-actions", actions) if actions.length
+      actions...
     )
   )
 
+bootstrap.form.actions = (actions...) -> div(class: "form-actions", actions)
 bootstrap.form.search = (items...) -> form(class: "form-search", items)
 bootstrap.form.inline = (items...) -> form(class: "form-inline", items)
 bootstrap.form.horizontal = (items, actions...) ->

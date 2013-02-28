@@ -1,20 +1,24 @@
 bootstrap = window.BC.namespace("bootstrap")
+docs = window.BC.namespace("docs")
+models = window.BC.namespace("models")
 
-$.extend(this, bootstrap)
+$.extend(this, bootstrap, models)
+
+content = model(docs.home())
 
 site = div.container(
   navbar(
-    navbar.brand("kiro.js")
-    nav(
-      a("Home", -> navigate.to('/'))
-      a("Api", -> navigate.to('#/api'))
-      a("Bootstrap", -> navigate.to('#/bootstrap'))
-      a("Examples", -> navigate.to('#/examples'))
+    div.container(
+      navbar.brand("kiro.js")
+      nav(
+        a("Home", -> content(docs.home()))
+        a("Api", -> content(docs.api()))
+        a("Bootstrap", -> content(docs.bootstrap()))
+        a("Examples", -> content(docs.examples()))
+      )
     )
-    right(navbar.search(
-      input.search().placeholder('Search')
-    ))
-  )
+  ).inverse().fixedTop()
+  div.row().bindHtml(content)
 )
 
 $('body').append(

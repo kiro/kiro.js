@@ -141,7 +141,7 @@ section("Forms",
       form.horizontal(
         {"First Name" : input.text()
         "Last Name" : input.text()}
-        button("Submit"), button("Remove")
+        form.actions(button("Submit"), button("Remove"))
       )
     )
   )
@@ -155,7 +155,7 @@ section("Forms",
     )
   )
 
-  example("Icons", "Use icon. for the icons ", ->
+  example("Icons", "Use <code>icon.</code> for the icons ", ->
     body(
       [value for name, value of icon]
     )

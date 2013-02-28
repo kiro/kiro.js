@@ -19,7 +19,11 @@ common.tag = (name, initialAttr = {}) ->
       init: (context) ->
         common.init(items, context)
         id = this.id()
-        el = context.find('#' + id).first() if id
+
+        if id and context.attr('id') == id.toString()
+          el = context
+        else
+          el = context.find('#' + id).first() if id
         bindings.initBindings(el)
 
       addClass: (name) ->

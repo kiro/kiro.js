@@ -4,6 +4,10 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
+# email
+# search
+# todomvc
+#
 section("Examples",
   example("Simple todo", "", ->
     todo = (text, done = false) ->

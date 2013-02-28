@@ -31,11 +31,11 @@
       return text("Link");
     }), span().bindText(text));
   }), example("Dropdown buttons", "Creating dropdown and segmented dropdown buttons", function() {
-    return body(dropdown(button.info("Hello"), a("Hi"), a("How"), divider(), a("Is it going?")), dropdown.segmented(button.info("Hello", function() {
+    return body(dropdown(button.info("Hello"), a("Hi"), a("How"), dropdown.divider(), a("Is it going?")), dropdown.segmented(button.info("Hello", function() {
       return console.log("Hello");
     }), a("Hi", function() {
       return console.log("Hi");
-    }), a("How"), divider(), a("Is it going?")));
+    }), a("How"), dropdown.divider(), a("Is it going?")));
   }), example("Button sizes", "Builder methods for different button sizes", function() {
     return body(button.primary("Large").large(), button.info("Default"), button.warning("Small").small(), button.danger("Mini").mini());
   }), example("Block level buttons", "Creating block level buttons", function() {

@@ -17,7 +17,7 @@ models.model = (arg) ->
       oldValue
 
   model.subscribe = (listener) -> o.subscribe(listener)
-  model.map = (fn)
+  model.map = ->
   model
 
 

@@ -93,7 +93,6 @@ common.bindings = (initialItems) ->
 
     if _.isFunction(collection)
       collection.subscribe( (newItems) =>
-        console.log(newItems)
         elements = (common.element(item) for item in initialItems)
         index = 0
         elements = elements.concat (common.element(render(item, index++)) for item in newItems)

@@ -10,8 +10,28 @@
 
   $.extend(this, bootstrap, models, docs);
 
-  section("Bindings", p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty of the model to a model."), example("Add", "It need the tabs bootstrap javascript to run correctly.", function() {
-    return body();
-  }));
+  docs.bindings = function() {
+    return section("Bindings", p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example("bindValue", "Binds the value of an element to a model. It's available for input and textarea elements.\n\n<code>bindValue(model)</code>\n", function() {
+      var married, sex, text;
+      text = model("initial");
+      sex = model("female");
+      married = model(false);
+      return body(form.inline(input.text().bindValue(text), span().bindText(text), button.info("Clear", function() {
+        return text("");
+      })), input.radio("sex", "male").label("Male").bindValue(sex), input.radio("sex", "female").label("Female").bindValue(sex), input.radio("sex", "other").label("Other").bindValue(sex), span().bindText(sex), input.checkbox().label("Married").bindValue(married), span().bindText(married));
+    }), example("bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
+      var radius;
+      radius = model(1);
+      return body(div({
+        "class": 'square'
+      }).bindCss(radius.get(function(value) {
+        return {
+          'border-radius': value
+        };
+      })), button("+1", function() {
+        return radius(radius() + 1);
+      }));
+    }), example("bindClass", "", function() {}), example("bindText", "", function() {}), example("bindHtml", "", function() {}), example("bindDisabled", "", function() {}), example("bindVisible", "", function() {}), example("foreach", "", function() {}));
+  };
 
 }).call(this);

@@ -326,11 +326,11 @@ only screen and (     -o-min-device-pixel-ratio: 2/1) {
 /* Special grid styles
 -------------------------------------------------- */
 
-.row {
+.bs-docs-example .row {
     margin-top: 10px;
     margin-bottom: 20px;
 }
-.row [class*="span"] {
+.bs-docs-example .row [class*="span"] {
     background-color: #eee;
     text-align: center;
     -webkit-border-radius: 3px;
@@ -339,28 +339,28 @@ only screen and (     -o-min-device-pixel-ratio: 2/1) {
     min-height: 40px;
     line-height: 40px;
 }
-.row:hover [class*="span"] {
+.bs-docs-example .row:hover [class*="span"] {
     background: #ddd;
 }
-.row .show-grid {
+.bs-docs-example .row .show-grid {
     margin-top: 0;
     margin-bottom: 0;
 }
-.row .show-grid [class*="span"] {
+.bs-docs-example .row .show-grid [class*="span"] {
     margin-top: 5px;
 }
-.row [class*="span"] [class*="span"] {
+.bs-docs-example .row [class*="span"] [class*="span"] {
     background-color: #ccc;
 }
-.row [class*="span"] [class*="span"] [class*="span"] {
+.bs-docs-example .row [class*="span"] [class*="span"] [class*="span"] {
     background-color: #999;
 }
 
-.row-fluid {
+.bs-docs-example .row-fluid {
     margin-top: 10px;
     margin-bottom: 20px;
 }
-.row-fluid [class*="span"] {
+.bs-docs-example .row-fluid [class*="span"] {
     background-color: #eee;
     text-align: center;
     -webkit-border-radius: 3px;
@@ -369,20 +369,20 @@ only screen and (     -o-min-device-pixel-ratio: 2/1) {
     min-height: 40px;
     line-height: 40px;
 }
-.row-fluid:hover [class*="span"] {
+.bs-docs-example .row-fluid:hover [class*="span"] {
     background: #ddd;
 }
-.row-fluid .show-grid {
+.bs-docs-example .row-fluid .show-grid {
     margin-top: 0;
     margin-bottom: 0;
 }
-.row-fluid .show-grid [class*="span"] {
+.bs-docs-example .row-fluid .show-grid [class*="span"] {
     margin-top: 5px;
 }
-.row-fluid [class*="span"] [class*="span"] {
+.bs-docs-example .row-fluid [class*="span"] [class*="span"] {
     background-color: #ccc;
 }
-.row-fluid [class*="span"] [class*="span"] [class*="span"] {
+.bs-docs-example .row-fluid [class*="span"] [class*="span"] [class*="span"] {
     background-color: #999;
 }
 

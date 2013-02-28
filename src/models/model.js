@@ -24,7 +24,7 @@
     model.subscribe = function(listener) {
       return o.subscribe(listener);
     };
-    model.map = fn;
+    model.map = function() {};
     return model;
   };
 

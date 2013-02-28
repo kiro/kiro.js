@@ -154,7 +154,6 @@
         if (_.isFunction(collection)) {
           collection.subscribe(function(newItems) {
             var elements;
-            console.log(newItems);
             elements = (function() {
               var _i, _len, _results;
               _results = [];

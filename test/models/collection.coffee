@@ -105,6 +105,8 @@ describe("Collection tests", ->
     numbers.replace(((number) -> number == 4), 2)
     expect(numbers()).toEqual([1, 2, 2, 3])
     expect(subscriptionCalls).toEqual(2)
+
+
   )
 
   it("Tests replaceAll", ->

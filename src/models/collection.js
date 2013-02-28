@@ -114,7 +114,6 @@
       var newItems;
       newItems = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       allItems = toArray.apply(null, newItems);
-      console.log(allItems);
       return update.call(collection);
     };
     collection.get = function(arg) {
@@ -125,7 +124,8 @@
       }
     };
     collection.subscribe = function(listener) {
-      return o.subscribe(listener);
+      o.subscribe(listener);
+      return this;
     };
     return collection;
   };

@@ -157,7 +157,7 @@
     }, btn, dropdown.apply(null, [toggle].concat(__slice.call(items))));
   };
 
-  bootstrap.divider = function() {
+  bootstrap.dropdown.divider = function() {
     return {
       isDivider: true
     };

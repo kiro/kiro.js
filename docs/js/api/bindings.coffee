@@ -4,12 +4,11 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-section("Bindings",
+docs.bindings = -> section("Bindings",
   p("""Each html element offers number of bindings, which allow to bind the value of a certain
       property to a model. The values of the bindings update automatically when the
       model changes. Each binding applies the builder pattern so they can be chained.
     """)
-
   example("bindValue", """
       Binds the value of an element to a model. It's available for input and textarea elements.
 
@@ -38,7 +37,7 @@ section("Bindings",
   )
 
   example("bindCss", """Binds css properties of an element to a model. It expects the value of the model to be
-      an object whose fields are names of css properties.""", ->
+      an object whose fields are names of css properties and have corresponding values.""", ->
 
     radius = model(1)
 
@@ -52,18 +51,10 @@ section("Bindings",
     )
   )
 
-  example("bindClass", """ Binds a class to a model. The model is expected to return true or false
-    depending on whther the c
-
-                       """)
-
-
-###  class
-  text
-  html
-  disabled
-  visible
-  foreach
-
-###
+  example("bindClass", "", ->)
+  example("bindText", "", ->)
+  example("bindHtml", "", ->)
+  example("bindDisabled", "", ->)
+  example("bindVisible", "", ->)
+  example("foreach", "", ->)
 )

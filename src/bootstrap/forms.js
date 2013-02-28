@@ -132,9 +132,15 @@
         content.push(value);
       }
     }
-    return form(fieldset(content, actions.length ? div({
+    return form(fieldset.apply(null, [content].concat(__slice.call(actions))));
+  };
+
+  bootstrap.form.actions = function() {
+    var actions;
+    actions = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return div({
       "class": "form-actions"
-    }, actions) : void 0));
+    }, actions);
   };
 
   bootstrap.form.search = function() {

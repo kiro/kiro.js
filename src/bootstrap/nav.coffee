@@ -5,17 +5,17 @@ common = window.BC.namespace("common")
 $.extend(this, common, bootstrap)
 
 activate = (el) ->
-  console.log("test")
   $(el).parent('li').removeClass('active')
+  debugger
   $(el).addClass('active')
 
 bootstrap.nav = (items...) ->
   items = (li(item) for item in items)
 
   items[0].addClass('active')
-  ul().foreach(items, (item) ->
+  ul(class: 'nav').foreach(items, (item) ->
     item.on('click', -> activate(this))
-  ).addClass('nav')
+  )
 
 # tabs
 bootstrap.tabs = (tabs...) ->
@@ -51,7 +51,7 @@ bootstrap.tab = (args...) ->
 bootstrap.pills = (items...) -> bootstrap.nav(items...).addClass('nav-pills')
 bootstrap.pills.stacked = (items...) -> bootstrap.nav(items...).addClass('nav-pills nav-stacked')
 bootstrap.pill = (name, click) ->
-  li(a(name)).on('click', click)
+  li(a(name).on('click', click))
 
 # navbar
 bootstrap.navbar = (items...) ->

@@ -92,7 +92,7 @@
     return body(form.horizontal({
       "First Name": input.text(),
       "Last Name": input.text()
-    }, button("Submit"), button("Remove")));
+    }, form.actions(button("Submit"), button("Remove"))));
   }), example("Different image styles", "predefined image styles, it accepts config object with src and class proeprties", function() {
     return body(img({
       "class": 'image',
@@ -107,7 +107,7 @@
       "class": 'image',
       src: 'img.jpeg'
     }));
-  }), example("Icons", "Use icon. for the icons ", function() {
+  }), example("Icons", "Use <code>icon.</code> for the icons ", function() {
     var name, value;
     return body([
       (function() {

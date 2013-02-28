@@ -33,8 +33,12 @@
           var el, id;
           common.init(items, context);
           id = this.id();
-          if (id) {
-            el = context.find('#' + id).first();
+          if (id && context.attr('id') === id.toString()) {
+            el = context;
+          } else {
+            if (id) {
+              el = context.find('#' + id).first();
+            }
           }
           return bindings.initBindings(el);
         },

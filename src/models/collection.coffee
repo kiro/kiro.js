@@ -105,7 +105,6 @@ models.collection = (allItems...) ->
   # Replaces all elements in the collection with new values.
   collection.replaceAll = (newItems...) ->
     allItems = toArray(newItems...)
-    console.log(allItems)
     update.call(collection)
 
   # Returns a value with index arg, or if arg is function all values that
@@ -116,6 +115,8 @@ models.collection = (allItems...) ->
     else
       items[arg]
 
-  collection.subscribe = (listener) -> o.subscribe(listener)
+  collection.subscribe = (listener) ->
+    o.subscribe(listener)
+    this
 
   collection

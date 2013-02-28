@@ -12,8 +12,8 @@
   $.extend(this, common, bootstrap);
 
   activate = function(el) {
-    console.log("test");
     $(el).parent('li').removeClass('active');
+    debugger;
     return $(el).addClass('active');
   };
 
@@ -30,11 +30,13 @@
       return _results;
     })();
     items[0].addClass('active');
-    return ul().foreach(items, function(item) {
+    return ul({
+      "class": 'nav'
+    }).foreach(items, function(item) {
       return item.on('click', function() {
         return activate(this);
       });
-    }).addClass('nav');
+    });
   };
 
   bootstrap.tabs = function() {
@@ -101,7 +103,7 @@
   };
 
   bootstrap.pill = function(name, click) {
-    return li(a(name)).on('click', click);
+    return li(a(name).on('click', click));
   };
 
   bootstrap.navbar = function() {
