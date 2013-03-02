@@ -42,4 +42,6 @@ docs.bootstrap.table = -> section(h1("Tables"),
       )
     )
   )
+
+  docs.code.table()
 )

@@ -152,4 +152,6 @@ docs.bindingsApi = -> section(h1("Bindings"),
       "clicks : ", span().bindText(clicks)
     )
   )
+
+  docs.code.bindings()
 )

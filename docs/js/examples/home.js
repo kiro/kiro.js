@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.home = function() {
-    return div(div().span12(h1("Enter Kiro.js")), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
+    return section(h1("Enter Kiro.js"), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
       var text;
       text = model("World");
       return body(input.text().bindValue(text), h3().bindText(text, function() {
@@ -67,7 +67,36 @@
       };
       text = model("Click to edit");
       return body(textEdit(text));
-    }));
+    }), example("Todo", "", function() {
+      var done, notDone, remaining, todo, todoText, todos;
+      todo = function(text, done) {
+        if (done == null) {
+          done = false;
+        }
+        return {
+          text: model(text),
+          done: model(done)
+        };
+      };
+      todos = collection(todo('first todo'));
+      notDone = function(todo) {
+        return !todo.done();
+      };
+      done = function(todo) {
+        return todo.done();
+      };
+      remaining = function() {
+        return todos.count(notDone) + " of " + todos.total() + " remaining";
+      };
+      todoText = model("");
+      return div(span().bindText(todos, remaining), button.link("archive", function() {
+        return todos.remove(done);
+      }), div().foreach(todos, function(todo) {
+        return form.inline(input.checkbox().bindValue(todo.done), span().bindText(todo.text));
+      }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
+        return todos.add(todo(todoText("")));
+      })));
+    }), docs.code.home());
   };
 
 }).call(this);

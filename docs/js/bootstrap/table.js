@@ -85,7 +85,7 @@
       })()));
     }), example("Row classes", "Builder methods for table row style, each of them can take the row content.", function() {
       return body(table(tr().info(td(1), td(2)), tr().warning(td(3), td(4)), tr().success(td(5), td(6)), tr().error(td(7), td(8))));
-    }));
+    }), docs.code.table());
   };
 
 }).call(this);

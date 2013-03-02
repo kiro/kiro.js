@@ -131,7 +131,7 @@
       }, li({
         "class": "active"
       }, a(icon.home, 'Home')), li(a(icon.book, 'Library')), li(a(icon.pencil, "Applications")), li(a("Misc"))));
-    }));
+    }), docs.code.forms());
   };
 
 }).call(this);

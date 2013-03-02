@@ -30,7 +30,7 @@
       return body(div.container(div.row(div().span12("Nested", div.row(div().span6("Nested 6"), div().span6("Nested 6"))))));
     }), example("Fluid layout", "Using div.container.fluid and div.row.fluid", function() {
       return body(div.container.fluid(div.row.fluid(div().span2().offset4("2,4"), div().span3().offset3("3,3")), div.row.fluid(div().span6("Nested fluid", div.row.fluid(div().span6("6"), div().span6("6"))), div().span6("6"))));
-    }));
+    }), docs.code.scaffolding());
   };
 
 }).call(this);

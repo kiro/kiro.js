@@ -163,4 +163,6 @@ docs.collectionApi = -> section(h1("Collection"),
       span().bindText(text)
     )
   )
+
+  docs.code.collection()
 )

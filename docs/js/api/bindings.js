@@ -116,7 +116,7 @@
       return body(div("Click me").on('click', function() {
         return clicks(clicks() + 1);
       }), "clicks : ", span().bindText(clicks));
-    }));
+    }), docs.code.bindings());
   };
 
 }).call(this);

@@ -111,4 +111,6 @@ docs.bootstrap.nav = -> section(h1("Navigation"),
       )
     )
   )
+
+  docs.code.nav()
 )

@@ -37,11 +37,11 @@
       return body(span("For example,", code('System.out.pintln("Hello World")'), 'should be wrapped as inline.'));
     }), example("Pre", "Pre", function() {
       return body(pre("code", "code"));
-    }), example('Labels', 'Use label to specify different label classes', function() {
+    }), example("Labels", 'Use label to specify different label classes', function() {
       return body(type.label('default'), type.label().info("info"), type.label().warning('warning'), type.label().inverse('inverse'), type.label().important('error'), type.label().success('success'));
-    }), example('Badges', 'Use badge to specify different badge classes', function() {
+    }), example("Badges", 'Use badge to specify different badge classes', function() {
       return body(type.badge('default'), type.badge().info("info"), type.badge().warning('warning'), type.badge().inverse('inverse'), type.badge().important('error'), type.badge().success('success'));
-    }));
+    }), docs.code.type());
   };
 
 }).call(this);

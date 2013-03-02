@@ -9,4 +9,6 @@ docs.modelApi = -> section(h1("Model"),
     body(
     )
   )
+
+  docs.code.model()
 )

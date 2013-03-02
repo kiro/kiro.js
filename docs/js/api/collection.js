@@ -121,7 +121,7 @@
         return text("Total length " + items.length);
       });
       return body("Click on a number to remove it", showCollection(numbers), span().bindText(text));
-    }));
+    }), docs.code.collection());
   };
 
 }).call(this);

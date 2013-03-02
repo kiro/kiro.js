@@ -10,19 +10,15 @@
   $.extend(this, bootstrap);
 
   docs.example = function(title, description, content) {
-    return div(h2(title), p(description), content(), docs.code());
+    return div(h2(title), p(description), content(), pre({
+      "class": 'prettyprint linenums'
+    }));
   };
 
   docs.body = function() {
     var items;
     items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return div(items).addClass('bs-docs-example');
-  };
-
-  docs.code = function(code) {
-    return pre({
-      "class": 'prettyprint linenums'
-    }, code);
   };
 
 }).call(this);

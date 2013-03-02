@@ -8,12 +8,9 @@ docs.example = (title, description, content) ->
     h2(title),
     p(description),
     content(),
-    docs.code()
+    pre({class: 'prettyprint linenums'})
   )
 
 docs.body = (items...) ->
   div(items).addClass('bs-docs-example')
-
-docs.code = (code) ->
-  pre({class: 'prettyprint linenums'}, code)
 

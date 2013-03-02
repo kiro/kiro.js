@@ -135,7 +135,7 @@ docs.bootstrap.type = -> section(h1("Typography"),
     )
   )
 
-  example('Labels', 'Use label to specify different label classes', ->
+  example("Labels", 'Use label to specify different label classes', ->
     body(
       type.label('default')
       type.label().info("info")
@@ -146,7 +146,7 @@ docs.bootstrap.type = -> section(h1("Typography"),
     )
   )
 
-  example('Badges', 'Use badge to specify different badge classes', ->
+  example("Badges", 'Use badge to specify different badge classes', ->
     body(
       type.badge('default')
       type.badge().info("info")
@@ -156,4 +156,6 @@ docs.bootstrap.type = -> section(h1("Typography"),
       type.badge().success('success')
     )
   )
+
+  docs.code.type()
 )

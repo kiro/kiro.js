@@ -177,4 +177,6 @@ docs.bootstrap.forms = -> section(h1("Forms"),
       )
     )
   )
+
+  docs.code.forms()
 )

@@ -106,4 +106,6 @@ docs.bootstrap.buttons = -> section(h1("Buttons"),
       )
     )
   )
+
+  docs.code.buttons()
 )

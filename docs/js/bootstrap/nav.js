@@ -50,7 +50,7 @@
       return body(div.container.fluid(navbar(right(navbar.form(input.text().span2().placeholder("Username"), input.password().span2().placeholder("Password"), button.success("Login"))), left(navbar.search(input.search().span2().placeholder("Search"))))));
     }), example("Navbar positioning", "<code>fixedTop()</code>\n<code>fixedBottom()</code> <code>staticTop()</code>\ncan be used to set the navbar positioning.\n<code>inverse()</code> sets inverse color scheme.", function() {
       return body(div.container.fluid(navbar(navbar.brand("Brand"), nav(a("Home"))).inverse()));
-    }));
+    }), docs.code.nav());
   };
 
 }).call(this);

@@ -92,5 +92,7 @@ docs.bootstrap.scaffolding = -> section(h1("Scaffolding"),
       )
     )
   )
+
+  docs.code.scaffolding()
 )
 
