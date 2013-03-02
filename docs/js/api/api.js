@@ -12,14 +12,14 @@
 
   docs.api = function() {
     var content;
-    content = model("");
-    return div(div().span3(pills.stacked(pill("Bindings", function() {
-      return content(docs.bindings());
-    }), pill("Collection", function() {
-      return content(docs.collection());
-    }), pill("Model", function() {
-      return content(docs.model());
-    }))), div().span9().bindHtml(content));
+    content = model(docs.bindingsApi());
+    return div(div().span3(nav(a("Bindings", function() {
+      return content(docs.bindingsApi());
+    }), a("Collection", function() {
+      return content(docs.collectionApi());
+    }), a("Model", function() {
+      return content(docs.modelApi());
+    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
 
 }).call(this);

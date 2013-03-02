@@ -10,8 +10,8 @@
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.models = function() {
-    return section("Model", example("Add", "It need the tabs bootstrap javascript to run correctly.", function() {
+  docs.modelApi = function() {
+    return section(h1("Model"), example("Add", "It need the tabs bootstrap javascript to run correctly.", function() {
       return body();
     }));
   };

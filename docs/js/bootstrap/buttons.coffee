@@ -1,10 +1,11 @@
 docs = window.BC.namespace("docs")
+docs.bootstrap = window.BC.namespace("docs.bootstrap")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-section("Buttons",
+docs.bootstrap.buttons = -> section(h1("Buttons"),
   example("Button styles", "Button styles for different actions", ->
     text = model("")
 

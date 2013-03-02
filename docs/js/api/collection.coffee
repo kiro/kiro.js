@@ -6,7 +6,7 @@ $.extend(this, bootstrap, models, docs)
 
 showCollection = ->
 
-docs.collection = -> section("Collection",
+docs.collectionApi = -> section(h1("Collection"),
   example(".add", """<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>
                      <p><code>.add(values)</code> <code>.add(1, 2, 3)</code>Appends a comma separated list of items. </p>
                      <p><code>.add(array)</code> <code>.add([1, 2, 3])</code>Appends items in the array. </p>""", ->
@@ -72,7 +72,7 @@ docs.collection = -> section("Collection",
       form.inline(
         button.danger("Filter", -> numbers.filter(biggerThan)),
         " bigger than ",
-        input.text().bindValue(limit)
+        input.text().span1().bindValue(limit)
       )
     )
   )
@@ -146,6 +146,7 @@ docs.collection = -> section("Collection",
     byId = (id) -> ((user) -> user.id.toString() == id.toString())
 
     body(
+      # TODO(kiro): make get to return the value directly if it's only one
       p("User 1 : ", users.get(byId(1))[0].name)
       p("User 2 : ", users.get(byId(2))[0].name)
     )

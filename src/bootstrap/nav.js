@@ -13,7 +13,6 @@
 
   activate = function(el) {
     $(el).parent('li').removeClass('active');
-    debugger;
     return $(el).addClass('active');
   };
 

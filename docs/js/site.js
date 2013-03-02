@@ -17,7 +17,7 @@
   }), a("Api", function() {
     return content(docs.api());
   }), a("Bootstrap", function() {
-    return content(docs.bootstrap());
+    return content(docs.bootstrap.index());
   }), a("Examples", function() {
     return content(docs.examples());
   })))).inverse().fixedTop(), div.row().bindHtml(content));

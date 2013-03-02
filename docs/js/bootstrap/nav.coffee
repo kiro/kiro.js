@@ -1,10 +1,11 @@
 docs = window.BC.namespace("docs")
+docs.bootstrap = window.BC.namespace("docs.bootstrap")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-section("Navigation",
+docs.bootstrap.nav = -> section(h1("Navigation"),
   example("Tabs", "It need the tabs bootstrap javascript to run correctly.", ->
     body(
       tabs(
@@ -87,7 +88,7 @@ section("Navigation",
           )
           left(
             navbar.search(
-              input.search().placeholder("Search")
+              input.search().span2().placeholder("Search")
             )
           )
         )

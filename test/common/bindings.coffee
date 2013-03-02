@@ -72,8 +72,9 @@ describe("Bindings test", ->
   )
 
   it("Tests html binding", ->
-    value = model("<h1>Check</h1>")
+    value = model()
     val = span().bindHtml(value)
+    value("<h1>Check</h1>")
     show(val)
 
     expect(val.el().html()).toBe("<h1>Check</h1>")

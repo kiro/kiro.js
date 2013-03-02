@@ -10,28 +10,113 @@
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.bindings = function() {
-    return section("Bindings", p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example("bindValue", "Binds the value of an element to a model. It's available for input and textarea elements.\n\n<code>bindValue(model)</code>\n", function() {
+  docs.bindingsApi = function() {
+    return section(h1("Bindings"), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example(".bindValue", "Binds the value of an element to a model. It's available for input and textarea elements.\n\n<code>.bindValue(model)</code>\n", function() {
       var married, sex, text;
       text = model("initial");
       sex = model("female");
       married = model(false);
       return body(form.inline(input.text().bindValue(text), span().bindText(text), button.info("Clear", function() {
         return text("");
-      })), input.radio("sex", "male").label("Male").bindValue(sex), input.radio("sex", "female").label("Female").bindValue(sex), input.radio("sex", "other").label("Other").bindValue(sex), span().bindText(sex), input.checkbox().label("Married").bindValue(married), span().bindText(married));
-    }), example("bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
-      var radius;
-      radius = model(1);
-      return body(div({
-        "class": 'square'
-      }).bindCss(radius.get(function(value) {
-        return {
-          'border-radius': value
-        };
-      })), button("+1", function() {
-        return radius(radius() + 1);
+      })), input.radio("sex", "male").bindValue(sex), input.radio("sex", "female").bindValue(sex), input.radio("sex", "other").bindValue(sex), span().bindText(sex), input.checkbox().bindValue(married), span().bindText(married));
+    }), example(".bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
+      var f, _i, _results;
+      f = model(function(x) {
+        return x;
+      });
+      return body(button.group(button("x", function() {
+        return f(function(x) {
+          return x;
+        });
+      }), button("x^2", function() {
+        return f(function(x) {
+          return (x - 50) * (x - 50) / 30;
+        });
+      }), button("log", function() {
+        return f(function(x) {
+          return Math.log(x) * 20;
+        });
+      }), button("sin", function() {
+        return f(function(x) {
+          return Math.sin((x - 50) / 10) * 50 + 50;
+        });
+      })), div({
+        "class": 'area'
+      }).foreach((function() {
+        _results = [];
+        for (_i = 1; _i <= 100; _i++){ _results.push(_i); }
+        return _results;
+      }).apply(this), function(x) {
+        return div({
+          "class": 'point'
+        }).bindCss(f, function(fn) {
+          return {
+            left: x + 'px',
+            bottom: fn(x) + 'px'
+          };
+        });
       }));
-    }), example("bindClass", "", function() {}), example("bindText", "", function() {}), example("bindHtml", "", function() {}), example("bindDisabled", "", function() {}), example("bindVisible", "", function() {}), example("foreach", "", function() {}));
+    }), example(".bindClass", "Binds whether class should be set. <code>bindClass(model, className, predicate)</code>", function() {
+      var count;
+      count = model(0);
+      return body(span().bindText(count), button("+1", function() {
+        return count(count() + 1);
+      }).bindClass(count, 'btn-danger', function() {
+        return count() > 3 && count() < 8;
+      }));
+    }), example(".bindText", "Binds the text of an element.", function() {
+      var text;
+      text = model("");
+      return body(form.inline(input.text().bindValue(text), h2().bindText(text)));
+    }), example(".bindHtml", "Binds the html content of an element. The html value can be string, number or a composite component", function() {
+      var content, i, items;
+      content = model();
+      items = [
+        button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(), button.info("Add", function() {
+          return console.log("Test");
+        }))
+      ];
+      i = 0;
+      content(items[0]);
+      return body(button("Next", function() {
+        return content(items[++i % items.length]);
+      }), h6("html"), div().bindHtml(content));
+    }), example(".bindDisabled", "Binds whether an element is disabled", function() {
+      var isThree, number;
+      number = model(0);
+      isThree = function() {
+        return number() === 3;
+      };
+      return body(div(p("You've clicked ", span("").bindText(number), " times"), button("Click me", function() {
+        return number(number() + 1);
+      }).bindDisabled(number, isThree), p("That's too many clicks!", button('Reset Clicks', function() {
+        return number(0);
+      })).bindVisible(number, isThree)));
+    }), example(".bindVisible", "Binds whether an element is visible.", function() {
+      var visible;
+      visible = model(false);
+      return body(button.success("Hide", function() {
+        return visible(!visible());
+      }).bindText(visible, function() {
+        if (visible()) {
+          return "Hide";
+        } else {
+          return "Show";
+        }
+      }), button.primary("Button").bindVisible(visible));
+    }), example(".foreach", "Binds the content of an element to a collection.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection of items</li>\n<li>render(item, index[optional]) - takes and element and optional index and renders the item</li>\n</ul>", function() {
+      var numbers;
+      numbers = collection([5, 3, 2, 7]);
+      return body(div().foreach(numbers, function(number, index) {
+        return div(type.label(number + " @ " + index));
+      }));
+    }), example(".on", " Binds event handlers to an element. It has the same parameters as the jquery on method and it uses it internally.\n<code>.on(event, filter [optional], callback)</code>\n\n<ul>Paramaters\n<li> event - event name, for example \"click\" </li>\n<li> filter - optional element filter for example <code> ul(li(\"a\"), li(\"b\")).on('click', 'li', -> console.log('test'))</code> </li>\n<li> handler(eventObject) - event handler that takes the jquery event object. </li>\n</ul>", function() {
+      var clicks;
+      clicks = model(0);
+      return body(div("Click me").on('click', function() {
+        return clicks(clicks() + 1);
+      }), "clicks : ", span().bindText(clicks));
+    }));
   };
 
 }).call(this);

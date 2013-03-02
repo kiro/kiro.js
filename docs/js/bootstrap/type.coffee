@@ -1,9 +1,10 @@
 docs = window.BC.namespace("docs")
+docs.bootstrap = window.BC.namespace("docs.bootstrap")
 bootstrap = window.BC.namespace("bootstrap")
 
 $.extend(this, bootstrap, docs)
 
-section("Typography",
+docs.bootstrap.type = -> section(h1("Typography"),
   example("Headings", "Heading styles, correspond to the html tags.", ->
     body(
       h1("Heading 1")
@@ -136,23 +137,23 @@ section("Typography",
 
   example('Labels', 'Use label to specify different label classes', ->
     body(
-      label('default')
-      label().info("info")
-      label().warning('warning')
-      label().inverse('inverse')
-      label().error('error')
-      label().success('success')
+      type.label('default')
+      type.label().info("info")
+      type.label().warning('warning')
+      type.label().inverse('inverse')
+      type.label().important('error')
+      type.label().success('success')
     )
   )
 
-  example('Badge', 'Use badge to specify different badge classes', ->
+  example('Badges', 'Use badge to specify different badge classes', ->
     body(
-      badge('default')
-      badge().info("info")
-      badge().warning('warning')
-      badge().inverse('inverse')
-      badge().error('error')
-      badge().success('success')
+      type.badge('default')
+      type.badge().info("info")
+      type.badge().warning('warning')
+      type.badge().inverse('inverse')
+      type.badge().important('error')
+      type.badge().success('success')
     )
   )
 )

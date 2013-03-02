@@ -1,9 +1,13 @@
 docs = window.BC.namespace("docs")
+docs.bootstrap = window.BC.namespace("docs.bootstrap")
 bootstrap = window.BC.namespace("bootstrap")
 
 $.extend(this, bootstrap, docs)
 
-section("Scaffolding",
+body = (items...) ->
+  div(items).addClass('bs-docs-example scaffolding')
+
+docs.bootstrap.scaffolding = -> section(h1("Scaffolding"),
   example("Grid building", "Div has fields for different grid styles", ->
     body(
       div.container(

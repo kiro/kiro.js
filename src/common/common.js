@@ -84,7 +84,9 @@
 
   common.element = function(composite) {
     var el;
-    if (_.isString(composite)) {
+    if (_.isUndefined(composite)) {
+
+    } else if (_.isString(composite)) {
       return composite;
     } else if (_.isNumber(composite)) {
       return composite;

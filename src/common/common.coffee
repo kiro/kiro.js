@@ -35,7 +35,8 @@ common.observable = () ->
 
 # Constructs a DOM element from composite, string, number, array.
 common.element = (composite) ->
-  if _.isString(composite)
+  if _.isUndefined(composite)
+  else if _.isString(composite)
     composite
   else if _.isNumber(composite)
     composite

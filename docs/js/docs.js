@@ -9,12 +9,6 @@
 
   $.extend(this, bootstrap);
 
-  docs.section = function() {
-    var items, title;
-    title = arguments[0], items = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    return $('#examples').append(element(bootstrap.section(h1(title), items)));
-  };
-
   docs.example = function(title, description, content) {
     return div(h2(title), p(description), content(), docs.code());
   };
@@ -22,9 +16,7 @@
   docs.body = function() {
     var items;
     items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return div({
-      "class": 'bs-docs-example'
-    }, items);
+    return div(items).addClass('bs-docs-example');
   };
 
   docs.code = function(code) {

@@ -10,196 +10,161 @@
 
   $.extend(this, bootstrap, models, docs);
 
-  section("Examples", example("Simple todo", "", function() {
-    var done, notDone, remaining, todo, todoText, todos;
-    todo = function(text, done) {
-      if (done == null) {
-        done = false;
-      }
-      return {
-        text: model(text),
-        done: model(done)
-      };
-    };
-    todos = collection(todo('first todo'));
-    notDone = function(todo) {
-      return !todo.done();
-    };
-    done = function(todo) {
-      return todo.done();
-    };
-    remaining = function() {
-      return todos.count(notDone) + " of " + todos.count() + " remaining";
-    };
-    todoText = model("");
-    return div(h2("Todo"), span().bindText(todos, remaining), button.link("archive", function() {
-      return todos.remove(done);
-    }), div().foreach(todos, function(todo) {
-      return form.inline(input.checkbox().bindValue(todo.done), span().bindText(todo.text));
-    }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
-      return todos.add(todo(todoText("")));
-    })));
-  }), example("Todo app", "", function() {
-    var all, done, footer, header, notDone, selectAll, todo, todoList, todoText, todos;
-    todo = function(text, done) {
-      if (done == null) {
-        done = false;
-      }
-      return {
-        text: model(text),
-        done: model(done)
-      };
-    };
-    todos = collection(todo('first todo'));
-    todoText = model("");
-    selectAll = model(false);
-    header = form.inline(input.checkbox().bindValue(selectAll).on('click', function() {
-      var todoItem, _i, _len, _ref, _results;
-      _ref = todos();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        todoItem = _ref[_i];
-        _results.push(todoItem.done(selectAll()));
-      }
-      return _results;
-    }), input.text().bindValue(todoText), button('Add', function() {
-      return todos.add(todo(todoText("")));
-    }));
-    todoList = table().foreach(todos, function(todo) {
-      return tr(td(input.checkbox().bindValue(todo.done)), td(todo.text()), td(button("Remove", function() {
-        return todos.remove(todo);
-      })));
-    });
-    notDone = function(todo) {
-      return !todo.done();
-    };
-    done = function(todo) {
-      return todo.done();
-    };
-    all = function() {
-      return true;
-    };
-    footer = div.row.fluid(div().span3(span().bindText(todos, function() {
-      return todos.count(notDone) + " of " + todos.count();
-    })), div().span6(button.link('All', function() {
-      return todos.filter(all);
-    }), button.link('Done', function() {
-      return todos.filter(done);
-    }), button.link('Left', function() {
-      return todos.filter(notDone);
-    })), div().span3(a('Remove all', function() {
-      return todos.removeAll();
-    })));
-    return body(div.container(div().span6(header, todoList, footer)));
-  }), example("Tests select with foreach", "", function() {
-    var text, value, values;
-    values = collection('One', 'Two', 'Three', 'Four');
-    value = model("X");
-    text = model("");
-    return body(div(select.multiple().foreach(values, function(value) {
-      return option(value, value);
-    }).bindValue(value), span().bindText(value), input.text().bindValue(text), button('Add', function() {
-      return values.add(text(""));
-    })));
-  }), example("Tests select", "", function() {
-    var value;
-    value = model("value2");
-    return body(div(select(option('Value 1', 'value1'), option('Value 2', 'value2'), option('Value 3', 'value3')).bindValue(value), span().bindText(value)));
-  }), example("Tests radio", "", function() {
-    var value;
-    value = model('value2');
-    return body(div(input.radio('name', 'value1').bindValue(value), input.radio('name', 'value2').bindValue(value), input.radio('name', 'value3').bindValue(value), span().bindText(value, function() {
-      return value().toString();
-    })));
-  }), example("Tests checkbox", "", function() {
-    var value;
-    value = model(true);
-    return body(div(input.checkbox().bindValue(value), input.checkbox().bindValue(value), span().bindText(value, function() {
-      return value().toString();
-    })));
-  }), example("Tests attr, css and text bindings", "", function() {
-    var number, selectColor;
-    number = model(0);
-    selectColor = function(value) {
-      if (value > 6) {
-        return 'red';
-      } else if (value > 3) {
-        return 'orange';
-      } else {
-        return 'green';
-      }
-    };
-    return body(div(button("Test", function() {
-      return number(number() + 1);
-    }).bindDisabled(number, function() {
-      return number() === 10;
-    }), span().bindText(number).bindCss(number, function() {
-      return {
-        color: selectColor(number())
-      };
-    })));
-  }), example("Tests visible and html bindings", "", function() {
-    var isThree, number;
-    number = model(0);
-    isThree = function() {
-      return number() === 3;
-    };
-    return body(div(p("You've clicked ", span("").bindText(number), " times"), button("Click me", function() {
-      return number(number() + 1);
-    }).bindDisabled(number, isThree), p("That's too many clicks! Please stop before you wear out your fingers. ", button('Reset Clicks', function() {
-      return number(0);
-    })).bindVisible(number, isThree)));
-  }), example("Tests input element", "", function() {
-    var value;
-    value = model("test");
-    return body(form.inline(input.text().bindValue(value), h1().bindText(value)));
-  }), example("Tests simple list", "", function() {
-    var item, items;
-    item = model("");
-    items = collection();
-    return body(div(form.inline(input.text().bindValue(item), button('Add', function() {
-      items.add(item(""));
-      return false;
-    })), table(thead(tr(th("Value")))).foreach(items, function(item) {
-      return tr(td(item));
-    })));
-  }), example("Displays different functions", "", function() {
-    var f, _i, _results;
-    f = model(function(x) {
-      return x;
-    });
-    return body(button.group(button("x", function() {
-      return f(function(x) {
-        return x;
-      });
-    }), button("x^2", function() {
-      return f(function(x) {
-        return (x - 50) * (x - 50) / 30;
-      });
-    }), button("log", function() {
-      return f(function(x) {
-        return Math.log(x) * 20;
-      });
-    }), button("sin", function() {
-      return f(function(x) {
-        return Math.sin((x - 50) / 10) * 50 + 50;
-      });
-    })), div({
-      "class": 'area'
-    }).foreach((function() {
-      _results = [];
-      for (_i = 1; _i <= 100; _i++){ _results.push(_i); }
-      return _results;
-    }).apply(this), function(x) {
-      return div({
-        "class": 'point'
-      }).bindCss(f, function(fn) {
+  docs.examples = function() {
+    return section(h1("Examples"), example("Simple todo", "", function() {
+      var done, notDone, remaining, todo, todoText, todos;
+      todo = function(text, done) {
+        if (done == null) {
+          done = false;
+        }
         return {
-          left: x + 'px',
-          bottom: fn(x) + 'px'
+          text: model(text),
+          done: model(done)
         };
+      };
+      todos = collection(todo('first todo'));
+      notDone = function(todo) {
+        return !todo.done();
+      };
+      done = function(todo) {
+        return todo.done();
+      };
+      remaining = function() {
+        return todos.count(notDone) + " of " + todos.total() + " remaining";
+      };
+      todoText = model("");
+      return div(h2("Todo"), span().bindText(todos, remaining), button.link("archive", function() {
+        return todos.remove(done);
+      }), div().foreach(todos, function(todo) {
+        return form.inline(input.checkbox().bindValue(todo.done), span().bindText(todo.text));
+      }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
+        return todos.add(todo(todoText("")));
+      })));
+    }), example("Todo app", "", function() {
+      var all, done, footer, header, notDone, selectAll, todo, todoList, todoText, todos;
+      todo = function(text, done) {
+        if (done == null) {
+          done = false;
+        }
+        return {
+          text: model(text),
+          done: model(done)
+        };
+      };
+      todos = collection(todo('first todo'));
+      todoText = model("");
+      selectAll = model(false);
+      header = form.inline(input.checkbox().bindValue(selectAll).on('click', function() {
+        var todoItem, _i, _len, _ref, _results;
+        _ref = todos();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          todoItem = _ref[_i];
+          _results.push(todoItem.done(selectAll()));
+        }
+        return _results;
+      }), input.text().bindValue(todoText), button('Add', function() {
+        return todos.add(todo(todoText("")));
+      }));
+      todoList = table().foreach(todos, function(todo) {
+        return tr(td(input.checkbox().bindValue(todo.done)), td(todo.text()), td(button("Remove", function() {
+          return todos.remove(todo);
+        })));
       });
+      notDone = function(todo) {
+        return !todo.done();
+      };
+      done = function(todo) {
+        return todo.done();
+      };
+      all = function() {
+        return true;
+      };
+      footer = div.row.fluid(div().span3(span().bindText(todos, function() {
+        return todos.count(notDone) + " of " + todos.count();
+      })), div().span6(button.link('All', function() {
+        return todos.filter(all);
+      }), button.link('Done', function() {
+        return todos.filter(done);
+      }), button.link('Left', function() {
+        return todos.filter(notDone);
+      })), div().span3(a('Remove all', function() {
+        return todos.removeAll();
+      })));
+      return body(div.container(div().span6(header, todoList, footer)));
+    }), example("Tests select with foreach", "", function() {
+      var text, value, values;
+      values = collection('One', 'Two', 'Three', 'Four');
+      value = model("X");
+      text = model("");
+      return body(div(select.multiple().foreach(values, function(value) {
+        return option(value, value);
+      }).bindValue(value), span().bindText(value), input.text().bindValue(text), button('Add', function() {
+        return values.add(text(""));
+      })));
+    }), example("Tests select", "", function() {
+      var value;
+      value = model("value2");
+      return body(div(select(option('Value 1', 'value1'), option('Value 2', 'value2'), option('Value 3', 'value3')).bindValue(value), span().bindText(value)));
+    }), example("Tests radio", "", function() {
+      var value;
+      value = model('value2');
+      return body(div(input.radio('name', 'value1').bindValue(value), input.radio('name', 'value2').bindValue(value), input.radio('name', 'value3').bindValue(value), span().bindText(value, function() {
+        return value().toString();
+      })));
+    }), example("Tests checkbox", "", function() {
+      var value;
+      value = model(true);
+      return body(div(input.checkbox().bindValue(value), input.checkbox().bindValue(value), span().bindText(value, function() {
+        return value().toString();
+      })));
+    }), example("Tests attr, css and text bindings", "", function() {
+      var number, selectColor;
+      number = model(0);
+      selectColor = function(value) {
+        if (value > 6) {
+          return 'red';
+        } else if (value > 3) {
+          return 'orange';
+        } else {
+          return 'green';
+        }
+      };
+      return body(div(button("Test", function() {
+        return number(number() + 1);
+      }).bindDisabled(number, function() {
+        return number() === 10;
+      }), span().bindText(number).bindCss(number, function() {
+        return {
+          color: selectColor(number())
+        };
+      })));
+    }), example("Tests visible and html bindings", "", function() {
+      var isThree, number;
+      number = model(0);
+      isThree = function() {
+        return number() === 3;
+      };
+      return body(div(p("You've clicked ", span("").bindText(number), " times"), button("Click me", function() {
+        return number(number() + 1);
+      }).bindDisabled(number, isThree), p("That's too many clicks! Please stop before you wear out your fingers. ", button('Reset Clicks', function() {
+        return number(0);
+      })).bindVisible(number, isThree)));
+    }), example("Tests input element", "", function() {
+      var value;
+      value = model("test");
+      return body(form.inline(input.text().bindValue(value), h1().bindText(value)));
+    }), example("Tests simple list", "", function() {
+      var item, items;
+      item = model("");
+      items = collection();
+      return body(div(form.inline(input.text().bindValue(item), button('Add', function() {
+        items.add(item(""));
+        return false;
+      })), table(thead(tr(th("Value")))).foreach(items, function(item) {
+        return tr(td(item));
+      })));
     }));
-  }));
+  };
 
 }).call(this);

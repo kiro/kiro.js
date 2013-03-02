@@ -8,7 +8,7 @@ $.extend(this, bootstrap, models, docs)
 # search
 # todomvc
 #
-section("Examples",
+docs.examples = -> section(h1("Examples"),
   example("Simple todo", "", ->
     todo = (text, done = false) ->
       text: model(text)
@@ -18,7 +18,7 @@ section("Examples",
 
     notDone = (todo) -> !todo.done()
     done = (todo) -> todo.done()
-    remaining = -> todos.count(notDone) + " of " + todos.count() + " remaining"
+    remaining = -> todos.count(notDone) + " of " + todos.total() + " remaining"
 
     todoText = model("")
     div(
@@ -204,27 +204,6 @@ section("Examples",
         )
         table(thead(tr(th("Value")))).foreach(items, (item) ->
           tr(td(item))
-        )
-      )
-    )
-  )
-
-  example("Displays different functions", "", ->
-    f = model((x) -> x)
-
-    body(
-
-      button.group(
-        button("x", -> f((x) -> x)),
-        button("x^2", -> f((x) -> (x-50)*(x-50) / 30)),
-        button("log", -> f((x) -> Math.log(x) * 20)),
-        button("sin", -> f((x) -> Math.sin((x-50)/10) * 50 + 50 ))
-      )
-
-      div(class: 'area').foreach([1..100], (x) ->
-        div(class: 'point').bindCss(f, (fn) ->
-          left: x + 'px'
-          bottom: fn(x) + 'px'
         )
       )
     )

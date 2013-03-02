@@ -13,7 +13,7 @@ site = div.container(
       nav(
         a("Home", -> content(docs.home()))
         a("Api", -> content(docs.api()))
-        a("Bootstrap", -> content(docs.bootstrap()))
+        a("Bootstrap", -> content(docs.bootstrap.index()))
         a("Examples", -> content(docs.examples()))
       )
     )

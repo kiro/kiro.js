@@ -3,9 +3,6 @@ docs = window.BC.namespace("docs")
 
 $.extend(this, bootstrap)
 
-docs.section = (title, items...) ->
-  $('#examples').append(element(bootstrap.section(h1(title), items)))
-
 docs.example = (title, description, content) ->
   div(
     h2(title),
@@ -15,7 +12,7 @@ docs.example = (title, description, content) ->
   )
 
 docs.body = (items...) ->
-  div({class: 'bs-docs-example'}, items)
+  div(items).addClass('bs-docs-example')
 
 docs.code = (code) ->
   pre({class: 'prettyprint linenums'}, code)

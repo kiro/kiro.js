@@ -1,9 +1,10 @@
 docs = window.BC.namespace("docs")
+docs.bootstrap = window.BC.namespace("docs.bootstrap")
 bootstrap = window.BC.namespace("bootstrap")
 
 $.extend(this, bootstrap, docs)
 
-section("Tables",
+docs.bootstrap.table = -> section(h1("Tables"),
   example("Table", "Table construction.", ->
     body(
       table(

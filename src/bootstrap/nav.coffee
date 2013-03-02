@@ -6,7 +6,6 @@ $.extend(this, common, bootstrap)
 
 activate = (el) ->
   $(el).parent('li').removeClass('active')
-  debugger
   $(el).addClass('active')
 
 bootstrap.nav = (items...) ->

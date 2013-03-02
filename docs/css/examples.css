@@ -59,3 +59,11 @@
     height: 20px;
     background-color: #87cefa;
 }
+
+.sidenav {
+    width: 220px;
+}
+
+.scaffolding {
+    width: 940px;
+}

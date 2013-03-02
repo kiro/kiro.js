@@ -106,16 +106,30 @@
     "class": 'page-header'
   });
 
-  bootstrap.badge = function() {
+  bootstrap.type = {};
+
+  bootstrap.type.badge = function() {
     var items;
     items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return $.extend(bootstrap.span.apply(bootstrap, items).addClass('badge'), mixins.contextual('badge'));
+    return $.extend(bootstrap.span.apply(bootstrap, items).addClass('badge'), mixins.contextual('badge'), {
+      important: function() {
+        var items;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return this.addClassAndItems.apply(this, ['badge-important'].concat(__slice.call(items)));
+      }
+    });
   };
 
-  bootstrap.label = function() {
+  bootstrap.type.label = function() {
     var items;
     items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return $.extend(bootstrap.span.apply(bootstrap, items).addClass('label'), mixins.contextual('label'));
+    return $.extend(bootstrap.span.apply(bootstrap, items).addClass('label'), mixins.contextual('label'), {
+      important: function() {
+        var items;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return this.addClassAndItems.apply(this, ['badge-important'].concat(__slice.call(items)));
+      }
+    });
   };
 
 }).call(this);

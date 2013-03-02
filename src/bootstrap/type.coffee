@@ -65,18 +65,21 @@ bootstrap.pre.scrollable = tag('pre', class: '.pre-scrollable')
 bootstrap.section = tag('section')
 bootstrap.pageHeader = tag('div', class: 'page-header')
 
+bootstrap.type = {}
 # badge
-bootstrap.badge = (items...) ->
+bootstrap.type.badge = (items...) ->
   $.extend(
     bootstrap.span(items...).addClass('badge'),
     mixins.contextual('badge')
+    important : (items...) -> this.addClassAndItems('badge-important', items...)
   )
 
 # label
-bootstrap.label = (items...) ->
+bootstrap.type.label = (items...) ->
   $.extend(
     bootstrap.span(items...).addClass('label'),
     mixins.contextual('label')
+    important : (items...) -> this.addClassAndItems('badge-important', items...)
   )
 
 

@@ -5,15 +5,15 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.api = () ->
-  content = model("")
+  content = model(docs.bindingsApi())
 
   div(
     div().span3(
-      pills.stacked(
-        pill("Bindings", -> content(docs.bindings()))
-        pill("Collection", -> content(docs.collection()))
-        pill("Model", -> content(docs.model()))
-      )
+      nav(
+        a("Bindings", -> content(docs.bindingsApi()))
+        a("Collection", -> content(docs.collectionApi()))
+        a("Model", -> content(docs.modelApi()))
+      ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
     div().span9().bindHtml(content)
   )

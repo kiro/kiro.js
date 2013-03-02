@@ -75,8 +75,9 @@
     });
     it("Tests html binding", function() {
       var val, value;
-      value = model("<h1>Check</h1>");
+      value = model();
       val = span().bindHtml(value);
+      value("<h1>Check</h1>");
       show(val);
       expect(val.el().html()).toBe("<h1>Check</h1>");
       value("<h2>Mente</h2>");
