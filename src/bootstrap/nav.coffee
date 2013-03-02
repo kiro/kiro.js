@@ -5,16 +5,15 @@ common = window.BC.namespace("common")
 $.extend(this, common, bootstrap)
 
 activate = (el) ->
-  $(el).parent('li').removeClass('active')
-  $(el).addClass('active')
+  $(el).parent().parent().find('li').removeClass('active')
+  $(el).parent().addClass('active')
 
 bootstrap.nav = (items...) ->
+  item.on('click', -> activate(this)) for item in items
   items = (li(item) for item in items)
 
   items[0].addClass('active')
-  ul(class: 'nav').foreach(items, (item) ->
-    item.on('click', -> activate(this))
-  )
+  ul(class: 'nav').foreach(items, (item) -> item)
 
 # tabs
 bootstrap.tabs = (tabs...) ->

@@ -12,18 +12,24 @@
   $.extend(this, common, bootstrap);
 
   activate = function(el) {
-    $(el).parent('li').removeClass('active');
-    return $(el).addClass('active');
+    $(el).parent().parent().find('li').removeClass('active');
+    return $(el).parent().addClass('active');
   };
 
   bootstrap.nav = function() {
-    var item, items;
+    var item, items, _i, _len;
     items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    for (_i = 0, _len = items.length; _i < _len; _i++) {
+      item = items[_i];
+      item.on('click', function() {
+        return activate(this);
+      });
+    }
     items = (function() {
-      var _i, _len, _results;
+      var _j, _len1, _results;
       _results = [];
-      for (_i = 0, _len = items.length; _i < _len; _i++) {
-        item = items[_i];
+      for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+        item = items[_j];
         _results.push(li(item));
       }
       return _results;
@@ -32,9 +38,7 @@
     return ul({
       "class": 'nav'
     }).foreach(items, function(item) {
-      return item.on('click', function() {
-        return activate(this);
-      });
+      return item;
     });
   };
 
