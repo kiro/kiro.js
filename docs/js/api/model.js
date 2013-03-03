@@ -11,8 +11,16 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.modelApi = function() {
-    return section(h1("Model"), docs.code.model(), example("Add", "It need the tabs bootstrap javascript to run correctly.", function() {
-      return body();
+    return section(h1("Model"), docs.code.model(), p("Models are observable. Creating a model returns a function <code>text = model('Hello')</code>.\nTo access the values of a model the function can be called <code>text() # -> Hello</code>.\nTo set the value, the function is called with a parameter for the new value <code>text(\"New Value\")</code>.\nWhen seeting the value of a model it returns the old value.\nModels has subscribe method which is used to listen to changes to models and generally is used in bindings."), example("Model example", "Model methods.", function() {
+      var count, text;
+      count = model(0);
+      text = model("");
+      count.subscribe(function() {
+        return text("Total count " + count());
+      });
+      return body(button.primary("+1", function() {
+        return count(count() + 1);
+      }), span().bindText(text));
     }));
   };
 

@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.examples = function() {
-    return section(h1("Examples"), docs.code.examples(), example("Todo app", "", function() {
+    return section(h1("Examples"), docs.code.examples(), example("TodoMVC app", "", function() {
       var all, done, footer, header, notDone, selectAll, todo, todoList, todoText, todos;
       todo = function(text, done) {
         if (done == null) {

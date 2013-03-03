@@ -10,7 +10,7 @@ $.extend(this, bootstrap, models, docs)
 docs.examples = -> section(h1("Examples"),
   docs.code.examples()
 
-  example("Todo app", "", ->
+  example("TodoMVC app", "", ->
     todo = (text, done = false) ->
       text: model(text)
       done: model(done)
