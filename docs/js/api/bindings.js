@@ -110,7 +110,7 @@
       return body(div().foreach(numbers, function(number, index) {
         return div(type.label(number + " @ " + index));
       }));
-    }), example(".on", " Binds event handlers to an element. It has the same parameters as the jquery on method and it uses it internally.\n<code>.on(event, filter [optional], callback)</code>\n\n<ul>Paramaters\n<li> event - event name, for example \"click\" </li>\n<li> filter - optional element filter for example <code> ul(li(\"a\"), li(\"b\")).on('click', 'li', -> console.log('test'))</code> </li>\n<li> handler(eventObject) - event handler that takes the jquery event object. </li>\n</ul>", function() {
+    }), example(".on", " Binds event handlers to an element. It has the same parameters as the jquery on method and it uses it internally.\n<code>.on(event, filter [optional], callback)</code>\n\n<ul>Paramaters\n<li> event - event name, for example \"click\" </li>\n<li> filter - optional element filter <code> ul(li(\"a\"), li(\"b\")).on('click', 'li', -> console.log('test'))</code> </li>\n<li> handler(eventObject) - event handler that takes the jquery event object. </li>\n</ul>", function() {
       var clicks;
       clicks = model(0);
       return body(div("Click me").on('click', function() {

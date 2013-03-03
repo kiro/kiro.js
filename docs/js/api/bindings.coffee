@@ -102,8 +102,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
 
     body(
       div(
-        p("You've clicked ", span("")
-          .bindText(number), " times"),
+        p("You've clicked ", span("").bindText(number), " times"),
         button("Click me", -> number(number() + 1))
           .bindDisabled(number, isThree),
         p("That's too many clicks!", button('Reset Clicks', -> number(0)))
@@ -143,7 +142,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
 
                      <ul>Paramaters
                      <li> event - event name, for example "click" </li>
-                     <li> filter - optional element filter for example <code> ul(li("a"), li("b")).on('click', 'li', -> console.log('test'))</code> </li>
+                     <li> filter - optional element filter <code> ul(li("a"), li("b")).on('click', 'li', -> console.log('test'))</code> </li>
                      <li> handler(eventObject) - event handler that takes the jquery event object. </li>
                      </ul>
                  """, ->

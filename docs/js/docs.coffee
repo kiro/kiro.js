@@ -8,7 +8,7 @@ docs.example = (title, description, content) ->
     h2(title),
     p(description),
     content(),
-    pre({class: 'prettyprint linenums'})
+    pre({class: 'prettyprint linenums', id: 'code ' + title})
   )
 
 docs.body = (items...) ->

@@ -11,7 +11,8 @@
 
   docs.example = function(title, description, content) {
     return div(h2(title), p(description), content(), pre({
-      "class": 'prettyprint linenums'
+      "class": 'prettyprint linenums',
+      id: 'code ' + title
     }));
   };
 

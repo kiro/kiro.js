@@ -4,14 +4,17 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 lexer = get_lexer_by_name("coffeescript", stripall=True)
-formatter = HtmlFormatter(linenos='inline', noclasses=True, cssclass="highlight", cssfile="./code.css", lineseparator="<br>")
+formatter = HtmlFormatter(linenos='inline', cssclass="highlight", cssfile="./code.css", lineseparator="<br>")
 
 def write_example(title, lines, name):
-    print("context.find(\":contains('" + title + "')\").last().siblings('pre').append('" + highlight(lines, lexer, formatter).replace("\n", "\\\n").replace('<pre', '<div').replace('</pre>', '</div>') + "')")
+    code = highlight(lines, lexer, formatter).replace("\n", "\\\n").replace('<pre', '<div').replace('</pre>', '</div>')
+    #print("context.find(\"h2:contains('" + title + "')\").last().siblings('pre').append('" + code + "')")
+    print("context.find('h2').filter(function() { return $(this).text() === \"" + title + "\"}).last().siblings('pre').append('" + code + "')")
 
 lines = ""
 title = ""
 isExample = False
+inExample = False
 
 print("docs = window.BC.namespace('docs')")
 print("docs.code = {}")
@@ -27,13 +30,17 @@ for filename in glob.glob("*/*/*.coffee"):
         title = ""
         for line in f.readlines():
             if line.strip().startswith('example'):
+                inExample = False
                 if isExample: write_example(title, lines, name)
                 lines = ""
                 title = line.split("(")[1].strip().split("\"")[1]
                 isExample = True
 
-            else:
+            if inExample:
                 lines += line[4:][:-1] + "\n"
+
+            if ("->" in line) and (('example' in line) or ('"""' in line)):
+                inExample = True
 
     write_example(title, lines, name)
 
