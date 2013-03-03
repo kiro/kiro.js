@@ -75,12 +75,12 @@
     });
     it("Tests html binding", function() {
       var val, value;
-      value = model();
+      value = model("");
       val = span().bindHtml(value);
-      value("<h1>Check</h1>");
       show(val);
+      value("<h1>Check</h1>");
       expect(val.el().html()).toBe("<h1>Check</h1>");
-      value("<h2>Mente</h2>");
+      value(h2("Mente"));
       return expect(val.el().html()).toBe("<h2>Mente</h2>");
     });
     it("Tests disabled binding", function() {
