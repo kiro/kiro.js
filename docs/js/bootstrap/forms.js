@@ -13,7 +13,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.bootstrap.forms = function() {
-    return section(h1("Forms"), example("Default styles", "Default from style", function() {
+    return section(h1("Forms"), docs.code.forms(), example("Default styles", "Default from style", function() {
       return body(form({
         legend: "Legend",
         'Label name': [input.text().placeholder("Type something..."), help.block("Example block-level help text here.")],
@@ -40,10 +40,10 @@
       }));
     }), example("Textarea", "Textarea input, it can bind the value", function() {
       var value;
-      value = function() {};
+      value = model("text");
       return body(textarea({
         rows: 3
-      }));
+      }).bindValue(value), span().bindText(value));
     }), example("Stacked radio and checkbox", "Radio and checkbox inputs", function() {
       return body(label({
         "class": 'checkbox'
@@ -60,9 +60,9 @@
       }, input.radio("radio", "value1"), "2"), label.inline({
         "class": 'radio'
       }, input.radio("radio", "value2"), "3"));
-    }), example("Append", "Appending buttons and values to input, the first value is the input the rest are the controls", function() {
+    }), example("Append input", "Appending buttons and values to input, the first value is the input the rest are the controls", function() {
       return body(append(input.text(), "@"), append(input.text(), button("Do it!"), button("Another one!")));
-    }), example("Prepend", "Prepending values to input, the last value is the input the others are the prepended controls", function() {
+    }), example("Prepend input", "Prepending values to input, the last value is the input the others are the prepended controls", function() {
       return body(prepend("@", input.text()), prepend(button("Check"), input.text()));
     }), example("Search box append and prepend", "Appending prepending to search box", function() {
       return body(form.search(append(input.text({
@@ -70,11 +70,11 @@
       }), button.submit('Search')), prepend(button.submit('Search'), input.text({
         "class": "input-medium search-query"
       }))));
-    }), example("Input sizes", "Builder methods for input sizes", function() {
+    }), example("Input size styles", "Builder methods for input sizes", function() {
       return body(div({
         "class": "controls docs-input-sizes"
       }, input.text().mini().placeholder('mini'), input.text().small().placeholder('small'), input.text().medium().placeholder('medium'), input.text().large().placeholder('large'), input.text().xlarge().placeholder('xlarge'), input.text().xxlarge().placeholder('xxlarge')));
-    }), example("Span input sizes", "Span style builder methods for input sizes", function() {
+    }), example("Input span", "Span style builder methods for input sizes", function() {
       var i, items;
       items = (function() {
         var _i, _results;
@@ -87,7 +87,7 @@
       return body(div({
         "class": "controls docs-input-sizes"
       }, input.text().span2().placeholder('span2'), input.text().span4().placeholder('span4'), input.text().span6().placeholder('span6'), select().span2(items), select().span4(items), select().span6(items)));
-    }), example("Input sizes", "Span style input sizes", function() {
+    }), example("Row inputs", "Span style input sizes", function() {
       return body(div({
         "class": "docs-input-sizes"
       }, div.controls.row(input.text().span1(), input.text().span5()), div.controls.row(input.text().span3(), input.text().span3()), div.controls.row(input.text().span5(), input.text().span1())));
@@ -123,7 +123,7 @@
           return _results;
         })()
       ]);
-    }), example("Buttons with icons", "Examples of using icons", function() {
+    }), example("Icon buttons", "Examples of using icons", function() {
       return body(button(icon.asterisk, "Asterisk"), form({
         "Email": prepend(icon.envelope, input.text())
       }), ul({
@@ -131,7 +131,7 @@
       }, li({
         "class": "active"
       }, a(icon.home, 'Home')), li(a(icon.book, 'Library')), li(a(icon.pencil, "Applications")), li(a("Misc"))));
-    }), docs.code.forms());
+    }));
   };
 
 }).call(this);

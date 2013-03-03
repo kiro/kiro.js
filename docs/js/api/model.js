@@ -11,9 +11,9 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.modelApi = function() {
-    return section(h1("Model"), example("Add", "It need the tabs bootstrap javascript to run correctly.", function() {
+    return section(h1("Model"), docs.code.model(), example("Add", "It need the tabs bootstrap javascript to run correctly.", function() {
       return body();
-    }), docs.code.model());
+    }));
   };
 
 }).call(this);

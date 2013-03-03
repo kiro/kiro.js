@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.bindingsApi = function() {
-    return section(h1("Bindings"), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example(".bindValue", "Binds the value of an element to a model. It's available for input and textarea elements.\n\n<code>.bindValue(model)</code>\n", function() {
+    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example(".bindValue", "Binds the value of an element to a model. It's available for input and textarea elements.\n\n<code>.bindValue(model)</code>\n", function() {
       var married, sex, text;
       text = model("initial");
       sex = model("female");
@@ -116,7 +116,7 @@
       return body(div("Click me").on('click', function() {
         return clicks(clicks() + 1);
       }), "clicks : ", span().bindText(clicks));
-    }), docs.code.bindings());
+    }));
   };
 
 }).call(this);

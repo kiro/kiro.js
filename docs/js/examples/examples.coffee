@@ -8,6 +8,8 @@ $.extend(this, bootstrap, models, docs)
 # search
 # todomvc
 docs.examples = -> section(h1("Examples"),
+  docs.code.examples()
+
   example("Todo app", "", ->
     todo = (text, done = false) ->
       text: model(text)
@@ -61,6 +63,4 @@ docs.examples = -> section(h1("Examples"),
       ))
     )
   )
-
-  docs.code.examples()
 )

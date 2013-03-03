@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.examples = function() {
-    return section(h1("Examples"), example("Todo app", "", function() {
+    return section(h1("Examples"), docs.code.examples(), example("Todo app", "", function() {
       var all, done, footer, header, notDone, selectAll, todo, todoList, todoText, todos;
       todo = function(text, done) {
         if (done == null) {
@@ -63,7 +63,7 @@
         return todos.removeAll();
       })));
       return body(div.container(div().span6(header, todoList, footer)));
-    }), docs.code.examples());
+    }));
   };
 
 }).call(this);

@@ -31,9 +31,10 @@ for filename in glob.glob("*/*/*.coffee"):
                 lines = ""
                 title = line.split("(")[1].strip().split("\"")[1]
                 isExample = True
+
             else:
                 lines += line[4:][:-1] + "\n"
 
-    print(" } } } ")
+    write_example(title, lines, name)
 
-#write_example(title, lines, name)
+    print(" } } } ")

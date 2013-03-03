@@ -13,7 +13,7 @@
   showCollection = function() {};
 
   docs.collectionApi = function() {
-    return section(h1("Collection"), example(".add", "<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>\n<p><code>.add(values)</code> <code>.add(1, 2, 3)</code>Appends a comma separated list of items. </p>\n<p><code>.add(array)</code> <code>.add([1, 2, 3])</code>Appends items in the array. </p>", function() {
+    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>\n<p><code>.add(values)</code> <code>.add(1, 2, 3)</code>Appends a comma separated list of items. </p>\n<p><code>.add(array)</code> <code>.add([1, 2, 3])</code>Appends items in the array. </p>", function() {
       var numbers, value;
       numbers = collection([1, 2, 3]);
       value = model("");
@@ -121,7 +121,7 @@
         return text("Total length " + items.length);
       });
       return body("Click on a number to remove it", showCollection(numbers), span().bindText(text));
-    }), docs.code.collection());
+    }));
   };
 
 }).call(this);

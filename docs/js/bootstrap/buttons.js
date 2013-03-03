@@ -13,7 +13,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.bootstrap.buttons = function() {
-    return section(h1("Buttons"), example("Button styles", "Button styles for different actions", function() {
+    return section(h1("Buttons"), docs.code.buttons(), example("Button styles", "Button styles for different actions", function() {
       var text;
       text = model("");
       return body(button("Default", function() {
@@ -63,7 +63,7 @@
       return body(button.toolbar(button.group(button("1"), button("2"), button("3")), button.group(button("4"), button("5")), button.group(button("6"))));
     }), example("Button group vertical", "Stack buttons vertically", function() {
       return body(button.group.vertical(button(icon.arrow_down), button(icon.arrow_left), button(icon.arrow_right), button(icon.arrow_up)));
-    }), docs.code.buttons());
+    }));
   };
 
 }).call(this);

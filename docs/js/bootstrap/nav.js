@@ -13,7 +13,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.bootstrap.nav = function() {
-    return section(h1("Navigation"), example("Tabs", "It need the tabs bootstrap javascript to run correctly.", function() {
+    return section(h1("Navigation"), docs.code.nav(), example("Tabs", "It need the tabs bootstrap javascript to run correctly.", function() {
       return body(tabs(tab("Tab 1", button("A button in a tab"), p("Boring tab")), tab("Tab 2", p("Test Test"), p("Test 2"))));
     }), example("Different tab location", "Tabs can be positioned left, right and below.", function() {
       return body(tabs(tab("Top 1"), tab("Top 2")), tabs(tab("Left 1"), tab("Left 2")).left(), tabs(tab("Right 1"), tab("Right 2")).right(), tabs(tab("Below 1"), tab("Below 2")).below());
@@ -50,7 +50,7 @@
       return body(div.container.fluid(navbar(right(navbar.form(input.text().span2().placeholder("Username"), input.password().span2().placeholder("Password"), button.success("Login"))), left(navbar.search(input.search().span2().placeholder("Search"))))));
     }), example("Navbar positioning", "<code>fixedTop()</code>\n<code>fixedBottom()</code> <code>staticTop()</code>\ncan be used to set the navbar positioning.\n<code>inverse()</code> sets inverse color scheme.", function() {
       return body(div.container.fluid(navbar(navbar.brand("Brand"), nav(a("Home"))).inverse()));
-    }), docs.code.nav());
+    }));
   };
 
 }).call(this);

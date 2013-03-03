@@ -5,10 +5,10 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.modelApi = -> section(h1("Model"),
+  docs.code.model()
+
   example("Add", "It need the tabs bootstrap javascript to run correctly.", ->
     body(
     )
   )
-
-  docs.code.model()
 )

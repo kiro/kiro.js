@@ -5,6 +5,8 @@ bootstrap = window.BC.namespace("bootstrap")
 $.extend(this, bootstrap, docs)
 
 docs.bootstrap.type = -> section(h1("Typography"),
+  docs.code.type()
+
   example("Headings", "Heading styles, correspond to the html tags.", ->
     body(
       h1("Heading 1")
@@ -156,6 +158,4 @@ docs.bootstrap.type = -> section(h1("Typography"),
       type.badge().success('success')
     )
   )
-
-  docs.code.type()
 )

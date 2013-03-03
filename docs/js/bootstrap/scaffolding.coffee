@@ -8,6 +8,8 @@ body = (items...) ->
   div(items).addClass('bs-docs-example scaffolding')
 
 docs.bootstrap.scaffolding = -> section(h1("Scaffolding"),
+  docs.code.scaffolding()
+
   example("Grid building", "Div has fields for different grid styles", ->
     body(
       div.container(
@@ -92,7 +94,5 @@ docs.bootstrap.scaffolding = -> section(h1("Scaffolding"),
       )
     )
   )
-
-  docs.code.scaffolding()
 )
 

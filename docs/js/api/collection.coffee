@@ -7,6 +7,9 @@ $.extend(this, bootstrap, models, docs)
 showCollection = ->
 
 docs.collectionApi = -> section(h1("Collection"),
+  docs.code.collection()
+  p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> ")
+
   example(".add", """<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>
                      <p><code>.add(values)</code> <code>.add(1, 2, 3)</code>Appends a comma separated list of items. </p>
                      <p><code>.add(array)</code> <code>.add([1, 2, 3])</code>Appends items in the array. </p>""", ->
@@ -163,6 +166,4 @@ docs.collectionApi = -> section(h1("Collection"),
       span().bindText(text)
     )
   )
-
-  docs.code.collection()
 )

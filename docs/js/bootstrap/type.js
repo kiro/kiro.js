@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, docs);
 
   docs.bootstrap.type = function() {
-    return section(h1("Typography"), example("Headings", "Heading styles, correspond to the html tags.", function() {
+    return section(h1("Typography"), docs.code.type(), example("Headings", "Heading styles, correspond to the html tags.", function() {
       return body(h1("Heading 1"), h2("Heading 2"), h3("Heading 3"), h4("Heading 4"), h5("Heading 5"), h6("Heading 6"));
     }), example("Emphasis", "Emphasis methods.", function() {
       return body(p(small("Small text")), p(bold("Bold text")), p(italic("Italics text")), p().lead("Lead paragraph"));
@@ -41,7 +41,7 @@
       return body(type.label('default'), type.label().info("info"), type.label().warning('warning'), type.label().inverse('inverse'), type.label().important('error'), type.label().success('success'));
     }), example("Badges", 'Use badge to specify different badge classes', function() {
       return body(type.badge('default'), type.badge().info("info"), type.badge().warning('warning'), type.badge().inverse('inverse'), type.badge().important('error'), type.badge().success('success'));
-    }), docs.code.type());
+    }));
   };
 
 }).call(this);

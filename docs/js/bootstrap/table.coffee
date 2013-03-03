@@ -5,6 +5,8 @@ bootstrap = window.BC.namespace("bootstrap")
 $.extend(this, bootstrap, docs)
 
 docs.bootstrap.table = -> section(h1("Tables"),
+  docs.code.table()
+
   example("Table", "Table construction.", ->
     body(
       table(
@@ -42,6 +44,4 @@ docs.bootstrap.table = -> section(h1("Tables"),
       )
     )
   )
-
-  docs.code.table()
 )

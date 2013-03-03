@@ -6,6 +6,8 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.bootstrap.nav = -> section(h1("Navigation"),
+  docs.code.nav()
+
   example("Tabs", "It need the tabs bootstrap javascript to run correctly.", ->
     body(
       tabs(
@@ -111,6 +113,4 @@ docs.bootstrap.nav = -> section(h1("Navigation"),
       )
     )
   )
-
-  docs.code.nav()
 )

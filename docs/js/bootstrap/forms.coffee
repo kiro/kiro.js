@@ -6,6 +6,8 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.bootstrap.forms = -> section(h1("Forms"),
+  docs.code.forms()
+
   example("Default styles", "Default from style", ->
     body(
       form(
@@ -51,12 +53,11 @@ docs.bootstrap.forms = -> section(h1("Forms"),
   )
 
   example("Textarea", "Textarea input, it can bind the value", ->
-    value = ->
-    #value = model("text")
+    value = model("text")
 
     body(
-      textarea(rows: 3)
-     # span().bindText(value)
+      textarea(rows: 3).bindValue(value)
+      span().bindText(value)
     )
   )
 
@@ -76,14 +77,14 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     )
   )
 
-  example("Append", "Appending buttons and values to input, the first value is the input the rest are the controls", ->
+  example("Append input", "Appending buttons and values to input, the first value is the input the rest are the controls", ->
     body(
       append(input.text(), "@")
       append(input.text(), button("Do it!"), button("Another one!"))
     )
   )
 
-  example("Prepend", "Prepending values to input, the last value is the input the others are the prepended controls", ->
+  example("Prepend input", "Prepending values to input, the last value is the input the others are the prepended controls", ->
     body(
       prepend("@", input.text())
       prepend(button("Check"), input.text())
@@ -105,7 +106,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     )
   )
 
-  example("Input sizes", "Builder methods for input sizes", ->
+  example("Input size styles", "Builder methods for input sizes", ->
     body(div(class: "controls docs-input-sizes",
       input.text().mini().placeholder('mini')
       input.text().small().placeholder('small')
@@ -116,7 +117,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     ))
   )
 
-  example("Span input sizes", "Span style builder methods for input sizes", ->
+  example("Input span", "Span style builder methods for input sizes", ->
     items = (option(i) for i in [1..5])
 
     body(div(class: "controls docs-input-sizes",
@@ -129,7 +130,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     ))
   )
 
-  example("Input sizes", "Span style input sizes", ->
+  example("Row inputs", "Span style input sizes", ->
     body(div(class: "docs-input-sizes",
       div.controls.row(input.text().span1(), input.text().span5())
       div.controls.row(input.text().span3(), input.text().span3())
@@ -162,7 +163,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     )
   )
 
-  example("Buttons with icons", "Examples of using icons", ->
+  example("Icon buttons", "Examples of using icons", ->
     body(
       button(icon.asterisk, "Asterisk"),
       form(
@@ -177,6 +178,4 @@ docs.bootstrap.forms = -> section(h1("Forms"),
       )
     )
   )
-
-  docs.code.forms()
 )

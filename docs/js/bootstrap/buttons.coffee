@@ -6,6 +6,8 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.bootstrap.buttons = -> section(h1("Buttons"),
+  docs.code.buttons()
+
   example("Button styles", "Button styles for different actions", ->
     text = model("")
 
@@ -106,6 +108,4 @@ docs.bootstrap.buttons = -> section(h1("Buttons"),
       )
     )
   )
-
-  docs.code.buttons()
 )

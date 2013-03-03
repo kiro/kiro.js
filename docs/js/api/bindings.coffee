@@ -5,6 +5,8 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.bindingsApi = -> section(h1("Bindings"),
+  docs.code.bindings()
+
   p("""Each html element offers number of bindings, which allow to bind the value of a certain
       property to a model. The values of the bindings update automatically when the
       model changes. Each binding applies the builder pattern so they can be chained.
@@ -152,6 +154,4 @@ docs.bindingsApi = -> section(h1("Bindings"),
       "clicks : ", span().bindText(clicks)
     )
   )
-
-  docs.code.bindings()
 )

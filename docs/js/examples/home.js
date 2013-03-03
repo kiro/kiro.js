@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.home = function() {
-    return section(h1("Enter Kiro.js"), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
+    return section(h1("Enter Kiro.js"), docs.code.home(), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
       var text;
       text = model("World");
       return body(input.text().bindValue(text), h3().bindText(text, function() {
@@ -96,7 +96,7 @@
       }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
         return todos.add(todo(todoText("")));
       })));
-    }), docs.code.home());
+    }));
   };
 
 }).call(this);
