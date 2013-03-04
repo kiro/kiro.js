@@ -1,0 +1,30 @@
+<project name="kirojs" default="buildall">
+    <loadproperties srcfile="build.properties" />
+
+    <macrodef name="concatenate">
+        <attribute name="destfile"/>
+        <attribute name="srcdir"/>
+        <attribute name="exclude" default=""/>
+        <attribute name="list" default=""/>
+        <attribute name="files" default="**/*.js"/>
+
+        <sequential>
+            <concat destfile="${build.dir}/@{destfile}">
+                <filelist dir="@{srcdir}" files="@{list}"/>
+                <fileset dir="@{srcdir}" includes="@{files}" excludes="@{exclude}"/>
+            </concat>
+        </sequential>
+    </macrodef>
+
+    <target name="buildall">
+
+    </target>
+
+    <target name="src">
+        <concatenate destfile="src.js" srcdir="${src.dir}" list="global.js" exclude="global.js"></concatenate>
+    </target>
+    <target name = "docs">
+        <concatenate destfile="docs.js" srcdir="${docs.dir}" exclude="code.js"></concatenate>
+        <concatenate destfile="docs.css" srcdir="${docs.dir}" files="**/*.css"></concatenate>
+    </target>
+</project>

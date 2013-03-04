@@ -1,30 +1,32 @@
-bootstrap = window.BC.namespace("bootstrap")
-mixins = window.BC.namespace("bootstrap.mixins")
-common = window.BC.namespace("common")
+window.BC.define('bootstrap', (bootstrap) ->
 
-$.extend(this, common)
+  mixins = window.BC.namespace("bootstrap.mixins")
+  common = window.BC.namespace("common")
 
-div = (config) ->
-  (items...) -> $.extend(
-    tag('div', config)(items...),
-    mixins.spannable(),
-    mixins.offsetable()
-  )
+  $.extend(this, common)
 
-bootstrap.div = div()
+  div = (config) ->
+    (items...) -> $.extend(
+      tag('div', config)(items...),
+      mixins.spannable(),
+      mixins.offsetable()
+    )
 
-# Containers and rows
-bootstrap.div.row = div(class: "row")
-bootstrap.div.row.fluid = div(class: "row-fluid")
-bootstrap.div.container = div(class: "container")
-bootstrap.div.container.fluid = div(class: "container-fluid")
-bootstrap.div.controls = div(class: "controls")
-bootstrap.div.controls.row = div(class: "controls controls-row")
+  bootstrap.div = div()
 
-# Alignment
-bootstrap.left = div(class: "pull-left")
-bootstrap.right = div(class: "pull-right")
-bootstrap.center = div(style: "text-align:center")
+  # Containers and rows
+  bootstrap.div.row = div(class: "row")
+  bootstrap.div.row.fluid = div(class: "row-fluid")
+  bootstrap.div.container = div(class: "container")
+  bootstrap.div.container.fluid = div(class: "container-fluid")
+  bootstrap.div.controls = div(class: "controls")
+  bootstrap.div.controls.row = div(class: "controls controls-row")
+
+  # Alignment
+  bootstrap.left = div(class: "pull-left")
+  bootstrap.right = div(class: "pull-right")
+  bootstrap.center = div(style: "text-align:center")
+)
 
 
 

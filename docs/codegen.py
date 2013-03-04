@@ -8,7 +8,6 @@ formatter = HtmlFormatter(linenos='inline', cssclass="highlight", cssfile="./cod
 
 def write_example(title, lines, name):
     code = highlight(lines, lexer, formatter).replace("\n", "\\\n").replace('<pre', '<div').replace('</pre>', '</div>')
-    #print("context.find(\"h2:contains('" + title + "')\").last().siblings('pre').append('" + code + "')")
     print("context.find('h2').filter(function() { return $(this).text() === \"" + title + "\"}).last().siblings('pre').append('" + code + "')")
 
 lines = ""

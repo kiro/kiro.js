@@ -1,25 +1,26 @@
-models = window.BC.namespace("models")
-common = window.BC.namespace("common")
+window.BC.define('models', (models) ->
 
-# Constructs an observable model
-models.model = (arg) ->
-  value = arg
+  common = window.BC.namespace("common")
 
-  o = common.observable()
+  # Constructs an observable model
+  models.model = (arg) ->
+    value = arg
 
-  model = (newValue) ->
-    if _.isUndefined(newValue)
-      value
-    else
-      oldValue = value
-      value = newValue
-      o.publish(value)
-      oldValue
+    o = common.observable()
 
-  model.subscribe = (listener) -> o.subscribe(listener)
-  model.map = ->
-  model
+    model = (newValue) ->
+      if _.isUndefined(newValue)
+        value
+      else
+        oldValue = value
+        value = newValue
+        o.publish(value)
+        oldValue
 
+    model.subscribe = (listener) -> o.subscribe(listener)
+    model.map = ->
+    model
+)
 
 
 
