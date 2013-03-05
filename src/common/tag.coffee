@@ -9,6 +9,15 @@ window.BC.define('common', (common) ->
         attr.merge(items[0])
         items = _.rest(items)
 
+      console.log(items)
+
+      index = 0
+      for item in items
+        index++
+        if !isValid(item)
+          throw Error("Item " + item + " at position " + index + " is expected to be String, Number, Array, undefined" +
+            " or have .html() function")
+
       bindings = common.bindings(_.clone(items))
       $.extend(bindings,
         id: () -> attr.get('id')

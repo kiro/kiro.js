@@ -8,7 +8,7 @@
       }
       return {
         isAttributes: function(obj) {
-          return obj && !_.isArray(obj) && _.isObject(obj) && !_.isFunction(obj['html']) && !_.isFunction(obj['init']);
+          return obj && !_.isArray(obj) && _.isObject(obj) && !_.isFunction(obj['html']) && !_.isFunction(obj['init']) && !_.isFunction(obj);
         },
         merge: function(attr2) {
           var key, value, _results;

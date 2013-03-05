@@ -8,12 +8,21 @@
         initialAttr = {};
       }
       return function() {
-        var attr, bindings, items;
+        var attr, bindings, index, item, items, _i, _len;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         attr = common.attributes(_.clone(initialAttr));
         if (items.length > 0 && attr.isAttributes(items[0])) {
           attr.merge(items[0]);
           items = _.rest(items);
+        }
+        console.log(items);
+        index = 0;
+        for (_i = 0, _len = items.length; _i < _len; _i++) {
+          item = items[_i];
+          index++;
+          if (!isValid(item)) {
+            throw Error("Item " + item + " at position " + index + " is expected to be String, Number, Array, undefined" + " or have .html() function");
+          }
         }
         bindings = common.bindings(_.clone(items));
         return $.extend(bindings, {

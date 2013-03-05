@@ -1,4 +1,8 @@
 window.BC.define('common', (common) ->
+  common.isValid = (item) ->
+    result = _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html)
+    console.log(item)
+    console.log(result)
 
   # Converts an item to HTML
   common.toHtml = (item) ->

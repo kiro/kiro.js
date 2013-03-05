@@ -5,7 +5,7 @@ $.extend(this, common, model)
 
 t = tag("span", class: 'class1', id: 'span1')
 
-describe("Tag", ->
+describe("Tag tests", ->
 
   it("Tests constructor", ->
     expect(t().html()).toBe("<span id='span1' class='class1'></span>")
@@ -43,5 +43,12 @@ describe("Tag", ->
     f = ->
     attr.merge(html: f, init: f, class: "class3")
     expect(attr.get("class")).toBe("class1 class2")
+  )
+
+  it("Tests passing invalid argument to tag", ->
+    a = tag("a")
+    f = (x) -> x
+    expect(-> a(null)).toThrow()
+    expect(-> a(f)).toThrow()
   )
 )

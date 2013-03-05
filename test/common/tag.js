@@ -13,7 +13,7 @@
     id: 'span1'
   });
 
-  describe("Tag", function() {
+  describe("Tag tests", function() {
     it("Tests constructor", function() {
       expect(t().html()).toBe("<span id='span1' class='class1'></span>");
       expect(t("value").html()).toBe("<span id='span1' class='class1'>value</span>");
@@ -39,7 +39,7 @@
         type: "text"
       }).html()).toBe("<span id='span1' class='class1' type='text'></span>");
     });
-    return it("Tests attributes", function() {
+    it("Tests attributes", function() {
       var attr, f;
       attr = common.attributes();
       expect(attr.get("class")).toBeUndefined();
@@ -60,6 +60,19 @@
         "class": "class3"
       });
       return expect(attr.get("class")).toBe("class1 class2");
+    });
+    return it("Tests passing invalid argument to tag", function() {
+      var a, f;
+      a = tag("a");
+      f = function(x) {
+        return x;
+      };
+      expect(function() {
+        return a(null);
+      }).toThrow();
+      return expect(function() {
+        return a(f);
+      }).toThrow();
     });
   });
 

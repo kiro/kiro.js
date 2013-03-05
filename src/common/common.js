@@ -3,6 +3,12 @@
   var __slice = [].slice;
 
   window.BC.define('common', function(common) {
+    common.isValid = function(item) {
+      var result;
+      result = _.isUndefined(item) || _.isString(item) || _.isNumber(item) || _.isArray(item) || _.isFunction(item.html);
+      console.log(item);
+      return console.log(result);
+    };
     common.toHtml = function(item) {
       var subitem;
       if (_.isUndefined(item)) {

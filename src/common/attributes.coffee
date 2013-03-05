@@ -2,7 +2,7 @@ window.BC.define('common', (common) ->
 
   common.attributes = (attr = {}) ->
     isAttributes: (obj) ->
-      obj and not _.isArray(obj) and _.isObject(obj) and !_.isFunction(obj['html']) and !_.isFunction(obj['init'])
+      obj and not _.isArray(obj) and _.isObject(obj) and !_.isFunction(obj['html']) and !_.isFunction(obj['init']) and !_.isFunction(obj)
 
     merge: (attr2) ->
       if !this.isAttributes(attr2)
