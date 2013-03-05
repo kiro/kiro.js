@@ -87,11 +87,11 @@
       isThree = function() {
         return number() === 3;
       };
-      return body(div(p("You've clicked ", span("").bindText(number), " times"), button("Click me", function() {
+      return body(p("You've clicked ", span().bindText(number), " times"), button("Click me", function() {
         return number(number() + 1);
       }).bindDisabled(number, isThree), p("That's too many clicks!", button('Reset Clicks', function() {
         return number(0);
-      })).bindVisible(number, isThree)));
+      })).bindVisible(number, isThree));
     }), example(".bindVisible", "Binds whether an element is visible.", function() {
       var visible;
       visible = model(false);
@@ -104,7 +104,7 @@
           return "Show";
         }
       }), button.primary("Button").bindVisible(visible));
-    }), example(".foreach", "Binds the content of an element to a collection.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection of items</li>\n<li>render(item, index[optional]) - takes and element and optional index and renders the item</li>\n</ul>", function() {
+    }), example(".foreach", "Binds the content of an element to a collection.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection of items</li>\n<li>render(item, index) - takes an element and optional index and renders the item</li>\n</ul>", function() {
       var numbers;
       numbers = collection([5, 3, 2, 7]);
       return body(div().foreach(numbers, function(number, index) {

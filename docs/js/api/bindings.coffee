@@ -101,13 +101,11 @@ docs.bindingsApi = -> section(h1("Bindings"),
     isThree = -> number() == 3
 
     body(
-      div(
-        p("You've clicked ", span("").bindText(number), " times"),
-        button("Click me", -> number(number() + 1))
-          .bindDisabled(number, isThree),
-        p("That's too many clicks!", button('Reset Clicks', -> number(0)))
-          .bindVisible(number, isThree)
-      )
+      p("You've clicked ", span().bindText(number), " times"),
+      button("Click me", -> number(number() + 1))
+        .bindDisabled(number, isThree),
+      p("That's too many clicks!", button('Reset Clicks', -> number(0)))
+        .bindVisible(number, isThree)
     )
   )
 
@@ -125,7 +123,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
                       <code>.foreach(collection, render)</code>
                       <ul>Parameters
                       <li>collection - collection of items</li>
-                      <li>render(item, index[optional]) - takes and element and optional index and renders the item</li>
+                      <li>render(item, index) - takes an element and optional index and renders the item</li>
                       </ul>
                       """, ->
     numbers = collection([5, 3, 2, 7])
