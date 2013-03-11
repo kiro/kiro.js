@@ -1,13 +1,13 @@
 window.BC.define('common', (common) ->
+  isComposite = (item) -> item and _.isFunction(item.html) and _.isFunction(item.init)
+
   common.isValid = (item) ->
-    result = _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html)
-    console.log(item)
-    console.log(result)
+    _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html)
 
   # Converts an item to HTML
   common.toHtml = (item) ->
     if _.isUndefined(item) then ""
-    else if _.isFunction(item.html) then item.html()
+    else if isComposite(item) then item.html()
     else if _.isString(item) then item
     else if _.isNumber(item) then item
     else if _.isArray(item) then (common.toHtml(subitem) for subitem in item).join(" ")
@@ -16,7 +16,7 @@ window.BC.define('common', (common) ->
   # Initializes the item with context.
   common.init = (item, context) ->
     if _.isUndefined(item)
-    else if _.isFunction(item.init) then item.init(context)
+    else if isComposite(item) then item.init(context)
     else if _.isString(item)
     else if _.isNumber(item)
     else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
@@ -70,4 +70,5 @@ window.BC.define('common', (common) ->
       else
         return undefined
 
+  common.isComposite = isComposite
 )

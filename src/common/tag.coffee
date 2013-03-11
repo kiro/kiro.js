@@ -9,8 +9,6 @@ window.BC.define('common', (common) ->
         attr.merge(items[0])
         items = _.rest(items)
 
-      console.log(items)
-
       index = 0
       for item in items
         index++

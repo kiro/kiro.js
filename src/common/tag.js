@@ -15,7 +15,6 @@
           attr.merge(items[0]);
           items = _.rest(items);
         }
-        console.log(items);
         index = 0;
         for (_i = 0, _len = items.length; _i < _len; _i++) {
           item = items[_i];

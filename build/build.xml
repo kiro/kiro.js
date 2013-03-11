@@ -23,7 +23,7 @@
     <target name="src">
         <concatenate destfile="src.js" srcdir="${src.dir}" list="global.js" exclude="global.js"></concatenate>
     </target>
-    <target name = "docs">
+    <target name="docs">
         <concatenate destfile="docs.js" srcdir="${docs.dir}" exclude="code.js"></concatenate>
         <concatenate destfile="docs.css" srcdir="${docs.dir}" files="**/*.css"></concatenate>
     </target>

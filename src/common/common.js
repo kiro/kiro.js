@@ -3,17 +3,18 @@
   var __slice = [].slice;
 
   window.BC.define('common', function(common) {
+    var isComposite;
+    isComposite = function(item) {
+      return item && _.isFunction(item.html) && _.isFunction(item.init);
+    };
     common.isValid = function(item) {
-      var result;
-      result = _.isUndefined(item) || _.isString(item) || _.isNumber(item) || _.isArray(item) || _.isFunction(item.html);
-      console.log(item);
-      return console.log(result);
+      return _.isUndefined(item) || _.isString(item) || _.isNumber(item) || _.isArray(item) || _.isFunction(item.html);
     };
     common.toHtml = function(item) {
       var subitem;
       if (_.isUndefined(item)) {
         return "";
-      } else if (_.isFunction(item.html)) {
+      } else if (isComposite(item)) {
         return item.html();
       } else if (_.isString(item)) {
         return item;
@@ -37,7 +38,7 @@
       var subitem;
       if (_.isUndefined(item)) {
 
-      } else if (_.isFunction(item.init)) {
+      } else if (isComposite(item)) {
         return item.init(context);
       } else if (_.isString(item)) {
 
@@ -107,7 +108,7 @@
         return fn.apply(null, fixedArgs.concat(args));
       };
     };
-    return common.once = function(value) {
+    common.once = function(value) {
       var first;
       first = true;
       return function() {
@@ -119,6 +120,7 @@
         }
       };
     };
+    return common.isComposite = isComposite;
   });
 
 }).call(this);

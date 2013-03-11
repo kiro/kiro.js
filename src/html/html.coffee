@@ -3,29 +3,76 @@ common = window.BC.namespace("common")
 
 $.extend(this, common)
 
-composite = ['abbr', 'address', 'b', 'blockquote', 'caption', 'cite', 'code', 'dd', 'div', 'dl', 'dt', 'em', 'fieldset',
-             'footer', 'form', 'h1', 'h2', 'h3', 'h5', 'h6', 'header', 'label', 'legend', 'li', 'nav', 'ol', 'optgroup',
-             'option', 'p', 'pre', 'q', 'section', 'small', 'span', 'strong', 'sub', 'table', 'tbody', 'td', 'tfoot',
-             'th', 'thead', 'tr', 'tt', 'u', 'ul']
-clickable = ['a', 'button']
-single = ['br', 'hr']
+composite = [
+  "abbr", "acronym", "address", "applet", "area", "b", "base", "basefont", "bdo", "big", "blockquote",
+  "br", "button", "caption", "center", "cite", "code", "col", "colgroup", "dd", "del", "dfn", "dir", "div", "dl",
+  "dt", "em", "fieldset", "font", "form", "frame", "frameset", "h1", "h2", "h3", "h4", "h5", "h6", "head", "hr",
+  "html", "i", "iframe", "img", "input", "ins", "isindex", "kbd", "label", "legend", "li", "link", "map", "menu",
+  "meta", "noframes", "noscript", "object", "ol", "optgroup", "option", "p", "param", "pre", "q", "s", "samp", "script",
+  "select", "small", "span", "strike", "strong", "style", "sub", "sup", "table", "tbody", "td","tfoot",
+  "th", "thead", "title", "tr", "tt", "u", "ul", "var"
+]
+
+for tagname in composite
+  html[tagname] = tag(tagname)
 
 html.div = tag("div")
 html.input = (config) -> tag('input', config)()
     .observable()
     .on('keyup change', (e) -> e.data.publish($(this).val()))
 
-html.input.text = -> html.input(type: 'text')
+html.input.text = ->
+  $.extend(
+    html.input(type: 'text')
+    placeholder: (value) -> this.addAttr('placeholder', value)
+  )
+
 html.span = tag("span")
+html.textarea = (config) ->
+  tag('textarea', config)()
+    .on('keyup', (e) -> e.data.publish($(this).val()))
+    .observable()
 
 # TODO(kiro): make it to accept multiple parameters for the name
-html.button = (name, click) ->
-  tag('button')(name).on('click', click)
+html.button = (args...) ->
+  last = _.last(args)
+  click = -> return false
+  if _.isFunction(last)
+    click = (args...) ->
+      last(args...)
+      return false
+    args = args.slice(0, args.length - 1)
 
+  tag('button', init)(args...).on('click', click)
+
+html.a = (args...) ->
+  last = _.last(args)
+  click = -> return false
+  if _.isFunction(last)
+    click = (args...) ->
+      last(args...)
+      return false
+    args = args.slice(0, args.length - 1)
+
+  tag('a', {href:'#'})(args...).on('click', click)
+
+html.body = (composite) -> $('body').html(
+  common.element(composite)
+)
+
+html.select = (items...) ->
+  $.extend(
+    tag('select')(items...)
+    .observable()
+    .on('change', (e) -> e.data.publish($(this).val()) )
+  )
+html.select.multiple = (items...) -> bootstrap.select(multiple: 'multiple', items)
+html.option = (text, value) -> tag('option', value: value)(text)
 
 #html.img
 #html.select
-#html.textarea
+
+
 
 
 

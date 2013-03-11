@@ -1,0 +1,41 @@
+body {
+    font-family: "Lato", Helvetica, sans-serif;
+}
+
+.modal {
+    box-shadow: 0 0 5px 5px #888;
+    width: 750px;
+    margin: 8px;
+    overflow: auto;
+}
+
+.half {
+    width: 50%;
+    border-top: solid;
+    border-top-width: 1px;
+    border-top-color: #008000;
+    box-sizing: border-box;
+}
+
+.padding {
+    padding: 8px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.container {
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+.textarea {
+    width: 95%;
+    height: 60px;
+}
