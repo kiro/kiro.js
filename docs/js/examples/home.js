@@ -78,7 +78,7 @@
           done: model(done)
         };
       };
-      todos = collection(todo('first todo'));
+      todos = collection([todo('first todo')]);
       notDone = function(todo) {
         return !todo.done();
       };

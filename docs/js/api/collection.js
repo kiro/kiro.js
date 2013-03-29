@@ -13,7 +13,7 @@
   showCollection = function() {};
 
   docs.collectionApi = function() {
-    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>\n<p><code>.add(values)</code> <code>.add(1, 2, 3)</code>Appends a comma separated list of items. </p>\n<p><code>.add(array)</code> <code>.add([1, 2, 3])</code>Appends items in the array. </p>", function() {
+    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>", function() {
       var numbers, value;
       numbers = collection([1, 2, 3]);
       value = model("");
@@ -30,6 +30,13 @@
       };
       return body(showCollection(numbers), form.inline(input.text().bindValue(value), button.success('Add', function() {
         return numbers.add(value(""));
+      })));
+    }), example(".addAll", "<p><code>.addAll([array])</code> <code>.addAll([1,2,3])</code>Appends an array of items to the collection. </p>", function() {
+      var numbers, value;
+      numbers = collection([1, 2, 3]);
+      value = model("4,5,6");
+      return body(showCollection(numbers), form.inline(input.text().bindValue(value), button.success('Add all', function() {
+        return numbers.addAll(value("").split(","));
       })));
     }), example(".remove", "<p><code>.remove(value)</code> removes items that have the same value.</p>\n<p><code>.remove(predicate)</code> remove all items for which the predicate function returns true.</p>", function() {
       var biggerThan, limit, numbers;
@@ -106,7 +113,7 @@
           name: name
         };
       };
-      users = collection(user(1, "Bai Mangau"), user(2, "Test user"), user(3, "Mente"));
+      users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")]);
       byId = function(id) {
         return function(user) {
           return user.id.toString() === id.toString();
@@ -115,7 +122,7 @@
       return body(p("User 1 : ", users.get(byId(1))[0].name), p("User 2 : ", users.get(byId(2))[0].name));
     }), example(".subscribe", "Subscribes to changes in the collection, useful for building custom controls", function() {
       var numbers, text;
-      numbers = collection(1, 2, 3, 4, 5, 6);
+      numbers = collection([1, 2, 3, 4, 5, 6]);
       text = model("Total length " + numbers.count());
       numbers.subscribe(function(items) {
         return text("Total length " + items.length);

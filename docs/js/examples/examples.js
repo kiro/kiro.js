@@ -22,7 +22,7 @@
           done: model(done)
         };
       };
-      todos = collection(todo('first todo'));
+      todos = collection([todo('first todo')]);
       todoText = model("");
       selectAll = model(false);
       header = form.inline(input.checkbox().bindValue(selectAll).on('click', function() {

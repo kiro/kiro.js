@@ -85,7 +85,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
       text: model(text)
       done: model(done)
 
-    todos = collection(todo('first todo'))
+    todos = collection([todo('first todo')])
 
     notDone = (todo) -> !todo.done()
     done = (todo) -> todo.done()

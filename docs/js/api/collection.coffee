@@ -156,7 +156,7 @@ docs.collectionApi = -> section(h1("Collection"),
       id: id
       name: name
 
-    users = collection(user(1, "Bai Mangau"), user(2, "Test user"), user(3, "Mente"))
+    users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")])
     byId = (id) -> ((user) -> user.id.toString() == id.toString())
 
     body(

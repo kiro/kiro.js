@@ -15,7 +15,7 @@ docs.examples = -> section(h1("Examples"),
       text: model(text)
       done: model(done)
 
-    todos = collection(todo('first todo'))
+    todos = collection([todo('first todo')])
     todoText = model("")
 
     selectAll = model(false)
