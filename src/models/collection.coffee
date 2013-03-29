@@ -2,24 +2,25 @@ window.BC.define('models', (models) ->
 
   common = window.BC.namespace("common")
 
-  models.collection = (allItems...) ->
-    toArray = (args...) ->
-      if args.length == 1 and _.isArray(args[0])
-        args[0]
-      else
-        args
+  assertArray = (arr) ->
+    if not _.isArray(arr)
+      throw Error(arr + " is expected to be an array")
 
-    allItems = toArray(allItems...)
+  models.collection = (initial = []) ->
+    assertArray(initial)
+
+    allItems = initial
     items = allItems
 
     o = common.observable()
 
     filter = () -> true
-    collection = (args...) ->
-      if args.length == 0
+    collection = (arg) ->
+      if _.isUndefined(arg)
         items
       else
-        allItems = toArray(args...)
+        assertArray(arg)
+        allItems = arg
         update()
 
     update = () ->
@@ -36,8 +37,14 @@ window.BC.define('models', (models) ->
     #
     # if arg is an array it concats it to the colection,
     # otherwise it pushes it at the end of the collection
-    collection.add = (args...) ->
-      allItems = allItems.concat(toArray(args...))
+    collection.add = (arg) ->
+      allItems.push(arg)
+      update.call(collection)
+
+    # Adds all elements in the array to the collection
+    collection.addAll = (items) ->
+      assertArray(items)
+      allItems = allItems.concat(items)
       update.call(collection)
 
     # Removes elements from the collection
@@ -104,8 +111,9 @@ window.BC.define('models', (models) ->
       update.call(collection)
 
     # Replaces all elements in the collection with new values.
-    collection.replaceAll = (newItems...) ->
-      allItems = toArray(newItems...)
+    collection.replaceAll = (items) ->
+      assertArray(items)
+      allItems = items
       update.call(collection)
 
     # Returns a value with index arg, or if arg is function all values that

@@ -112,7 +112,7 @@ describe("Bindings test", ->
   )
 
   it("Tests foreach binding", ->
-    values = collection(1, 2, 3)
+    values = collection([1, 2, 3])
 
     list = div("Test").foreach(values, (value) -> value)
 

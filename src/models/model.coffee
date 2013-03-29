@@ -1,5 +1,4 @@
 window.BC.define('models', (models) ->
-
   common = window.BC.namespace("common")
 
   # Constructs an observable model
@@ -21,6 +20,3 @@ window.BC.define('models', (models) ->
     model.map = ->
     model
 )
-
-
-

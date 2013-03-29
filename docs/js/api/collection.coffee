@@ -10,9 +10,7 @@ docs.collectionApi = -> section(h1("Collection"),
   docs.code.collection()
   p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> ")
 
-  example(".add", """<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>
-                     <p><code>.add(values)</code> <code>.add(1, 2, 3)</code>Appends a comma separated list of items. </p>
-                     <p><code>.add(array)</code> <code>.add([1, 2, 3])</code>Appends items in the array. </p>""", ->
+  example(".add", """<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>""", ->
     numbers = collection([1, 2, 3])
     value = model("")
 
@@ -28,6 +26,19 @@ docs.collectionApi = -> section(h1("Collection"),
       form.inline(
         input.text().bindValue(value),
         button.success('Add', -> numbers.add(value("")))
+      )
+    )
+  )
+
+  example(".addAll", """<p><code>.addAll([array])</code> <code>.addAll([1,2,3])</code>Appends an array of items to the collection. </p>""", ->
+    numbers = collection([1, 2, 3])
+    value = model("4,5,6")
+
+    body(
+      showCollection(numbers)
+      form.inline(
+        input.text().bindValue(value),
+      button.success('Add all', -> numbers.addAll(value("").split(",")))
       )
     )
   )
@@ -156,7 +167,7 @@ docs.collectionApi = -> section(h1("Collection"),
   )
 
   example(".subscribe", """Subscribes to changes in the collection, useful for building custom controls""", ->
-    numbers = collection(1, 2, 3, 4, 5, 6)
+    numbers = collection([1, 2, 3, 4, 5, 6])
     text = model("Total length " + numbers.count())
     numbers.subscribe((items) -> text("Total length " + items.length))
 

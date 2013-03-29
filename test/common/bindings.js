@@ -114,7 +114,7 @@
     });
     return it("Tests foreach binding", function() {
       var expectedIndex, list, values;
-      values = collection(1, 2, 3);
+      values = collection([1, 2, 3]);
       list = div("Test").foreach(values, function(value) {
         return value;
       });

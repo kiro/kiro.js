@@ -14,19 +14,19 @@
     var betweenThreeAndFive;
     it("Tests collection", function() {
       var numbers;
-      expect(collection(1, 2, 3)()).toEqual([1, 2, 3]);
+      expect(collection([1])()).toEqual([1]);
       expect(collection([1, 2, 3])()).toEqual([1, 2, 3]);
       numbers = collection([1, 2, 3]);
       numbers([4, 5, 6]);
       expect(numbers()).toEqual([4, 5, 6]);
-      numbers(7, 8, 9);
+      numbers([7, 8, 9]);
       expect(numbers()).toEqual([7, 8, 9]);
-      return expect(collection(1)()).toEqual([1]);
+      return expect(collection([1])()).toEqual([1]);
     });
-    it("Tests add", function() {
+    it("Tests add and addAll", function() {
       var numbers, subscriptionCalls, total;
       subscriptionCalls = 0;
-      numbers = collection(1, 2);
+      numbers = collection([1, 2]);
       total = 3;
       numbers.subscribe(function(values) {
         var _i, _results;
@@ -41,20 +41,20 @@
       expect(numbers()).toEqual([1, 2, 3]);
       expect(subscriptionCalls).toEqual(1);
       total = 5;
-      numbers.add([4, 5]);
+      numbers.addAll([4, 5]);
       expect(numbers()).toEqual([1, 2, 3, 4, 5]);
       expect(subscriptionCalls).toEqual(2);
       total = 7;
-      numbers.add(6, 7);
+      numbers.addAll([6, 7]);
       expect(numbers()).toEqual([1, 2, 3, 4, 5, 6, 7]);
       return expect(subscriptionCalls).toEqual(3);
     });
     it("Tests remove", function() {
       var numbers, subscriptionCalls;
-      numbers = collection(1, 2, 2, 3, 3);
+      numbers = collection([1, 2, 2, 3, 3]);
       numbers.remove(3);
       expect(numbers()).toEqual([1, 2, 2]);
-      numbers.add(4, 5, 6);
+      numbers.addAll([4, 5, 6]);
       numbers.remove(function(number) {
         return (2 < number && number < 6);
       });
@@ -70,7 +70,7 @@
     it("Tests removeAll", function() {
       var numbers, subscriptionCalls;
       subscriptionCalls = 0;
-      numbers = collection(1, 2, 3);
+      numbers = collection([1, 2, 3]);
       numbers.subscribe(function(values) {
         subscriptionCalls++;
         return expect(values).toEqual([]);
@@ -81,7 +81,7 @@
     });
     it("Tests get", function() {
       var numbers;
-      numbers = collection(1, 2, 3);
+      numbers = collection([1, 2, 3]);
       numbers.subscribe(function() {
         throw Error("Get shouldn't trigger an update.");
       });
@@ -93,7 +93,7 @@
     });
     it("Tests count", function() {
       var numbers;
-      numbers = collection(1, 2, 3, 4);
+      numbers = collection([1, 2, 3, 4]);
       numbers.subscribe(function() {
         throw Error("Get shouldn't trigger an update.");
       });
@@ -105,7 +105,7 @@
     it("Tests replace", function() {
       var expectedValues, numbers, subscriptionCalls;
       subscriptionCalls = 0;
-      numbers = collection(1, 2, 2, 3);
+      numbers = collection([1, 2, 2, 3]);
       expectedValues = [1, 4, 4, 3];
       numbers.subscribe(function(values) {
         subscriptionCalls++;
@@ -125,7 +125,7 @@
       var expectedValues, numbers, subscriptionCalls;
       subscriptionCalls = 0;
       expectedValues = [4, 5, 6];
-      numbers = collection(1, 2, 3);
+      numbers = collection([1, 2, 3]);
       numbers.subscribe(function(values) {
         subscriptionCalls++;
         return expect(values).toEqual(expectedValues);
@@ -134,7 +134,7 @@
       expect(numbers()).toEqual([4, 5, 6]);
       expect(subscriptionCalls).toEqual(1);
       expectedValues = [7, 8, 9];
-      numbers.replaceAll(7, 8, 9);
+      numbers.replaceAll([7, 8, 9]);
       expect(numbers()).toEqual([7, 8, 9]);
       return expect(subscriptionCalls).toEqual(2);
     });
@@ -210,7 +210,7 @@
     });
     return it("Tests total", function() {
       var numbers;
-      numbers = collection(1, 2, 3, 4);
+      numbers = collection([1, 2, 3, 4]);
       numbers.filter(betweenThreeAndFive);
       expect(numbers.total()).toBe(4);
       expect(numbers.count()).toBe(2);

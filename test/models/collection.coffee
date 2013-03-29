@@ -6,20 +6,20 @@ $.extend(this, common, models, util)
 
 describe("Collection tests", ->
   it("Tests collection", ->
-    expect(collection(1, 2, 3)()).toEqual([1, 2, 3])
+    expect(collection([1])()).toEqual([1])
     expect(collection([1, 2, 3])()).toEqual([1, 2, 3])
 
     numbers = collection([1, 2, 3])
     numbers([4, 5, 6])
     expect(numbers()).toEqual([4, 5, 6])
-    numbers(7, 8, 9)
+    numbers([7, 8, 9])
     expect(numbers()).toEqual([7, 8, 9])
-    expect(collection(1)()).toEqual([1])
+    expect(collection([1])()).toEqual([1])
   )
 
-  it("Tests add", ->
+  it("Tests add and addAll", ->
     subscriptionCalls = 0
-    numbers = collection(1, 2)
+    numbers = collection([1, 2])
 
     total = 3
     numbers.subscribe((values) ->
@@ -31,23 +31,23 @@ describe("Collection tests", ->
     expect(subscriptionCalls).toEqual(1)
 
     total = 5
-    numbers.add([4, 5])
+    numbers.addAll([4, 5])
     expect(numbers()).toEqual([1..5])
     expect(subscriptionCalls).toEqual(2)
 
     total = 7
-    numbers.add(6, 7)
+    numbers.addAll([6, 7])
     expect(numbers()).toEqual([1..7])
     expect(subscriptionCalls).toEqual(3)
   )
 
   it("Tests remove", ->
-    numbers = collection(1, 2, 2, 3, 3)
+    numbers = collection([1, 2, 2, 3, 3])
 
     numbers.remove(3)
     expect(numbers()).toEqual([1, 2, 2])
 
-    numbers.add(4, 5, 6)
+    numbers.addAll([4, 5, 6])
     numbers.remove((number) -> 2 < number < 6)
     expect(numbers()).toEqual([1, 2, 2, 6])
 
@@ -61,7 +61,7 @@ describe("Collection tests", ->
 
   it("Tests removeAll", ->
     subscriptionCalls = 0
-    numbers = collection(1, 2, 3)
+    numbers = collection([1, 2, 3])
 
     numbers.subscribe((values) ->
       subscriptionCalls++
@@ -73,7 +73,7 @@ describe("Collection tests", ->
   )
 
   it("Tests get", ->
-    numbers = collection(1, 2, 3)
+    numbers = collection([1, 2, 3])
     numbers.subscribe( -> throw Error("Get shouldn't trigger an update."))
 
     expect(numbers.get(1)).toEqual(2)
@@ -82,7 +82,7 @@ describe("Collection tests", ->
   )
 
   it("Tests count", ->
-    numbers = collection(1, 2, 3, 4)
+    numbers = collection([1, 2, 3, 4])
     numbers.subscribe( -> throw Error("Get shouldn't trigger an update."))
 
     expect(numbers.count()).toEqual(4)
@@ -91,7 +91,7 @@ describe("Collection tests", ->
 
   it("Tests replace", ->
     subscriptionCalls = 0
-    numbers = collection(1, 2, 2, 3)
+    numbers = collection([1, 2, 2, 3])
 
     expectedValues = [1, 4, 4, 3]
     numbers.subscribe((values) ->
@@ -105,15 +105,13 @@ describe("Collection tests", ->
     numbers.replace(((number) -> number == 4), 2)
     expect(numbers()).toEqual([1, 2, 2, 3])
     expect(subscriptionCalls).toEqual(2)
-
-
   )
 
   it("Tests replaceAll", ->
     subscriptionCalls = 0
 
     expectedValues = [4, 5, 6]
-    numbers = collection(1, 2, 3)
+    numbers = collection([1, 2, 3])
     numbers.subscribe((values) ->
       subscriptionCalls++
       expect(values).toEqual(expectedValues)
@@ -124,7 +122,7 @@ describe("Collection tests", ->
     expect(subscriptionCalls).toEqual(1)
 
     expectedValues = [7, 8, 9]
-    numbers.replaceAll(7, 8, 9)
+    numbers.replaceAll([7, 8, 9])
     expect(numbers()).toEqual([7, 8, 9])
     expect(subscriptionCalls).toEqual(2)
   )
@@ -201,7 +199,7 @@ describe("Collection tests", ->
   )
 
   it("Tests total", ->
-    numbers = collection(1, 2, 3, 4)
+    numbers = collection([1, 2, 3, 4])
     numbers.filter(betweenThreeAndFive)
 
     expect(numbers.total()).toBe(4)
