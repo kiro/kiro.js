@@ -83,7 +83,7 @@
       expect(calls).toBe(3);
       return expect(arr.toString()).toEqual([1, 2, 4].toString());
     });
-    return it("Tests nested object observable", function() {
+    it("Tests nested object observable", function() {
       var languageCalls, languageNameCalls, obj, objCalls;
       obj = models.object({
         firstName: "Kiril",
@@ -113,6 +113,32 @@
       expect(objCalls).toBe(2);
       expect(languageCalls).toBe(1);
       return expect(languageNameCalls).toBe(1);
+    });
+    return it("Tests map", function() {
+      var calls, expected, mapped, value;
+      value = model(0);
+      mapped = models.map(value, function() {
+        if (value() < 3) {
+          return "Less than 3";
+        } else {
+          return "Bigger than 3";
+        }
+      });
+      expected = "Less than 3";
+      calls = 0;
+      mapped.subscribe(function(val) {
+        calls++;
+        return expect(val).toEqual(expected);
+      });
+      value(2);
+      expect(calls).toBe(1);
+      value(1);
+      expect(calls).toBe(2);
+      expected = "Bigger than 3";
+      value(3);
+      expect(calls).toBe(3);
+      value(4);
+      return expect(calls).toBe(4);
     });
   });
 

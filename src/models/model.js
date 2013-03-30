@@ -63,7 +63,7 @@
       };
       return arr;
     };
-    return models.object = function(obj) {
+    models.object = function(obj) {
       var key, makeObservable, o, observables, prop, result, value;
       if (!_.isObject(obj)) {
         throw Error(obj + " is expected to be an object");
@@ -132,6 +132,29 @@
         throw Error("set is not supported");
       };
       return result;
+    };
+    return models.map = function(observable, map) {
+      var value;
+      if (map == null) {
+        map = function(x) {
+          return x;
+        };
+      }
+      value = map(observable._get());
+      return {
+        _get: function() {
+          return value;
+        },
+        _set: function(newValue) {
+          throw Error("_set is not supported for mapped values");
+        },
+        subscribe: function(callback) {
+          return observable.subscribe(function(baseValue) {
+            value = map(baseValue);
+            return callback(value);
+          });
+        }
+      };
     };
   });
 

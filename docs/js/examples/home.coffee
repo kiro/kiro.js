@@ -80,14 +80,15 @@ docs.home = () -> section(h1("Enter Kiro.js"),
   )
 
   example("Todo", "", ->
-    todo = (text, done = false) ->
-      text: model(text)
-      done: model(done)
+    todo = (text, done = false) -> object(
+      text: text
+      done: done
+    )
 
     todos = collection([todo('first todo')])
 
-    notDone = (todo) -> !todo.done()
-    done = (todo) -> todo.done()
+    notDone = (todo) -> !todo.done.valueOf()
+    done = (todo) -> todo.done.valueOf()
     remaining = -> todos.count(notDone) + " of " + todos.total() + " remaining"
 
     todoText = model("")

@@ -36,11 +36,11 @@ window.BC.define('bootstrap', (bootstrap) ->
 
       $.extend(
         (tag('input')()
-          .addAttr(type: 'checkbox')
+          .addAttr({type: 'checkbox', checked: 'checked'})
           .observable()
           .on('click', (e) -> e.data.publish($(this).is(':checked')))),
         bindValue: (observable) ->
-          this.bindAttr(observable, -> checked: observable._get())
+          this.bindAttr(observable, -> checked: observable._get().valueOf())
           this.subscribe((value) -> observable._set(value))
         isCheckbox: true
       ).bindValue(model)
@@ -50,7 +50,7 @@ window.BC.define('bootstrap', (bootstrap) ->
         model = models.model("")
 
       $.extend(
-        tag('input', type: 'radio', name: name, value: value)()
+        tag('input', type: 'radio', name: name, value: value, checked: 'checked')()
           .observable()
           .on('click', (e) -> e.data.publish(value)),
         bindValue: (observable) ->

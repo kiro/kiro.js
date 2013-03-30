@@ -73,17 +73,17 @@
         if (done == null) {
           done = false;
         }
-        return {
-          text: model(text),
-          done: model(done)
-        };
+        return object({
+          text: text,
+          done: done
+        });
       };
       todos = collection([todo('first todo')]);
       notDone = function(todo) {
-        return !todo.done();
+        return !todo.done.valueOf();
       };
       done = function(todo) {
-        return todo.done();
+        return todo.done.valueOf();
       };
       remaining = function() {
         return todos.count(notDone) + " of " + todos.total() + " remaining";

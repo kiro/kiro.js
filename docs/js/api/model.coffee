@@ -52,7 +52,7 @@ docs.modelApi = -> section(h1("Model"),
       locations: ["London", "Cambridge"]
       language:
         name: "Bulgarian"
-        native: true
+        native: false
     )
 
     location = model("")

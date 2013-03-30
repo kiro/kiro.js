@@ -51,14 +51,15 @@
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         model = getModel(items);
         return $.extend(tag('input')().addAttr({
-          type: 'checkbox'
+          type: 'checkbox',
+          checked: 'checked'
         }).observable().on('click', function(e) {
           return e.data.publish($(this).is(':checked'));
         }), {
           bindValue: function(observable) {
             this.bindAttr(observable, function() {
               return {
-                checked: observable._get()
+                checked: observable._get().valueOf()
               };
             });
             return this.subscribe(function(value) {
@@ -75,7 +76,8 @@
         return $.extend(tag('input', {
           type: 'radio',
           name: name,
-          value: value
+          value: value,
+          checked: 'checked'
         })().observable().on('click', function(e) {
           return e.data.publish(value);
         }), {

@@ -106,4 +106,25 @@ describe("Model tests", ->
     expect(languageCalls).toBe(1)
     expect(languageNameCalls).toBe(1)
   )
+
+  it("Tests map", ->
+    value = model(0)
+    mapped = models.map(value, -> if value() < 3 then "Less than 3" else "Bigger than 3")
+
+    expected = "Less than 3"
+    calls = 0
+    mapped.subscribe((val) ->
+      calls++
+      expect(val).toEqual(expected)
+    )
+    value(2)
+    expect(calls).toBe(1)
+    value(1)
+    expect(calls).toBe(2)
+    expected = "Bigger than 3"
+    value(3)
+    expect(calls).toBe(3)
+    value(4)
+    expect(calls).toBe(4)
+  )
 )

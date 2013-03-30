@@ -101,4 +101,15 @@ window.BC.define('models', (models) ->
     result._set = () -> throw Error("set is not supported")
 
     result
+
+  models.map = (observable, map = (x) -> x) ->
+    value = map(observable._get())
+
+    _get: () -> value
+    _set: (newValue) -> throw Error("_set is not supported for mapped values")
+    subscribe: (callback) -> observable.subscribe(
+      (baseValue) ->
+        value = map(baseValue)
+        callback(value)
+    )
 )
