@@ -66,13 +66,11 @@ docs.modelApi = -> section(h1("Model"),
             button("Add", -> obj.locations.push(location("")))
           )
         ]
-        "Language": div(
-          input.text().bindValue(obj.language.name)
-          input.checkbox().bindValue(obj.language.native)
-        )
+        "Language": input.text().bindValue(obj.language.name)
+        "Native": input.checkbox().bindValue(obj.language.native)
       )
 
-      span().bindText(obj, -> JSON.stringify(obj))
+      pre(code().bindText(obj, -> JSON.stringify(obj, null, 4)))
     )
   )
 )

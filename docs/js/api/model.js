@@ -60,10 +60,11 @@
             return obj.locations.push(location(""));
           }))
         ],
-        "Language": div(input.text().bindValue(obj.language.name), input.checkbox().bindValue(obj.language["native"]))
-      }), span().bindText(obj, function() {
-        return JSON.stringify(obj);
-      }));
+        "Language": input.text().bindValue(obj.language.name),
+        "Native": input.checkbox().bindValue(obj.language["native"])
+      }), pre(code().bindText(obj, function() {
+        return JSON.stringify(obj, null, 4);
+      })));
     }));
   };
 
