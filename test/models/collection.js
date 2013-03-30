@@ -216,7 +216,7 @@
       expect(numbers.count()).toBe(2);
       return expect(numbers.total(betweenThreeAndFive)).toBe(2);
     });
-    return it("Tests sort", function() {
+    it("Tests sort", function() {
       var names;
       names = collection(["Java", "Ada", "C++"]);
       names.sort();
@@ -231,6 +231,39 @@
       expect(names()).toEqual(["Ada", "C++", "Java", "Test"]);
       names.add("ABC");
       return expect(names()).toEqual(["ABC", "Ada", "C++", "Java", "Test"]);
+    });
+    return it("Tests subscription to models", function() {
+      var four, one, player, players, two;
+      player = function(name, score) {
+        return object({
+          name: name,
+          score: score
+        });
+      };
+      one = player("one", 1);
+      two = player("two", 2);
+      four = player("four", 4);
+      players = collection([one, two]);
+      players.sort(function(player1, player2) {
+        if (player1.score < player2.score) {
+          return 1;
+        } else {
+          if (player1.score > player2.score) {
+            return -1;
+          } else {
+            return 0;
+          }
+        }
+      });
+      expect(players()).toEqual([two, one]);
+      one.score += 2;
+      expect(players()).toEqual([one, two]);
+      players.add(four);
+      expect(players()).toEqual([four, one, two]);
+      two.score = 5;
+      expect(players()).toEqual([two, four, one]);
+      four.score = 10;
+      return expect(players()).toEqual([four, two, one]);
     });
   });
 

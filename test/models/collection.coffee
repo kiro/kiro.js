@@ -221,4 +221,28 @@ describe("Collection tests", ->
     names.add("ABC")
     expect(names()).toEqual(["ABC", "Ada", "C++", "Java", "Test"])
   )
+
+  it("Tests subscription to models", ->
+    player = (name, score) -> object(name: name, score: score)
+
+    one = player("one", 1)
+    two = player("two", 2)
+    four = player("four", 4)
+
+    players = collection([one, two])
+
+    players.sort((player1, player2) ->
+      return if player1.score < player2.score then 1 else (if player1.score > player2.score then -1 else 0)
+    )
+
+    expect(players()).toEqual([two, one])
+    one.score += 2
+    expect(players()).toEqual([one, two])
+    players.add(four)
+    expect(players()).toEqual([four, one, two])
+    two.score = 5
+    expect(players()).toEqual([two, four, one])
+    four.score = 10
+    expect(players()).toEqual([four, two, one])
+  )
 )

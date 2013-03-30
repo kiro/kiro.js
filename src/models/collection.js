@@ -10,7 +10,7 @@
       }
     };
     return models.collection = function(initial) {
-      var allItems, collection, compareFunction, defaultCompare, filter, items, o, toPredicate, update;
+      var allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, o, toPredicate, update;
       if (initial == null) {
         initial = [];
       }
@@ -31,11 +31,21 @@
           return update();
         }
       };
+      callUpdate = function() {
+        return update.call(collection);
+      };
       update = function() {
+        var item, _i, _len;
         if (compareFunction) {
           allItems.sort(compareFunction);
         }
         items = _.filter(allItems, filter);
+        for (_i = 0, _len = allItems.length; _i < _len; _i++) {
+          item = allItems[_i];
+          if (common.isModel(item)) {
+            item.subscribe(callUpdate);
+          }
+        }
         return o.publish(items);
       };
       toPredicate = function(arg) {

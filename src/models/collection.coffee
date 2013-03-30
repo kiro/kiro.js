@@ -24,10 +24,19 @@ window.BC.define('models', (models) ->
         allItems = arg
         update()
 
+    callUpdate = -> update.call(collection)
+
     update = () ->
       if compareFunction
         allItems.sort(compareFunction)
       items = _.filter(allItems, filter)
+
+      for item in allItems
+        if common.isModel(item)
+          # if callUpdate is already subscribed to a model it
+          # won't be added again
+          item.subscribe(callUpdate)
+
       o.publish(items)
 
     toPredicate = (arg) ->

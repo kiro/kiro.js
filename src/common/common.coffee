@@ -33,6 +33,9 @@ window.BC.define('common', (common) ->
   common.observable = () ->
     listeners = []
     subscribe: (listener) ->
+      for existingListener in listeners
+        if existingListener == listener
+          return
       listeners.push(listener)
       this
     publish: (newValue, path) ->

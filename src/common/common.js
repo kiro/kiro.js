@@ -73,6 +73,13 @@
       listeners = [];
       return {
         subscribe: function(listener) {
+          var existingListener, _i, _len;
+          for (_i = 0, _len = listeners.length; _i < _len; _i++) {
+            existingListener = listeners[_i];
+            if (existingListener === listener) {
+              return;
+            }
+          }
           listeners.push(listener);
           return this;
         },
