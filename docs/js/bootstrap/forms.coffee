@@ -56,7 +56,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     value = model("text")
 
     body(
-      textarea(rows: 3).bindValue(value)
+      textarea({rows: 3}, value)
       span().bindText(value)
     )
   )

@@ -11,11 +11,8 @@ docs.bindingsApi = -> section(h1("Bindings"),
       property to a model. The values of the bindings update automatically when the
       model changes. Each binding applies the builder pattern so they can be chained.
     """)
-  example(".bindValue", """
-      Binds the value of an element to a model. It's available for input and textarea elements.
-
-      <code>.bindValue(model)</code>
-
+  example("Value bindings", """
+    The input elements accept observable model and bind their value to it.
     """, ->
     text = model("initial")
     sex = model("female")
@@ -23,17 +20,17 @@ docs.bindingsApi = -> section(h1("Bindings"),
 
     body(
       form.inline(
-        input.text().bindValue(text)
+        input.text(text)
         span().bindText(text)
         button.info("Clear", -> text(""))
       )
 
-      input.radio("sex", "male").bindValue(sex)
-      input.radio("sex", "female").bindValue(sex)
-      input.radio("sex", "other").bindValue(sex)
+      input.radio("sex", "male", sex)
+      input.radio("sex", "female", sex)
+      input.radio("sex", "other", sex)
       span().bindText(sex)
 
-      input.checkbox().bindValue(married)
+      input.checkbox(married)
       span().bindText(married)
     )
   )
@@ -74,7 +71,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
     text = model("")
     body(
       form.inline(
-        input.text().bindValue(text)
+        input.text(text)
         h2().bindText(text)
       )
     )
@@ -85,7 +82,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
 
     items = [button.warning("Button"),
              "<h2>Test</h2>",
-             form.inline(input.text(), button.info("Add", -> console.log("Test")))]
+             form.inline(input.text(model("")), button.info("Add", -> console.log("Test")))]
     i = 0
     content(items[0])
     body(

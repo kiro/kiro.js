@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.modelApi = function() {
-    return section(h1("Model"), docs.code.model(), p("Models are observable. Creating a model returns a function <code>text = model('Hello')</code>.\nTo access the values of a model the function can be called <code>text() # -> Hello</code>.\nTo set the value, the function is called with a parameter for the new value <code>text(\"New Value\")</code>.\nWhen seeting the value of a model it returns the old value.\nModels has subscribe method which is used to listen to changes to models and generally is used in bindings."), example("Model example", "Model methods.", function() {
+    return section(h1("Model"), docs.code.model(), p("Models are observable. Creating a model returns a function <code>text = model('Hello')</code>.\nTo access the values of a model the function can be called <code>text() # -> Hello</code>.\nTo set the value, the function is called with a parameter for the new value <code>text(\"New Value\")</code>.\nWhen seeting the value of a model it returns the old value.\nModels has subscribe method which is used to listen to changes to models and generally is used in bindings."), example("Observable primitive", "Making primitive values observable", function() {
       var count, text;
       count = model(0);
       text = model("");
@@ -25,7 +25,7 @@
       var arr, value;
       arr = array([1, 2, 3, 4]);
       value = model();
-      return body(form.inline(input.text().span1().bindValue(value), button.primary("Push", function() {
+      return body(form.inline(input.text(value).span1(), button.primary("Push", function() {
         if (value()) {
           return arr.push(value());
         }
@@ -36,7 +36,7 @@
       })), span().bindText(arr, function() {
         return arr.toString();
       }));
-    }), example("Observable objects", "Using <code>models.object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects and arrays are converted to observables.", function() {
+    }), example("Observable objects", "Using <code>models.object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects and arrays are converted to observables.\nChanges to a field within the object are propagated upwards, so if you subscribe\not an object changes to all fields and subfields will result in updating the object.", function() {
       var location, obj;
       obj = object({
         name: "Kiril Minkov",
@@ -50,18 +50,18 @@
       });
       location = model("");
       return body(form({
-        "Name": input.text().bindValue(obj.name),
-        "Cool": input.checkbox().bindValue(obj.cool),
-        "Age": input.text().bindValue(obj.age),
+        "Name": input.text(obj.name),
+        "Cool": input.checkbox(obj.cool),
+        "Age": input.text(obj.age),
         "Locations": [
           span().bindText(obj.locations, function() {
             return obj.locations.toString();
-          }), append(input.text().placeholder("Add location...").bindValue(location), button("Add", function() {
+          }), append(input.text(location).placeholder("Add location..."), button("Add", function() {
             return obj.locations.push(location(""));
           }))
         ],
-        "Language": input.text().bindValue(obj.language.name),
-        "Native": input.checkbox().bindValue(obj.language["native"])
+        "Language": input.text(obj.language.name),
+        "Native": input.checkbox(obj.language["native"])
       }), pre(code().bindText(obj, function() {
         return JSON.stringify(obj, null, 4);
       })));

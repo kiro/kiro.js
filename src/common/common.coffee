@@ -1,6 +1,8 @@
 window.BC.define('common', (common) ->
   isComposite = (item) -> item and _.isFunction(item.html) and _.isFunction(item.init)
 
+  common.isModel = (item) -> _.isFunction(item.subscribe) and _.isFunction(item._get) and _.isFunction(item._set)
+
   common.isValid = (item) ->
     _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html)
 

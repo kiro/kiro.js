@@ -25,7 +25,7 @@
       todos = collection([todo('first todo')]);
       todoText = model("");
       selectAll = model(false);
-      header = form.inline(input.checkbox().bindValue(selectAll).on('click', function() {
+      header = form.inline(input.checkbox(selectAll).on('click', function() {
         var todoItem, _i, _len, _ref, _results;
         _ref = todos();
         _results = [];
@@ -34,11 +34,11 @@
           _results.push(todoItem.done(selectAll()));
         }
         return _results;
-      }), input.text().bindValue(todoText), button('Add', function() {
+      }), input.text(todoText), button('Add', function() {
         return todos.add(todo(todoText("")));
       }));
       todoList = table().foreach(todos, function(todo) {
-        return tr(td(input.checkbox().bindValue(todo.done)), td(todo.text()), td(button("Remove", function() {
+        return tr(td(input.checkbox(todo.done)), td(todo.text()), td(button("Remove", function() {
           return todos.remove(todo);
         })));
       });

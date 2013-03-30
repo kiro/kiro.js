@@ -7,6 +7,9 @@
     isComposite = function(item) {
       return item && _.isFunction(item.html) && _.isFunction(item.init);
     };
+    common.isModel = function(item) {
+      return _.isFunction(item.subscribe) && _.isFunction(item._get) && _.isFunction(item._set);
+    };
     common.isValid = function(item) {
       return _.isUndefined(item) || _.isString(item) || _.isNumber(item) || _.isArray(item) || _.isFunction(item.html);
     };

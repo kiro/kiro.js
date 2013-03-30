@@ -43,7 +43,7 @@
       value = model("text");
       return body(textarea({
         rows: 3
-      }).bindValue(value), span().bindText(value));
+      }, value), span().bindText(value));
     }), example("Stacked radio and checkbox", "Radio and checkbox inputs", function() {
       return body(label({
         "class": 'checkbox'

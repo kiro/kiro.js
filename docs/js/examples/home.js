@@ -14,7 +14,7 @@
     return section(h1("Enter Kiro.js"), docs.code.home(), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
       var text;
       text = model("World");
-      return body(input.text().bindValue(text), h3().bindText(text, function() {
+      return body(input.text(text), h3().bindText(text, function() {
         return "Hello " + text();
       }));
     }), example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", function() {
@@ -41,8 +41,8 @@
       })), span().bindText(text, function() {
         return "I am " + text();
       }), h5("Forms"), form({
-        "First name": input.text().bindValue(user.firstName),
-        "Last name": input.text().bindValue(user.lastName)
+        "First name": input.text(user.firstName),
+        "Last name": input.text(user.lastName)
       }), h5("Table"), table().bordered().hover().foreach([1, 2], function(row) {
         return tr().foreach([1, 2, 3], function(col) {
           return td(row + ", " + col);
@@ -57,7 +57,7 @@
           return !edit();
         }).on('click', function() {
           return edit(true);
-        }), input.text().bindValue(text).bindVisible(edit).on('blur', function() {
+        }), input.text(text).bindVisible(edit).on('blur', function() {
           return edit(false);
         }).on('keydown', function(e) {
           if (e.keyCode === 13) {
@@ -92,8 +92,8 @@
       return div(span().bindText(todos, remaining), button.link("archive", function() {
         return todos.remove(done);
       }), div().foreach(todos, function(todo) {
-        return form.inline(input.checkbox().bindValue(todo.done), span().bindText(todo.text));
-      }), form.inline(input.text().bindValue(todoText), button.primary('Add', function() {
+        return form.inline(input.checkbox(todo.done), span().bindText(todo.text));
+      }), form.inline(input.text(todoText), button.primary('Add', function() {
         return todos.add(todo(todoText("")));
       })));
     }));

@@ -3,20 +3,31 @@
   var __slice = [].slice;
 
   window.BC.define('bootstrap', function(bootstrap) {
-    var common, form, img, mixins, toAddOn;
+    var common, form, getModel, img, mixins, models, toAddOn;
     mixins = window.BC.namespace("bootstrap.mixins");
     common = window.BC.namespace("common");
+    models = window.BC.namespace("models");
     $.extend(this, common);
+    getModel = function(items) {
+      var model;
+      model = _.last(items);
+      if (_.isUndefined(model) || !common.isModel(model)) {
+        model = models.model("");
+      } else {
+        items.pop();
+      }
+      return model;
+    };
     bootstrap.input = {
-      text: function(config, type) {
-        if (type == null) {
-          type = 'text';
-        }
+      text: function() {
+        var items, model;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        model = getModel(items);
         return $.extend(tag('input', {
-          type: type
-        })(config).observable().on('keyup change', function(e) {
+          type: 'text'
+        }).apply(null, items).observable().on('keyup change', function(e) {
           return e.data.publish($(this).val());
-        }), {
+        }).bindValue(model), {
           placeholder: function(value) {
             return this.addAttr({
               'placeholder': value
@@ -24,15 +35,21 @@
           }
         }, mixins.sizeable("input"), mixins.spannable());
       },
-      password: function(config) {
-        return this.text(config, 'password');
-      },
-      search: function(config) {
+      password: function(model) {
         return this.text({
-          "class": "search-query"
-        }, 'text');
+          type: 'password'
+        }, model);
+      },
+      search: function(model) {
+        return this.text({
+          "class": "search-query",
+          type: 'text'
+        }, model);
       },
       checkbox: function() {
+        var items, model;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        model = getModel(items);
         return $.extend(tag('input')().addAttr({
           type: 'checkbox'
         }).observable().on('click', function(e) {
@@ -49,9 +66,12 @@
             });
           },
           isCheckbox: true
-        });
+        }).bindValue(model);
       },
-      radio: function(name, value) {
+      radio: function(name, value, model) {
+        if (_.isUndefined(model)) {
+          model = models.model("");
+        }
         return $.extend(tag('input', {
           type: 'radio',
           name: name,
@@ -70,7 +90,7 @@
             });
           },
           isRadio: true
-        });
+        }).bindValue(model);
       },
       submit: function(name, click) {
         return tag('input')(name).addAttr({
@@ -79,28 +99,30 @@
       }
     };
     bootstrap.select = function() {
-      var items;
+      var items, model;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      model = getModel(items);
       return $.extend(tag('select').apply(null, items).observable().on('change', function(e) {
         return e.data.publish($(this).val());
-      }), mixins.spannable());
+      }).bindValue(model), mixins.spannable());
     };
-    bootstrap.select.multiple = function() {
-      var items;
-      items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return bootstrap.select({
+    bootstrap.select.multiple = function(model) {
+      return bootstrap.select(model, {
         multiple: 'multiple'
-      }, items);
+      });
     };
     bootstrap.option = function(text, value) {
       return tag('option', {
         value: value
       })(text);
     };
-    bootstrap.textarea = function(init) {
-      return tag('textarea', init)().observable().on('keyup', function(e) {
+    bootstrap.textarea = function() {
+      var items, model;
+      items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      model = getModel(items);
+      return tag('textarea').apply(null, items).observable().on('keyup', function(e) {
         return e.data.publish($(this).val());
-      });
+      }).bindValue(model);
     };
     form = tag('form');
     bootstrap.form = function() {

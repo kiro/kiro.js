@@ -28,14 +28,14 @@
           });
         });
       };
-      return body(showCollection(numbers), form.inline(input.text().bindValue(value), button.success('Add', function() {
+      return body(showCollection(numbers), form.inline(input.text(value), button.success('Add', function() {
         return numbers.add(value(""));
       })));
     }), example(".addAll", "<p><code>.addAll([array])</code> <code>.addAll([1,2,3])</code>Appends an array of items to the collection. </p>", function() {
       var numbers, value;
       numbers = collection([1, 2, 3]);
       value = model("4,5,6");
-      return body(showCollection(numbers), form.inline(input.text().bindValue(value), button.success('Add all', function() {
+      return body(showCollection(numbers), form.inline(input.text(value), button.success('Add all', function() {
         return numbers.addAll(value("").split(","));
       })));
     }), example(".remove", "<p><code>.remove(value)</code> removes items that have the same value.</p>\n<p><code>.remove(predicate)</code> remove all items for which the predicate function returns true.</p>", function() {
@@ -47,7 +47,7 @@
       };
       return body(form.inline(button.danger("Remove", function() {
         return numbers.remove(biggerThan);
-      }), " bigger than ", input.text().bindValue(limit)), "or click on a number to remove it", showCollection(numbers));
+      }), " bigger than ", input.text(limit)), "or click on a number to remove it", showCollection(numbers));
     }), example(".removeAll", "Removes all numbers from a collection.", function() {
       var numbers;
       numbers = collection([1, 2, 3, 4]);
@@ -63,7 +63,7 @@
       };
       return body(showCollection(numbers), form.inline(button.danger("Filter", function() {
         return numbers.filter(biggerThan);
-      }), " bigger than ", input.text().span1().bindValue(limit)));
+      }), " bigger than ", input.text(limit).span1()));
     }), example(".count", "Counts the current number of items in a collection. If there is a filter it counts only the\nitems that match it.\n\n<p><code>.count()</code> Returns the number of the current items in the collection.</p>\n<p><code>.count(predicate)</code> Returns the number of the current items in the collection that match the predicate</p>", function() {
       var numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
@@ -98,7 +98,7 @@
       to = model("");
       return body(showCollection(numbers), form.inline(button.warning("Replace", function() {
         return numbers.replace(parseInt(from()), parseInt(to()));
-      }), input.text().span1().bindValue(from), " with ", input.text().span1().bindValue(to)));
+      }), input.text(from).span1(), " with ", input.text(to).span1()));
     }), example(".replaceAll", "Replaces all items in the collection.", function() {
       var numbers;
       numbers = collection([1, 2, 3, 4, 5]);

@@ -14,7 +14,7 @@ docs.modelApi = -> section(h1("Model"),
       Models has subscribe method which is used to listen to changes to models and generally is used in bindings.
     """)
 
-  example("Model example", "Model methods.", ->
+  example("Observable primitive", "Making primitive values observable", ->
     count = model(0)
     text = model("")
 
@@ -32,7 +32,7 @@ docs.modelApi = -> section(h1("Model"),
 
     body(
       form.inline(
-        input.text().span1().bindValue(value)
+        input.text(value).span1()
         button.primary("Push", -> if value() then arr.push(value()))
         button.danger("Pop", -> arr.pop())
         button.info("Sort", -> arr.sort())
@@ -42,7 +42,9 @@ docs.modelApi = -> section(h1("Model"),
   )
 
   example("Observable objects", """Using <code>models.object(obj)</code> makes a new object each field of
-                                which is observable. Nested objects and arrays are converted to observables.""", ->
+                                which is observable. Nested objects and arrays are converted to observables.
+                                Changes to a field within the object are propagated upwards, so if you subscribe
+                                ot an object changes to all fields and subfields will result in updating the object.""", ->
     obj = object(
       name: "Kiril Minkov"
       cool: true
@@ -56,18 +58,18 @@ docs.modelApi = -> section(h1("Model"),
     location = model("")
     body(
       form(
-        "Name": input.text().bindValue(obj.name)
-        "Cool": input.checkbox().bindValue(obj.cool)
-        "Age": input.text().bindValue(obj.age)
+        "Name": input.text(obj.name)
+        "Cool": input.checkbox(obj.cool)
+        "Age": input.text(obj.age)
         "Locations" : [
           span().bindText(obj.locations, -> obj.locations.toString())
           append(
-            input.text().placeholder("Add location...").bindValue(location)
+            input.text(location).placeholder("Add location...")
             button("Add", -> obj.locations.push(location("")))
           )
         ]
-        "Language": input.text().bindValue(obj.language.name)
-        "Native": input.checkbox().bindValue(obj.language.native)
+        "Language": input.text(obj.language.name)
+        "Native": input.checkbox(obj.language.native)
       )
 
       pre(code().bindText(obj, -> JSON.stringify(obj, null, 4)))

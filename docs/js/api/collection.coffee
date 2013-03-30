@@ -24,7 +24,7 @@ docs.collectionApi = -> section(h1("Collection"),
     body(
       showCollection(numbers)
       form.inline(
-        input.text().bindValue(value),
+        input.text(value),
         button.success('Add', -> numbers.add(value("")))
       )
     )
@@ -37,7 +37,7 @@ docs.collectionApi = -> section(h1("Collection"),
     body(
       showCollection(numbers)
       form.inline(
-        input.text().bindValue(value),
+        input.text(value),
       button.success('Add all', -> numbers.addAll(value("").split(",")))
       )
     )
@@ -54,7 +54,7 @@ docs.collectionApi = -> section(h1("Collection"),
       form.inline(
         button.danger("Remove", -> numbers.remove(biggerThan)),
         " bigger than ",
-        input.text().bindValue(limit)
+        input.text(limit)
       ),
       "or click on a number to remove it",
       showCollection(numbers)
@@ -86,7 +86,7 @@ docs.collectionApi = -> section(h1("Collection"),
       form.inline(
         button.danger("Filter", -> numbers.filter(biggerThan)),
         " bigger than ",
-        input.text().span1().bindValue(limit)
+        input.text(limit).span1()
       )
     )
   )
@@ -135,9 +135,9 @@ docs.collectionApi = -> section(h1("Collection"),
       showCollection(numbers),
       form.inline(
         button.warning("Replace", -> numbers.replace(parseInt(from()), parseInt(to()))),
-        input.text().span1().bindValue(from),
+        input.text(from).span1(),
         " with ",
-        input.text().span1().bindValue(to)
+        input.text(to).span1()
       )
     )
   )

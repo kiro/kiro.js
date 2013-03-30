@@ -72,13 +72,13 @@ describe("Model tests", ->
 
     arr.push(1)
     expect(calls).toBe(1)
-    expect(arr.join(",")).toEqual([1, 4, 2, 1].join(","))
+    expect(arr.toString()).toEqual([1, 4, 2, 1].toString())
     arr.pop()
-    expect(arr.join(",")).toEqual([1, 4, 2].join(","))
+    expect(arr.toString()).toEqual([1, 4, 2].toString())
     expect(calls).toBe(2)
     arr.sort()
     expect(calls).toBe(3)
-    expect(arr.join(",")).toEqual([1, 2, 4].join(","))
+    expect(arr.toString()).toEqual([1, 2, 4].toString())
   )
 
   it("Tests nested object observable", ->

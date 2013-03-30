@@ -6,7 +6,7 @@ window.BC.define('common', (common) ->
 
     merge: (attr2) ->
       if !this.isAttributes(attr2)
-        return
+        throw Error(attr2 + " is expected to be attributes")
 
       for key, value of attr2
         if attr[key]

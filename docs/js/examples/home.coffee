@@ -10,7 +10,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
   example("Declarative bindings", """Allows to bind the values of html properties to models.""", ->
     text = model("World")
     body(
-      input.text().bindValue(text)
+      input.text(text)
       h3().bindText(text, ->  "Hello " + text())
     )
   )
@@ -42,8 +42,8 @@ docs.home = () -> section(h1("Enter Kiro.js"),
 
       h5("Forms")
       form(
-        "First name" : input.text().bindValue(user.firstName)
-        "Last name" : input.text().bindValue(user.lastName)
+        "First name" : input.text(user.firstName)
+        "Last name" : input.text(user.lastName)
       )
 
       h5("Table")
@@ -66,8 +66,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
           .bindText(text)
           .bindVisible(edit, -> !edit())
           .on('click', -> edit(true))
-        input.text()
-          .bindValue(text)
+        input.text(text)
           .bindVisible(edit)
           .on('blur', -> edit(false))
           .on('keydown', (e) -> if e.keyCode == 13 then edit(false))
@@ -98,12 +97,12 @@ docs.home = () -> section(h1("Enter Kiro.js"),
       button.link("archive", -> todos.remove(done)),
       div().foreach(todos, (todo) ->
         form.inline(
-          input.checkbox().bindValue(todo.done),
+          input.checkbox(todo.done),
           span().bindText(todo.text)
         )
       ),
       form.inline(
-        input.text().bindValue(todoText),
+        input.text(todoText),
         button.primary('Add', -> todos.add(todo(todoText(""))))
       )
     )

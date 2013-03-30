@@ -13,7 +13,7 @@
         merge: function(attr2) {
           var key, value, _results;
           if (!this.isAttributes(attr2)) {
-            return;
+            throw Error(attr2 + " is expected to be attributes");
           }
           _results = [];
           for (key in attr2) {

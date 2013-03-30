@@ -11,14 +11,14 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.bindingsApi = function() {
-    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example(".bindValue", "Binds the value of an element to a model. It's available for input and textarea elements.\n\n<code>.bindValue(model)</code>\n", function() {
+    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example("Value bindings", "The input elements accept observable model and bind their value to it.", function() {
       var married, sex, text;
       text = model("initial");
       sex = model("female");
       married = model(false);
-      return body(form.inline(input.text().bindValue(text), span().bindText(text), button.info("Clear", function() {
+      return body(form.inline(input.text(text), span().bindText(text), button.info("Clear", function() {
         return text("");
-      })), input.radio("sex", "male").bindValue(sex), input.radio("sex", "female").bindValue(sex), input.radio("sex", "other").bindValue(sex), span().bindText(sex), input.checkbox().bindValue(married), span().bindText(married));
+      })), input.radio("sex", "male", sex), input.radio("sex", "female", sex), input.radio("sex", "other", sex), span().bindText(sex), input.checkbox(married), span().bindText(married));
     }), example(".bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
       var f, _i, _results;
       f = model(function(x) {
@@ -67,12 +67,12 @@
     }), example(".bindText", "Binds the text of an element.", function() {
       var text;
       text = model("");
-      return body(form.inline(input.text().bindValue(text), h2().bindText(text)));
+      return body(form.inline(input.text(text), h2().bindText(text)));
     }), example(".bindHtml", "Binds the html content of an element. The html value can be string, number or a composite component", function() {
       var content, i, items;
       content = model();
       items = [
-        button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(), button.info("Add", function() {
+        button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(model("")), button.info("Add", function() {
           return console.log("Test");
         }))
       ];

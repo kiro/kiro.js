@@ -20,17 +20,16 @@ docs.examples = -> section(h1("Examples"),
 
     selectAll = model(false)
     header = form.inline(
-      input.checkbox()
-        .bindValue(selectAll)
+      input.checkbox(selectAll)
         .on('click', -> todoItem.done(selectAll()) for todoItem in todos()),
-      input.text().bindValue(todoText),
+      input.text(todoText),
       button('Add', -> todos.add(todo(todoText(""))))
     )
 
     todoList =
       table().foreach(todos, (todo) ->
         tr(
-          td(input.checkbox().bindValue(todo.done)),
+          td(input.checkbox(todo.done)),
           td(todo.text())
           td(button("Remove", -> todos.remove(todo)))
         )
