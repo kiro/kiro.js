@@ -166,6 +166,18 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
+  example(".sort", """Sorts the elements in the collection""", ->
+    numbers = collection([2, 6, 3])
+    numbers.sort()
+
+    text = model("")
+    body(
+      "Click on a number to remove it"
+      showCollection(numbers)
+      form.inline(input.text(text), button("Add", -> numbers.add(Number(text()))))
+    )
+  )
+
   example(".subscribe", """Subscribes to changes in the collection, useful for building custom controls""", ->
     numbers = collection([1, 2, 3, 4, 5, 6])
     text = model("Total length " + numbers.count())

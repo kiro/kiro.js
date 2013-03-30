@@ -206,4 +206,19 @@ describe("Collection tests", ->
     expect(numbers.count()).toBe(2)
     expect(numbers.total(betweenThreeAndFive)).toBe(2)
   )
+
+  it("Tests sort", ->
+    names = collection(["Java", "Ada", "C++"])
+    names.sort()
+
+    expect(names()).toEqual(["Ada", "C++", "Java"])
+    names.add("Go")
+    expect(names()).toEqual(["Ada", "C++", "Go", "Java"])
+    names.filter((name) -> name != "Go")
+    expect(names()).toEqual(["Ada", "C++", "Java"])
+    names.add("Test")
+    expect(names()).toEqual(["Ada", "C++", "Java", "Test"])
+    names.add("ABC")
+    expect(names()).toEqual(["ABC", "Ada", "C++", "Java", "Test"])
+  )
 )

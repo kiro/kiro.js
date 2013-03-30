@@ -208,13 +208,29 @@
       numbers.removeAll();
       return expect(numbers()).toEqual([]);
     });
-    return it("Tests total", function() {
+    it("Tests total", function() {
       var numbers;
       numbers = collection([1, 2, 3, 4]);
       numbers.filter(betweenThreeAndFive);
       expect(numbers.total()).toBe(4);
       expect(numbers.count()).toBe(2);
       return expect(numbers.total(betweenThreeAndFive)).toBe(2);
+    });
+    return it("Tests sort", function() {
+      var names;
+      names = collection(["Java", "Ada", "C++"]);
+      names.sort();
+      expect(names()).toEqual(["Ada", "C++", "Java"]);
+      names.add("Go");
+      expect(names()).toEqual(["Ada", "C++", "Go", "Java"]);
+      names.filter(function(name) {
+        return name !== "Go";
+      });
+      expect(names()).toEqual(["Ada", "C++", "Java"]);
+      names.add("Test");
+      expect(names()).toEqual(["Ada", "C++", "Java", "Test"]);
+      names.add("ABC");
+      return expect(names()).toEqual(["ABC", "Ada", "C++", "Java", "Test"]);
     });
   });
 

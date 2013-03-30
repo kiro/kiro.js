@@ -11,6 +11,7 @@ window.BC.define('models', (models) ->
 
     allItems = initial
     items = allItems
+    compareFunction = undefined
 
     o = common.observable()
 
@@ -24,6 +25,8 @@ window.BC.define('models', (models) ->
         update()
 
     update = () ->
+      if compareFunction
+        allItems.sort(compareFunction)
       items = _.filter(allItems, filter)
       o.publish(items)
 
@@ -132,6 +135,15 @@ window.BC.define('models', (models) ->
     collection._set = (arg) ->
       assertArray(arg)
       allItems = arg
+      update()
+
+    defaultCompare = (a, b) ->
+      if a > b then 1
+      else if a < b then -1
+      else 0
+
+    collection.sort = (f = defaultCompare) ->
+      compareFunction = f
       update()
 
     collection

@@ -120,6 +120,14 @@
         };
       };
       return body(p("User 1 : ", users.get(byId(1))[0].name), p("User 2 : ", users.get(byId(2))[0].name));
+    }), example(".sort", "Sorts the elements in the collection", function() {
+      var numbers, text;
+      numbers = collection([2, 6, 3]);
+      numbers.sort();
+      text = model("");
+      return body("Click on a number to remove it", showCollection(numbers), form.inline(input.text(text), button("Add", function() {
+        return numbers.add(Number(text()));
+      })));
     }), example(".subscribe", "Subscribes to changes in the collection, useful for building custom controls", function() {
       var numbers, text;
       numbers = collection([1, 2, 3, 4, 5, 6]);

@@ -10,13 +10,14 @@
       }
     };
     return models.collection = function(initial) {
-      var allItems, collection, filter, items, o, toPredicate, update;
+      var allItems, collection, compareFunction, defaultCompare, filter, items, o, toPredicate, update;
       if (initial == null) {
         initial = [];
       }
       assertArray(initial);
       allItems = initial;
       items = allItems;
+      compareFunction = void 0;
       o = common.observable();
       filter = function() {
         return true;
@@ -31,6 +32,9 @@
         }
       };
       update = function() {
+        if (compareFunction) {
+          allItems.sort(compareFunction);
+        }
         items = _.filter(allItems, filter);
         return o.publish(items);
       };
@@ -130,6 +134,22 @@
       collection._set = function(arg) {
         assertArray(arg);
         allItems = arg;
+        return update();
+      };
+      defaultCompare = function(a, b) {
+        if (a > b) {
+          return 1;
+        } else if (a < b) {
+          return -1;
+        } else {
+          return 0;
+        }
+      };
+      collection.sort = function(f) {
+        if (f == null) {
+          f = defaultCompare;
+        }
+        compareFunction = f;
         return update();
       };
       return collection;
