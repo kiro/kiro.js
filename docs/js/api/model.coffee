@@ -35,6 +35,7 @@ docs.modelApi = -> section(h1("Model"),
         input.text().span1().bindValue(value)
         button.primary("Push", -> if value() then arr.push(value()))
         button.danger("Pop", -> arr.pop())
+        button.info("Sort", -> arr.sort())
       )
       span().bindText(arr, -> arr.toString())
     )
@@ -58,11 +59,13 @@ docs.modelApi = -> section(h1("Model"),
         "Name": input.text().bindValue(obj.name)
         "Cool": input.checkbox().bindValue(obj.cool)
         "Age": input.text().bindValue(obj.age)
-        "Locations" : form.inline(
-          input.text().bindText(obj.locations, -> obj.locations.toString())
-          input.text().placeholder("Add location...").bindValue(location)
-          button("Add", -> obj.locations.push(location("")))
-        )
+        "Locations" : [
+          span().bindText(obj.locations, -> obj.locations.toString())
+          append(
+            input.text().placeholder("Add location...").bindValue(location)
+            button("Add", -> obj.locations.push(location("")))
+          )
+        ]
         "Language": div(
           input.text().bindValue(obj.language.name)
           input.checkbox().bindValue(obj.language.native)

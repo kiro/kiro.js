@@ -32,12 +32,15 @@ window.BC.define('models', (models) ->
     o = common.observable()
     mutators = ['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift']
 
-    for method in mutators
+    hook = (arr, method) ->
       f = arr[method]
       arr[method] = ->
         result = f.apply(arr, arguments)
         o.publish(arr)
         result
+
+    for method in mutators
+      hook(arr, method)
 
     arr.subscribe = (callback) -> o.subscribe(callback)
     arr._get = () -> arr

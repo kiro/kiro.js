@@ -68,17 +68,20 @@
     });
     it("Tests array observable", function() {
       var arr, calls;
-      arr = models.array([1, 2, 3, 4]);
+      arr = models.array([1, 4, 2]);
       calls = 0;
       arr.subscribe(function() {
         return calls++;
       });
       arr.push(1);
       expect(calls).toBe(1);
+      expect(arr.join(",")).toEqual([1, 4, 2, 1].join(","));
       arr.pop();
+      expect(arr.join(",")).toEqual([1, 4, 2].join(","));
       expect(calls).toBe(2);
       arr.sort();
-      return expect(calls).toBe(3);
+      expect(calls).toBe(3);
+      return expect(arr.join(",")).toEqual([1, 2, 4].join(","));
     });
     return it("Tests nested object observable", function() {
       var languageCalls, languageNameCalls, obj, objCalls;

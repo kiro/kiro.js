@@ -66,16 +66,19 @@ describe("Model tests", ->
   )
 
   it("Tests array observable", ->
-    arr = models.array([1, 2, 3, 4])
+    arr = models.array([1, 4, 2])
     calls = 0
     arr.subscribe(-> calls++)
 
     arr.push(1)
     expect(calls).toBe(1)
+    expect(arr.join(",")).toEqual([1, 4, 2, 1].join(","))
     arr.pop()
+    expect(arr.join(",")).toEqual([1, 4, 2].join(","))
     expect(calls).toBe(2)
     arr.sort()
     expect(calls).toBe(3)
+    expect(arr.join(",")).toEqual([1, 2, 4].join(","))
   )
 
   it("Tests nested object observable", ->

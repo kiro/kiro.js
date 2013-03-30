@@ -31,6 +31,8 @@
         }
       }), button.danger("Pop", function() {
         return arr.pop();
+      }), button.info("Sort", function() {
+        return arr.sort();
       })), span().bindText(arr, function() {
         return arr.toString();
       }));
@@ -51,11 +53,13 @@
         "Name": input.text().bindValue(obj.name),
         "Cool": input.checkbox().bindValue(obj.cool),
         "Age": input.text().bindValue(obj.age),
-        "Locations": form.inline(input.text().bindText(obj.locations, function() {
-          return obj.locations.toString();
-        }), input.text().placeholder("Add location...").bindValue(location), button("Add", function() {
-          return obj.locations.push(location(""));
-        })),
+        "Locations": [
+          span().bindText(obj.locations, function() {
+            return obj.locations.toString();
+          }), append(input.text().placeholder("Add location...").bindValue(location), button("Add", function() {
+            return obj.locations.push(location(""));
+          }))
+        ],
         "Language": div(input.text().bindValue(obj.language.name), input.checkbox().bindValue(obj.language["native"]))
       }), span().bindText(obj, function() {
         return JSON.stringify(obj);

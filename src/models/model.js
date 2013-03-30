@@ -32,21 +32,25 @@
       return model;
     };
     models.array = function(arr) {
-      var f, method, mutators, o, _i, _len;
+      var hook, method, mutators, o, _i, _len;
       if (!_.isArray(arr)) {
         throw new Error(arr + " is expected to be an array.");
       }
       o = common.observable();
       mutators = ['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'];
-      for (_i = 0, _len = mutators.length; _i < _len; _i++) {
-        method = mutators[_i];
+      hook = function(arr, method) {
+        var f;
         f = arr[method];
-        arr[method] = function() {
+        return arr[method] = function() {
           var result;
           result = f.apply(arr, arguments);
           o.publish(arr);
           return result;
         };
+      };
+      for (_i = 0, _len = mutators.length; _i < _len; _i++) {
+        method = mutators[_i];
+        hook(arr, method);
       }
       arr.subscribe = function(callback) {
         return o.subscribe(callback);
