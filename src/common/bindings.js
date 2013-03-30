@@ -29,7 +29,7 @@
           if (map == null) {
             map = defaultMap;
           }
-          addInitializer.call(this, f, map(observable()));
+          addInitializer.call(this, f, map(observable._get()));
           observable.subscribe(function(newValue) {
             return el[f](map(newValue));
           });
@@ -55,7 +55,7 @@
           }
           if (this.subscribe) {
             this.subscribe(function(newValue) {
-              return observable(newValue);
+              return observable._set(newValue);
             });
           }
           binder('val').call(this, observable, map);
@@ -77,7 +77,7 @@
               id: common.nextId()
             });
           }
-          if (condition(observable())) {
+          if (condition(observable._get())) {
             this.addAttr({
               "class": className
             });

@@ -128,5 +128,11 @@ window.BC.define('models', (models) ->
       o.subscribe(listener)
       this
 
+    collection._get = () -> items
+    collection._set = (arg) ->
+      assertArray(arg)
+      allItems = arg
+      update()
+
     collection
 )

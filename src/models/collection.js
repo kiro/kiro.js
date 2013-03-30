@@ -124,6 +124,14 @@
         o.subscribe(listener);
         return this;
       };
+      collection._get = function() {
+        return items;
+      };
+      collection._set = function(arg) {
+        assertArray(arg);
+        allItems = arg;
+        return update();
+      };
       return collection;
     };
   });

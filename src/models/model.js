@@ -4,7 +4,7 @@
   window.BC.define('models', function(models) {
     var common;
     common = window.BC.namespace("common");
-    return models.model = function(arg) {
+    models.model = function(arg) {
       var model, o, value;
       value = arg;
       o = common.observable();
@@ -22,8 +22,112 @@
       model.subscribe = function(listener) {
         return o.subscribe(listener);
       };
-      model.map = function() {};
+      model._set = function(newValue) {
+        value = newValue;
+        return o.publish(value);
+      };
+      model._get = function() {
+        return value;
+      };
       return model;
+    };
+    models.array = function(arr) {
+      var f, method, mutators, o, _i, _len;
+      if (!_.isArray(arr)) {
+        throw new Error(arr + " is expected to be an array.");
+      }
+      o = common.observable();
+      mutators = ['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'];
+      for (_i = 0, _len = mutators.length; _i < _len; _i++) {
+        method = mutators[_i];
+        f = arr[method];
+        arr[method] = function() {
+          var result;
+          result = f.apply(arr, arguments);
+          o.publish(arr);
+          return result;
+        };
+      }
+      arr.subscribe = function(callback) {
+        return o.subscribe(callback);
+      };
+      arr._get = function() {
+        return arr;
+      };
+      arr._set = function(newArr) {
+        throw Error("set is not supported for arrays");
+      };
+      return arr;
+    };
+    return models.object = function(obj) {
+      var key, makeObservable, o, observables, prop, result, value;
+      if (!_.isObject(obj)) {
+        throw Error(obj + " is expected to be an object");
+      }
+      result = {};
+      observables = {};
+      makeObservable = function(obj, key, value) {
+        if (_.isString(value)) {
+          value = new String(value);
+        } else if (_.isNumber(value)) {
+          value = new Number(value);
+        } else if (_.isBoolean(value)) {
+          value = new Boolean(value);
+        } else if (_.isUndefined(value)) {
+          throw Error("value of " + key + " shouldn't be undefined");
+        }
+        value.subscribe = function(callback) {
+          return observables[key].subscribe(callback);
+        };
+        value._set = function(newValue) {
+          return obj[key] = newValue;
+        };
+        value._get = function() {
+          return value;
+        };
+        return value;
+      };
+      o = common.observable();
+      for (key in obj) {
+        value = obj[key];
+        observables[key] = common.observable();
+        if (_.isArray(value)) {
+          value = models.array(value);
+        } else if (_.isObject(value)) {
+          value = models.object(value);
+        } else {
+          value = makeObservable(result, key, value);
+        }
+        value.subscribe(function() {
+          return o.publish(result);
+        });
+        prop = function(key, value) {
+          return {
+            get: function() {
+              return value;
+            },
+            set: function(newValue) {
+              var oldValue;
+              oldValue = value;
+              value = makeObservable(result, key, newValue);
+              observables[key].publish(newValue);
+              return oldValue;
+            },
+            enumerable: true
+          };
+        };
+        Object.defineProperty(result, key, prop(key, value));
+      }
+      result.subscribe = function(callback) {
+        return o.subscribe(callback);
+      };
+      result._get = function() {
+        return result;
+      };
+      result._set = function() {
+        throw Error("set is not supported");
+      };
+      return result;
     };
   });
 

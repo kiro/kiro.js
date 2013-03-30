@@ -41,11 +41,11 @@
           bindValue: function(observable) {
             this.bindAttr(observable, function() {
               return {
-                checked: observable()
+                checked: observable._get()
               };
             });
             return this.subscribe(function(value) {
-              return observable(value);
+              return observable._set(value);
             });
           },
           isCheckbox: true
@@ -62,11 +62,11 @@
           bindValue: function(observable) {
             this.bindAttr(observable, function() {
               return {
-                checked: observable() === value
+                checked: observable._get() === value
               };
             });
             return this.subscribe(function(value) {
-              return observable(value);
+              return observable._set(value);
             });
           },
           isRadio: true

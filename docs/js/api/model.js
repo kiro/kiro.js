@@ -21,6 +21,45 @@
       return body(button.primary("+1", function() {
         return count(count() + 1);
       }), span().bindText(text));
+    }), example("Observable array", "Using <code>models.array(arr)</code> to construct an observable array.", function() {
+      var arr, value;
+      arr = array([1, 2, 3, 4]);
+      value = model();
+      return body(form.inline(input.text().span1().bindValue(value), button.primary("Push", function() {
+        if (value()) {
+          return arr.push(value());
+        }
+      }), button.danger("Pop", function() {
+        return arr.pop();
+      })), span().bindText(arr, function() {
+        return arr.toString();
+      }));
+    }), example("Observable objects", "Using <code>models.object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects and arrays are converted to observables.", function() {
+      var location, obj;
+      obj = object({
+        name: "Kiril Minkov",
+        cool: true,
+        age: 25,
+        locations: ["London", "Cambridge"],
+        language: {
+          name: "Bulgarian",
+          "native": true
+        }
+      });
+      location = model("");
+      return body(form({
+        "Name": input.text().bindValue(obj.name),
+        "Cool": input.checkbox().bindValue(obj.cool),
+        "Age": input.text().bindValue(obj.age),
+        "Locations": form.inline(input.text().bindText(obj.locations, function() {
+          return obj.locations.toString();
+        }), input.text().placeholder("Add location...").bindValue(location), button("Add", function() {
+          return obj.locations.push(location(""));
+        })),
+        "Language": div(input.text().bindValue(obj.language.name), input.checkbox().bindValue(obj.language["native"]))
+      }), span().bindText(obj, function() {
+        return JSON.stringify(obj);
+      }));
     }));
   };
 

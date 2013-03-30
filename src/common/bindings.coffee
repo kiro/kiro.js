@@ -14,7 +14,7 @@ window.BC.define('common', (common) ->
 
     binder = (f, defaultMap = identity) ->
       (observable, map = defaultMap) ->
-        addInitializer.call(this, f, map(observable()))
+        addInitializer.call(this, f, map(observable._get()))
         observable.subscribe( (newValue) -> el[f](map(newValue)) )
         this
 
@@ -31,7 +31,7 @@ window.BC.define('common', (common) ->
     # mapping to the observable
     bindValue: (observable, map = identity) ->
       if this.subscribe
-        this.subscribe((newValue) -> observable(newValue))
+        this.subscribe((newValue) -> observable._set(newValue))
       binder('val').call(this, observable, map)
       this
 
@@ -47,7 +47,7 @@ window.BC.define('common', (common) ->
     # Binds the class of an element
     bindClass: (observable, className, condition = (x) -> x) ->
       this.addAttr(id: common.nextId()) if !this.id()
-      this.addAttr(class: className) if condition(observable())
+      this.addAttr(class: className) if condition(observable._get())
 
       observable.subscribe((value) ->
         if condition(value)

@@ -35,4 +35,72 @@ describe("Model tests", ->
     expect(flag("")).toEqual("new")
     expect(flag()).toEqual("")
   )
+
+  it("Tests object observable", ->
+    obj = models.object(
+      firstName: "Kiril"
+      lastName: "Minkov"
+    )
+
+    objCalls = 0
+    obj.subscribe(-> objCalls++)
+    firstCalls = 0
+    obj.firstName.subscribe(-> firstCalls++)
+    lastCalls = 0
+    obj.lastName.subscribe(-> lastCalls++)
+
+    obj.firstName = "Test"
+    expect(firstCalls).toBe(1)
+    expect(objCalls).toBe(1)
+    expect(lastCalls).toBe(0)
+
+    obj.lastName = "Mente"
+    expect(firstCalls).toBe(1)
+    expect(lastCalls).toBe(1)
+    expect(objCalls).toBe(2)
+
+    obj.lastName = "Mente"
+    expect(firstCalls).toBe(1)
+    expect(lastCalls).toBe(2)
+    expect(objCalls).toBe(3)
+  )
+
+  it("Tests array observable", ->
+    arr = models.array([1, 2, 3, 4])
+    calls = 0
+    arr.subscribe(-> calls++)
+
+    arr.push(1)
+    expect(calls).toBe(1)
+    arr.pop()
+    expect(calls).toBe(2)
+    arr.sort()
+    expect(calls).toBe(3)
+  )
+
+  it("Tests nested object observable", ->
+    obj = models.object(
+      firstName: "Kiril"
+      lastName: "Minkov"
+      cities: ["Plovdiv", "Sofia", "San Francisco", "London"]
+      language: {
+        name: "Bulgarian"
+        confidence: "Profficient"
+      }
+    )
+
+    objCalls = 0
+    obj.subscribe(-> objCalls++)
+    expect(objCalls).toBe(0)
+    obj.firstName = "Mente"
+    expect(objCalls).toBe(1)
+    languageCalls = 0
+    obj.language.subscribe(-> languageCalls++)
+    languageNameCalls = 0
+    obj.language.name.subscribe(-> languageNameCalls++)
+    obj.language.name = "Test"
+    expect(objCalls).toBe(2)
+    expect(languageCalls).toBe(1)
+    expect(languageNameCalls).toBe(1)
+  )
 )
