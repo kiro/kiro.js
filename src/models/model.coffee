@@ -42,6 +42,16 @@ window.BC.define('models', (models) ->
     for method in mutators
       hook(arr, method)
 
+    index = 0
+    for value in arr
+      if common.isModel(value)
+        value.subscribe((newValue, path) -> o.publish(arr, path))
+      else if _.isObject(value)
+        value = models.object(value)
+        arr[index] = value
+        value.subscribe((newValue, path) -> o.publish(arr, path))
+      index++
+
     arr.subscribe = (callback) -> o.subscribe(callback)
     arr._get = () -> arr
     arr._set = (newArr) -> throw Error("set is not supported for arrays")
@@ -82,7 +92,9 @@ window.BC.define('models', (models) ->
       else
         value = makeObservable(result, key, value)
 
-      value.subscribe( -> o.publish(result))
+      listener = (key) ->
+        (newValue, valuePath) -> o.publish(result, key + (if valuePath then "." + valuePath else ""))
+      value.subscribe(listener(key))
 
       prop = (key, value) ->
         get: () ->

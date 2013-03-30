@@ -15,7 +15,7 @@ window.BC.define('common', (common) ->
     binder = (f, defaultMap = identity) ->
       (observable, map = defaultMap) ->
         addInitializer.call(this, f, map(observable._get()))
-        observable.subscribe( (newValue) -> el[f](map(newValue)) )
+        observable.subscribe( (newValue, path) -> el[f](map(newValue, path)) )
         this
 
     initBindings: (element) ->

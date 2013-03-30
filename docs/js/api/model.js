@@ -62,7 +62,7 @@
         ],
         "Language": input.text(obj.language.name),
         "Native": input.checkbox(obj.language["native"])
-      }), pre(code().bindText(obj, function() {
+      }), pre(code().bindText(obj, function(value, path) {
         return JSON.stringify(obj, null, 4);
       })));
     }));

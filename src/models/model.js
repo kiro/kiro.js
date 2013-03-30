@@ -32,7 +32,7 @@
       return model;
     };
     models.array = function(arr) {
-      var hook, method, mutators, o, _i, _len;
+      var hook, index, method, mutators, o, value, _i, _j, _len, _len1;
       if (!_.isArray(arr)) {
         throw new Error(arr + " is expected to be an array.");
       }
@@ -52,6 +52,22 @@
         method = mutators[_i];
         hook(arr, method);
       }
+      index = 0;
+      for (_j = 0, _len1 = arr.length; _j < _len1; _j++) {
+        value = arr[_j];
+        if (common.isModel(value)) {
+          value.subscribe(function(newValue, path) {
+            return o.publish(arr, path);
+          });
+        } else if (_.isObject(value)) {
+          value = models.object(value);
+          arr[index] = value;
+          value.subscribe(function(newValue, path) {
+            return o.publish(arr, path);
+          });
+        }
+        index++;
+      }
       arr.subscribe = function(callback) {
         return o.subscribe(callback);
       };
@@ -64,7 +80,7 @@
       return arr;
     };
     models.object = function(obj) {
-      var key, makeObservable, o, observables, prop, result, value;
+      var key, listener, makeObservable, o, observables, prop, result, value;
       if (!_.isObject(obj)) {
         throw Error(obj + " is expected to be an object");
       }
@@ -102,9 +118,12 @@
         } else {
           value = makeObservable(result, key, value);
         }
-        value.subscribe(function() {
-          return o.publish(result);
-        });
+        listener = function(key) {
+          return function(newValue, valuePath) {
+            return o.publish(result, key + (valuePath ? "." + valuePath : ""));
+          };
+        };
+        value.subscribe(listener(key));
         prop = function(key, value) {
           return {
             get: function() {

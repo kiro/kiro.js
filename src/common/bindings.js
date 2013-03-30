@@ -30,8 +30,8 @@
             map = defaultMap;
           }
           addInitializer.call(this, f, map(observable._get()));
-          observable.subscribe(function(newValue) {
-            return el[f](map(newValue));
+          observable.subscribe(function(newValue, path) {
+            return el[f](map(newValue, path));
           });
           return this;
         };

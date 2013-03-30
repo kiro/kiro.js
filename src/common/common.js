@@ -76,11 +76,11 @@
           listeners.push(listener);
           return this;
         },
-        publish: function(newValue) {
+        publish: function(newValue, path) {
           var listener, _i, _len;
           for (_i = 0, _len = listeners.length; _i < _len; _i++) {
             listener = listeners[_i];
-            listener(newValue);
+            listener(newValue, path);
           }
           return this;
         }

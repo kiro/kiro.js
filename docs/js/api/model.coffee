@@ -72,7 +72,9 @@ docs.modelApi = -> section(h1("Model"),
         "Native": input.checkbox(obj.language.native)
       )
 
-      pre(code().bindText(obj, -> JSON.stringify(obj, null, 4)))
+      pre(code().bindText(obj, (value, path) ->
+        JSON.stringify(obj, null, 4)
+      ))
     )
   )
 )

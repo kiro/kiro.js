@@ -127,4 +127,55 @@ describe("Model tests", ->
     value(4)
     expect(calls).toBe(4)
   )
+
+  it("Tests path", ->
+    obj = object(
+      name: "Test"
+      checked: true
+      numbers: [1, 2, 3]
+      sub: [
+        {key: "key1", value: "value1"}
+        {key: "key2", value: "value2"}
+      ]
+      subsub:
+        name:
+          first: "Kiril"
+          last: "Minkov"
+        age: "I don't want to think about it"
+    )
+
+    expectedPath = ""
+    calls = 0
+    obj.subscribe((value, path) ->
+      expect(path).toEqual(expectedPath)
+      calls++
+    )
+    expectedPath = "name"
+    obj.name = "Mente"
+    expect(calls).toBe(1)
+
+    expectedPath = "checked"
+    obj.checked = false
+    expect(calls).toBe(2)
+
+    expectedPath = "numbers"
+    obj.numbers.push(4)
+    expect(calls).toBe(3)
+
+    expectedPath = "sub.key"
+    obj.sub[0].key = "kkk"
+    expect(calls).toBe(4)
+
+    expectedPath = "sub.value"
+    obj.sub[0].value = "vvv"
+    expect(calls).toBe(5)
+
+    expectedPath = "subsub.name.first"
+    obj.subsub.name.first = "first"
+    expect(calls).toBe(6)
+
+    expectedPath = "subsub.age"
+    obj.subsub.age = 30
+    expect(calls).toBe(7)
+  )
 )

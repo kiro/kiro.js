@@ -35,8 +35,8 @@ window.BC.define('common', (common) ->
     subscribe: (listener) ->
       listeners.push(listener)
       this
-    publish: (newValue) ->
-      listener(newValue) for listener in listeners
+    publish: (newValue, path) ->
+      listener(newValue, path) for listener in listeners
       this
 
   # Constructs a DOM element from composite, string, number, array.
