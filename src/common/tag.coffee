@@ -1,5 +1,4 @@
 window.BC.define('common', (common) ->
-
   # TODO(kiro): make it to take extensions
   common.tag = (name, initialAttr = {}) ->
     (items...) ->
@@ -57,9 +56,23 @@ window.BC.define('common', (common) ->
         classes: () -> attr.get('class')
       )
 
-      for item in items
-        if common.isModel(item)
-          result.bindHtml(item)
+      map = (observable, map = (x) -> x) ->
+        value = map(observable._get())
+
+        _get: () -> value
+        _set: (newValue) -> throw Error("_set is not supported for mapped values")
+        subscribe: (callback) -> observable.subscribe(
+          (baseValue) ->
+            value = map(baseValue)
+            callback(value)
+        )
+
+      if items.length == 1 && common.isModel(items[0])
+        result.bindHtml(items[0])
+      else
+        for item in items
+          if common.isModel(item)
+            throw Error(items + " should have only one model")
 
       result
 )
