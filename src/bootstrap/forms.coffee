@@ -45,12 +45,13 @@ window.BC.define('bootstrap', (bootstrap) ->
         isCheckbox: true
       ).bindValue(model)
 
-    radio: (name, value, model) ->
-      if _.isUndefined(model)
-        model = models.model("")
+    radio: (items...) ->
+      model = getModel(items)
+
+      value = items[0].value
 
       $.extend(
-        tag('input', type: 'radio', name: name, value: value, checked: 'checked')()
+        tag('input', type: 'radio')(items...)
           .observable()
           .on('click', (e) -> e.data.publish(value)),
         bindValue: (observable) ->
@@ -172,4 +173,8 @@ window.BC.define('bootstrap', (bootstrap) ->
   bootstrap.img.rounded = img(class: 'img-rounded')
   bootstrap.img.circle = img(class: 'img-circle')
   bootstrap.img.polaroid = img(class: 'img-polaroid')
+
+  bootstrap.header = tag('header')
+  bootstrap.section = tag('section')
+  bootstrap.footer = tag('footer')
 )

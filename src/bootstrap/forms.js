@@ -69,16 +69,14 @@
           isCheckbox: true
         }).bindValue(model);
       },
-      radio: function(name, value, model) {
-        if (_.isUndefined(model)) {
-          model = models.model("");
-        }
+      radio: function() {
+        var items, model, value;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        model = getModel(items);
+        value = items[0].value;
         return $.extend(tag('input', {
-          type: 'radio',
-          name: name,
-          value: value,
-          checked: 'checked'
-        })().observable().on('click', function(e) {
+          type: 'radio'
+        }).apply(null, items).observable().on('click', function(e) {
           return e.data.publish(value);
         }), {
           bindValue: function(observable) {
@@ -288,9 +286,12 @@
     bootstrap.img.circle = img({
       "class": 'img-circle'
     });
-    return bootstrap.img.polaroid = img({
+    bootstrap.img.polaroid = img({
       "class": 'img-polaroid'
     });
+    bootstrap.header = tag('header');
+    bootstrap.section = tag('section');
+    return bootstrap.footer = tag('footer');
   });
 
 }).call(this);
