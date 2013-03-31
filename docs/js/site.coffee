@@ -14,7 +14,7 @@ site = div.container(
         a("Home", -> content(docs.home()))
         a("Api", -> content(docs.api()))
         a("Bootstrap", -> content(docs.bootstrap.index()))
-        a("Examples", -> content(docs.examples()))
+        a("Examples", -> content(docs.examples.index()))
       )
     )
   ).inverse().fixedTop()

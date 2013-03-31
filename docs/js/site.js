@@ -19,7 +19,7 @@
   }), a("Bootstrap", function() {
     return content(docs.bootstrap.index());
   }), a("Examples", function() {
-    return content(docs.examples());
+    return content(docs.examples.index());
   })))).inverse().fixedTop(), div.row().bindHtml(content));
 
   $('body').append(element(site));

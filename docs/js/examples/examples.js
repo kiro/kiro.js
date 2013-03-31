@@ -4,122 +4,22 @@
 
   docs = window.BC.namespace("docs");
 
+  docs.examples = window.BC.namespace("docs.examples");
+
   bootstrap = window.BC.namespace("bootstrap");
 
   models = window.BC.namespace("models");
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.examples = function() {
-    return section(h1("Examples"), docs.code.examples(), example("TodoMVC app", "", function() {
-      var all, done, footer, header, notDone, selectAll, todo, todoList, todoText, todos;
-      todo = function(text, done) {
-        if (done == null) {
-          done = false;
-        }
-        return {
-          text: model(text),
-          done: model(done)
-        };
-      };
-      todos = collection([todo('first todo')]);
-      todoText = model("");
-      selectAll = model(false);
-      header = form.inline(input.checkbox(selectAll).on('click', function() {
-        var todoItem, _i, _len, _ref, _results;
-        _ref = todos();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          todoItem = _ref[_i];
-          _results.push(todoItem.done(selectAll()));
-        }
-        return _results;
-      }), input.text(todoText), button('Add', function() {
-        return todos.add(todo(todoText("")));
-      }));
-      todoList = table().foreach(todos, function(todo) {
-        return tr(td(input.checkbox(todo.done)), td(todo.text()), td(button("Remove", function() {
-          return todos.remove(todo);
-        })));
-      });
-      notDone = function(todo) {
-        return !todo.done();
-      };
-      done = function(todo) {
-        return todo.done();
-      };
-      all = function() {
-        return true;
-      };
-      footer = div.row.fluid(div().span3(span().bindText(todos, function() {
-        return todos.count(notDone) + " of " + todos.count();
-      })), div().span6(button.link('All', function() {
-        return todos.filter(all);
-      }), button.link('Done', function() {
-        return todos.filter(done);
-      }), button.link('Left', function() {
-        return todos.filter(notDone);
-      })), div().span3(a('Remove all', function() {
-        return todos.removeAll();
-      })));
-      return body(div.container(div().span6(header, todoList, footer)));
-    }), example("Players", "", function() {
-      var player, players, selected;
-      player = function(name, score) {
-        return object({
-          name: name,
-          score: score
-        });
-      };
-      players = collection([player("C++", 5), player("Java", 10), player("Javascript", 15), player("Go", 25), player("Python", 20)]);
-      players.sort(function(player1, player2) {
-        if (player1.score < player2.score) {
-          return 1;
-        } else {
-          if (player1.score > player2.score) {
-            return -1;
-          } else {
-            return 0;
-          }
-        }
-      });
-      selected = model();
-      return body(div({
-        id: 'outer'
-      }, div({
-        "class": 'leader board'
-      }).foreach(players, function(player) {
-        return div({
-          "class": 'player'
-        }, span({
-          "class": 'name'
-        }).bindText(player.name), span({
-          "class": 'score'
-        }).bindText(player.score)).bindClass(selected, 'selected', function() {
-          return selected() === player;
-        }).on('click', function() {
-          return selected(player);
-        });
-      })), div({
-        "class": 'details'
-      }, div({
-        "class": 'name'
-      }).bindText(selected, function() {
-        if (selected()) {
-          return selected().name;
-        }
-      }), button({
-        "class": 'inc'
-      }, "Give 5 points", function() {
-        return selected().score += 5;
-      })).bindVisible(selected, function() {
-        return selected();
-      }), div({
-        "class": 'none'
-      }, 'Click a player to select').bindVisible(selected, function() {
-        return !selected();
-      }));
-    }));
+  docs.examples.index = function() {
+    var content;
+    content = model(docs.examples.todomvc());
+    return div(div().span3(nav(a("Todo MVC", function() {
+      return content(docs.examples.todomvc());
+    }), a("Players", function() {
+      return content(docs.examples.players());
+    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
 
 }).call(this);

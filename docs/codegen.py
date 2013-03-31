@@ -28,7 +28,7 @@ for filename in glob.glob("*/*/*.coffee"):
         lines = ""
         title = ""
         for line in f.readlines():
-            if line.strip().startswith('example'):
+            if line.strip().startswith('example('):
                 inExample = False
                 if isExample: write_example(title, lines, name)
                 lines = ""
