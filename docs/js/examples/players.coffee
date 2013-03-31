@@ -30,15 +30,15 @@ docs.examples.players = -> section(h1("Players"),
       div(id:'outer',
         div(class: 'leader board').foreach(players, (player) ->
           div(class:'player',
-            span(class:'name').bindText(player.name)
-            span(class: 'score').bindText(player.score)
+            span({class:'name'}, player.name)
+            span({class: 'score'}, player.score)
           ).bindClass(selected, 'selected', -> selected() == player)
             .on('click', -> selected(player))
         )
       )
 
       div(class: 'details',
-        div(class: 'name').bindText(selected, -> selected().name if selected())
+        div({class: 'name'}, map(selected, -> selected().name if selected()))
         button(class: 'inc',"Give 5 points", -> selected().score += 5)
       ).bindVisible(selected, -> selected())
 

@@ -17,7 +17,7 @@ window.BC.define('common', (common) ->
             " or have .html() function")
 
       bindings = common.bindings(_.clone(items))
-      $.extend(bindings,
+      result = $.extend(bindings,
         id: () -> attr.get('id')
         html: () ->
           _.template("""
@@ -57,4 +57,9 @@ window.BC.define('common', (common) ->
         classes: () -> attr.get('class')
       )
 
+      for item in items
+        if common.isModel(item)
+          result.bindHtml(item)
+
+      result
 )

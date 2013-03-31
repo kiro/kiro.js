@@ -8,7 +8,7 @@
         initialAttr = {};
       }
       return function() {
-        var attr, bindings, index, item, items, _i, _len;
+        var attr, bindings, index, item, items, result, _i, _j, _len, _len1;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         attr = common.attributes(_.clone(initialAttr));
         if (items.length > 0 && attr.isAttributes(items[0])) {
@@ -24,7 +24,7 @@
           }
         }
         bindings = common.bindings(_.clone(items));
-        return $.extend(bindings, {
+        result = $.extend(bindings, {
           id: function() {
             return attr.get('id');
           },
@@ -80,6 +80,13 @@
             return attr.get('class');
           }
         });
+        for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+          item = items[_j];
+          if (common.isModel(item)) {
+            result.bindHtml(item);
+          }
+        }
+        return result;
       };
     };
   });

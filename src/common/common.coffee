@@ -4,7 +4,7 @@ window.BC.define('common', (common) ->
   common.isModel = (item) -> _.isFunction(item.subscribe) and _.isFunction(item._get) and _.isFunction(item._set)
 
   common.isValid = (item) ->
-    _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html)
+    _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html) or common.isModel(item)
 
   # Converts an item to HTML
   common.toHtml = (item) ->
@@ -13,7 +13,8 @@ window.BC.define('common', (common) ->
     else if _.isString(item) then item
     else if _.isNumber(item) then item
     else if _.isArray(item) then (common.toHtml(subitem) for subitem in item).join(" ")
-    else throw Error(item + " is expected to be String, Number, Array, undefined or have .html() function")
+    else if common.isModel(item) then common.toHtml(item._get())
+    else throw Error(item + " is expected to be String, Number, Array, undefined, model or have .html() function")
 
   # Initializes the item with context.
   common.init = (item, context) ->
@@ -22,6 +23,7 @@ window.BC.define('common', (common) ->
     else if _.isString(item)
     else if _.isNumber(item)
     else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
+    else if common.isModel(item) then common.init(item._get())
     else throw Error(item + " is expected to be String, Number, Array, undefined or have .init() function")
 
   common.nextId = ( ->
@@ -54,7 +56,7 @@ window.BC.define('common', (common) ->
       composite.init(el)
       el
     else
-      throw Error(composite + " is expected to be string, number of composite")
+      throw Error(composite + " is expected to be string, model, number of composite")
 
   # Partial application of a function.
   #

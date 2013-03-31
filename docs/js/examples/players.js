@@ -43,9 +43,9 @@
           "class": 'player'
         }, span({
           "class": 'name'
-        }).bindText(player.name), span({
+        }, player.name), span({
           "class": 'score'
-        }).bindText(player.score)).bindClass(selected, 'selected', function() {
+        }, player.score)).bindClass(selected, 'selected', function() {
           return selected() === player;
         }).on('click', function() {
           return selected(player);
@@ -54,11 +54,11 @@
         "class": 'details'
       }, div({
         "class": 'name'
-      }).bindText(selected, function() {
+      }, map(selected, function() {
         if (selected()) {
           return selected().name;
         }
-      }), button({
+      })), button({
         "class": 'inc'
       }, "Give 5 points", function() {
         return selected().score += 5;
