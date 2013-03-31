@@ -14,6 +14,17 @@
 
   describe("Bindings test", function() {
     it("Empty test", function() {});
+    it("Tests tag model binding", function() {
+      var el, value;
+      value = model("test");
+      show(span({
+        id: 'span1'
+      }, value));
+      el = $('#span1');
+      expect(el.html()).toBe(value());
+      value("Check check");
+      return expect(el.html()).toBe(value());
+    });
     it("Tests value binding", function() {
       var text, value;
       value = model("test");

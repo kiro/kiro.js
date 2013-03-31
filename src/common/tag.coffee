@@ -56,17 +56,6 @@ window.BC.define('common', (common) ->
         classes: () -> attr.get('class')
       )
 
-      map = (observable, map = (x) -> x) ->
-        value = map(observable._get())
-
-        _get: () -> value
-        _set: (newValue) -> throw Error("_set is not supported for mapped values")
-        subscribe: (callback) -> observable.subscribe(
-          (baseValue) ->
-            value = map(baseValue)
-            callback(value)
-        )
-
       if items.length == 1 && common.isModel(items[0])
         result.bindHtml(items[0])
       else

@@ -8,7 +8,7 @@
         initialAttr = {};
       }
       return function() {
-        var attr, bindings, index, item, items, map, result, _i, _j, _len, _len1;
+        var attr, bindings, index, item, items, result, _i, _j, _len, _len1;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         attr = common.attributes(_.clone(initialAttr));
         if (items.length > 0 && attr.isAttributes(items[0])) {
@@ -80,29 +80,6 @@
             return attr.get('class');
           }
         });
-        map = function(observable, map) {
-          var value;
-          if (map == null) {
-            map = function(x) {
-              return x;
-            };
-          }
-          value = map(observable._get());
-          return {
-            _get: function() {
-              return value;
-            },
-            _set: function(newValue) {
-              throw Error("_set is not supported for mapped values");
-            },
-            subscribe: function(callback) {
-              return observable.subscribe(function(baseValue) {
-                value = map(baseValue);
-                return callback(value);
-              });
-            }
-          };
-        };
         if (items.length === 1 && common.isModel(items[0])) {
           result.bindHtml(items[0]);
         } else {

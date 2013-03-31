@@ -8,6 +8,19 @@ $.extend(this, common, models, util, bootstrap)
 describe("Bindings test", ->
   it("Empty test", ->)
 
+  it("Tests tag model binding", ->
+    value = model("test")
+
+    show(
+      span({id: 'span1'}, value)
+    )
+
+    el = $('#span1')
+    expect(el.html()).toBe(value())
+    value("Check check")
+    expect(el.html()).toBe(value())
+  )
+
   it("Tests value binding", ->
     value = model("test")
     text = input.text().bindValue(value)
