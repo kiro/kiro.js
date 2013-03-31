@@ -151,4 +151,17 @@ describe("Bindings test", ->
     expectedIndex = 0
     list = div("Mente").foreach(values, (value, index) -> expect(index).toEqual(expectedIndex++))
   )
+
+  it("Tests binding to boolean", ->
+    value = model(false)
+
+    show(
+      span({id: 'span2'}, value)
+    )
+
+    el = $('#span2')
+    expect(el.html()).toBe("false")
+    value(true)
+    expect(el.html()).toBe("true")
+  )
 )

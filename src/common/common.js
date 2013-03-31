@@ -110,7 +110,7 @@
       } else if (_.isNumber(composite)) {
         return composite;
       } else if (_.isBoolean(composite)) {
-        return composite;
+        return composite.toString();
       } else if (_.isFunction(composite.html)) {
         el = $(composite.html());
         composite.init(el);

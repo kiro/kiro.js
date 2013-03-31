@@ -133,7 +133,7 @@
       isVisible(true);
       return expect(box.el().css('display')).toBe("block");
     });
-    return it("Tests foreach binding", function() {
+    it("Tests foreach binding", function() {
       var expectedIndex, list, values;
       values = collection([1, 2, 3]);
       list = div("Test").foreach(values, function(value) {
@@ -147,6 +147,17 @@
       return list = div("Mente").foreach(values, function(value, index) {
         return expect(index).toEqual(expectedIndex++);
       });
+    });
+    return it("Tests binding to boolean", function() {
+      var el, value;
+      value = model(false);
+      show(span({
+        id: 'span2'
+      }, value));
+      el = $('#span2');
+      expect(el.html()).toBe("false");
+      value(true);
+      return expect(el.html()).toBe("true");
     });
   });
 

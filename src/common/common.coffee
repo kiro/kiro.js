@@ -54,7 +54,7 @@ window.BC.define('common', (common) ->
     else if _.isNumber(composite)
       composite
     else if _.isBoolean(composite)
-      composite
+      composite.toString()
     else if _.isFunction(composite.html)
       el = $(composite.html())
       composite.init(el)
