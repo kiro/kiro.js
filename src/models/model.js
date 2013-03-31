@@ -152,7 +152,7 @@
       };
       return result;
     };
-    return models.map = function(observable, map) {
+    models.map = function(observable, map) {
       var value;
       if (map == null) {
         map = function(x) {
@@ -174,6 +174,11 @@
           });
         }
       };
+    };
+    return models.not = function(observable) {
+      return models.map(observable, function(x) {
+        return !x;
+      });
     };
   });
 

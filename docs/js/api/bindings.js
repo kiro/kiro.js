@@ -19,10 +19,20 @@
       return body(form.inline(input.text(text), span(text), button.info("Clear", function() {
         return text("");
       })), input.radio("sex", "male", sex), input.radio("sex", "female", sex), input.radio("sex", "other", sex), span(sex), input.checkbox(married), span(married));
-    }), example("Html bindins", "When a model is passed to an html element, its\nvalue is bound to the html content of the element", function() {
-      var text;
+    }), example("Html bindings", "When a model is passed to an html element, its\nvalue is bound to the html content of the element", function() {
+      var content, i, items, text;
       text = model("");
-      return body(form.inline(input.text(text), h2(text)));
+      content = model();
+      items = [
+        button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(text), button.info("Clear", function() {
+          return text("");
+        }))
+      ];
+      i = 0;
+      content(items[0]);
+      return body(form.inline(input.text(text), h2(text), button("Next", function() {
+        return content(items[++i % items.length]);
+      }), h6("html"), div(content)));
     }), example(".bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
       var f, _i, _results;
       f = model(function(x) {
@@ -68,19 +78,6 @@
       }).bindClass(count, 'btn-danger', function() {
         return count() > 3 && count() < 8;
       }));
-    }), example(".bindHtml", "Binds the html content of an element. The html value can be string, number or a composite component", function() {
-      var content, i, items;
-      content = model();
-      items = [
-        button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(model("")), button.info("Add", function() {
-          return console.log("Test");
-        }))
-      ];
-      i = 0;
-      content(items[0]);
-      return body(button("Next", function() {
-        return content(items[++i % items.length]);
-      }), h6("html"), div(content));
     }), example(".bindDisabled", "Binds whether an element is disabled", function() {
       var isThree, number;
       number = model(0);

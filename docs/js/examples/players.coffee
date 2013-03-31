@@ -40,7 +40,7 @@ docs.examples.players = -> section(h1("Players"),
       div(class: 'details',
         div({class: 'name'}, map(selected, -> selected().name if selected()))
         button(class: 'inc',"Give 5 points", -> selected().score += 5)
-      ).bindVisible(selected, -> selected())
+      ).bindVisible(selected)
 
       div(class: 'none', 'Click a player to select')
         .bindVisible(selected, -> !selected())

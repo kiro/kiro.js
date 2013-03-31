@@ -124,4 +124,6 @@ window.BC.define('models', (models) ->
         value = map(baseValue)
         callback(value)
     )
+
+  models.not = (observable) -> models.map(observable, (x) -> !x)
 )

@@ -19,6 +19,19 @@ describe("Bindings test", ->
     expect(el.html()).toBe(value())
     value("Check check")
     expect(el.html()).toBe(value())
+
+    content = model(div("Check"))
+
+    show(
+      div({id: 'content-div'}, content)
+    )
+
+    el = $('#content-div')
+    expect(el.html()).toBe("<div>Check</div>")
+    content(span("Test"))
+    expect(el.html()).toBe("<span>Test</span>")
+    content("Text")
+    expect(el.html()).toBe("Text")
   )
 
   it("Tests value binding", ->

@@ -140,7 +140,7 @@
       value(4);
       return expect(calls).toBe(4);
     });
-    return it("Tests path", function() {
+    it("Tests path", function() {
       var calls, expectedPath, obj;
       obj = object({
         name: "Test",
@@ -190,6 +190,23 @@
       expectedPath = "subsub.age";
       obj.subsub.age = 30;
       return expect(calls).toBe(7);
+    });
+    return it("Tests not", function() {
+      var calls, expected, notVisible, visible;
+      visible = model(false);
+      notVisible = models.not(visible);
+      expected = false;
+      calls = 0;
+      notVisible.subscribe(function(value) {
+        calls++;
+        return expect(value).toEqual(expected);
+      });
+      expect(notVisible._get()).toEqual(true);
+      visible(true);
+      expect(calls).toEqual(1);
+      expected = true;
+      visible(false);
+      return expect(calls).toEqual(2);
     });
   });
 

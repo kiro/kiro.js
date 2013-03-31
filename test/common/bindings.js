@@ -15,7 +15,7 @@
   describe("Bindings test", function() {
     it("Empty test", function() {});
     it("Tests tag model binding", function() {
-      var el, value;
+      var content, el, value;
       value = model("test");
       show(span({
         id: 'span1'
@@ -23,7 +23,17 @@
       el = $('#span1');
       expect(el.html()).toBe(value());
       value("Check check");
-      return expect(el.html()).toBe(value());
+      expect(el.html()).toBe(value());
+      content = model(div("Check"));
+      show(div({
+        id: 'content-div'
+      }, content));
+      el = $('#content-div');
+      expect(el.html()).toBe("<div>Check</div>");
+      content(span("Test"));
+      expect(el.html()).toBe("<span>Test</span>");
+      content("Text");
+      return expect(el.html()).toBe("Text");
     });
     it("Tests value binding", function() {
       var text, value;

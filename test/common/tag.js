@@ -54,11 +54,13 @@
       expect(attr.get("class")).toBe("class1 class2");
       expect(attr.get("type")).toBe("test");
       f = function() {};
-      attr.merge({
-        html: f,
-        init: f,
-        "class": "class3"
-      });
+      expect(function() {
+        return attr.merge({
+          html: f,
+          init: f,
+          "class": "class3"
+        });
+      }).toThrow();
       return expect(attr.get("class")).toBe("class1 class2");
     });
     return it("Tests passing invalid argument to tag", function() {

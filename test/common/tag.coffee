@@ -41,7 +41,7 @@ describe("Tag tests", ->
     expect(attr.get("type")).toBe("test")
 
     f = ->
-    attr.merge(html: f, init: f, class: "class3")
+    expect(-> attr.merge(html: f, init: f, class: "class3")).toThrow()
     expect(attr.get("class")).toBe("class1 class2")
   )
 

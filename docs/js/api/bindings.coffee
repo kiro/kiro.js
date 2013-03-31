@@ -35,13 +35,27 @@ docs.bindingsApi = -> section(h1("Bindings"),
     )
   )
 
-  example("Html bindins", """When a model is passed to an html element, its
+  example("Html bindings", """When a model is passed to an html element, its
                           value is bound to the html content of the element""", ->
     text = model("")
+    content = model()
+
+    items = [
+      button.warning("Button"),
+      "<h2>Test</h2>",
+      form.inline(input.text(text), button.info("Clear", -> text("")))
+    ]
+    i = 0
+    content(items[0])
+
     body(
       form.inline(
         input.text(text)
         h2(text)
+
+        button("Next", -> content(items[++i % items.length]))
+        h6("html")
+        div(content)
       )
     )
   )
@@ -75,21 +89,6 @@ docs.bindingsApi = -> section(h1("Bindings"),
       span(count),
       button("+1", -> count(count() + 1))
         .bindClass(count, 'btn-danger', -> count() > 3 and count() < 8)
-    )
-  )
-
-  example(".bindHtml", "Binds the html content of an element. The html value can be string, number or a composite component", ->
-    content = model()
-
-    items = [button.warning("Button"),
-             "<h2>Test</h2>",
-             form.inline(input.text(model("")), button.info("Add", -> console.log("Test")))]
-    i = 0
-    content(items[0])
-    body(
-      button("Next", -> content(items[++i % items.length]))
-      h6("html")
-      div(content)
     )
   )
 

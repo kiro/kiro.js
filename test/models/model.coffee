@@ -178,4 +178,24 @@ describe("Model tests", ->
     obj.subsub.age = 30
     expect(calls).toBe(7)
   )
+
+  it("Tests not", ->
+    visible = model(false)
+
+    notVisible = models.not(visible)
+
+    expected = false
+    calls = 0
+    notVisible.subscribe((value) ->
+      calls++
+      expect(value).toEqual(expected)
+    )
+
+    expect(notVisible._get()).toEqual(true)
+    visible(true)
+    expect(calls).toEqual(1)
+    expected = true
+    visible(false)
+    expect(calls).toEqual(2)
+  )
 )
