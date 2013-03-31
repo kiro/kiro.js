@@ -198,4 +198,16 @@ describe("Model tests", ->
     visible(false)
     expect(calls).toEqual(2)
   )
+
+  it("Tests a bug with _set", ->
+    obj = object(
+      name:
+        key: "key"
+        value: false
+    )
+
+    expect(obj.name.value._get().valueOf()).toBe(false)
+    obj.name.value._set(true)
+    expect(obj.name.value._get().valueOf()).toBe(true)
+  )
 )

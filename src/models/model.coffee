@@ -77,7 +77,7 @@ window.BC.define('models', (models) ->
 
       value.subscribe = (callback) -> observables[key].subscribe(callback)
       value._set = (newValue) -> obj[key] = newValue
-      value._get = () -> value
+      value._get = () -> obj[key]
       value
 
     o = common.observable()

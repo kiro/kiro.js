@@ -191,7 +191,7 @@
       obj.subsub.age = 30;
       return expect(calls).toBe(7);
     });
-    return it("Tests negate", function() {
+    it("Tests negate", function() {
       var calls, expected, notVisible, visible;
       visible = model(false);
       notVisible = models.negate(visible);
@@ -207,6 +207,18 @@
       expected = true;
       visible(false);
       return expect(calls).toEqual(2);
+    });
+    return it("Tests a bug with _set", function() {
+      var obj;
+      obj = object({
+        name: {
+          key: "key",
+          value: false
+        }
+      });
+      expect(obj.name.value._get().valueOf()).toBe(false);
+      obj.name.value._set(true);
+      return expect(obj.name.value._get().valueOf()).toBe(true);
     });
   });
 

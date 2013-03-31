@@ -103,7 +103,7 @@
           return obj[key] = newValue;
         };
         value._get = function() {
-          return value;
+          return obj[key];
         };
         return value;
       };
