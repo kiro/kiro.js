@@ -43,7 +43,7 @@ docs.examples.players = -> section(h1("Players"),
       ).bindVisible(selected)
 
       div(class: 'none', 'Click a player to select')
-        .bindVisible(selected, -> !selected())
+        .bindVisible(negate(selected))
     )
   )
 )

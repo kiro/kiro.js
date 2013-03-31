@@ -7,24 +7,22 @@ window.BC.define('common', (common) ->
     identity = (x) -> x
 
     # Adds a initializer, which is a jquery call.
-    addInitializer = (args...) ->
+    addInitializer = (initializer) ->
       this.addAttr(id: common.nextId()) if not this.id()
-      initializers.push(args)
+      initializers.push(initializer)
       this
 
     binder = (f, defaultMap = identity) ->
       (observable, map = defaultMap) ->
-        addInitializer.call(this, f, map(observable._get()))
-        observable.subscribe( (newValue, path) -> el[f](map(newValue, path)) )
+        addInitializer.call(this, ->  el[f](map(observable._get())))
+        addInitializer.call(this, -> observable.subscribe( (newValue) -> el[f](map(newValue)) ))
         this
 
     initBindings: (element) ->
       el = element
 
       for initializer in initializers
-        method = initializer[0]
-        params = _.rest(initializer)
-        el[method](params...)
+        initializer()
 
     # Binds the value of an element to an observable
     # TODO(kiro): maybe add get and set mapping, or move all the
@@ -76,7 +74,7 @@ window.BC.define('common', (common) ->
         handler = selector
         selector = ""
 
-      addInitializer.call(this, 'on', events, selector, this, handler)
+      addInitializer.call(this, => el.on(events, selector, this, handler))
       this
 
     # Binds the content of an element to collection

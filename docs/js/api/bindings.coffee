@@ -52,11 +52,10 @@ docs.bindingsApi = -> section(h1("Bindings"),
       form.inline(
         input.text(text)
         h2(text)
-
-        button("Next", -> content(items[++i % items.length]))
-        h6("html")
-        div(content)
       )
+      button("Next", -> content(items[++i % items.length]))
+      h6("html")
+      div(content)
     )
   )
 

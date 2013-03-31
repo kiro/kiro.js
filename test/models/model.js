@@ -191,10 +191,10 @@
       obj.subsub.age = 30;
       return expect(calls).toBe(7);
     });
-    return it("Tests not", function() {
+    return it("Tests negate", function() {
       var calls, expected, notVisible, visible;
       visible = model(false);
-      notVisible = models.not(visible);
+      notVisible = models.negate(visible);
       expected = false;
       calls = 0;
       notVisible.subscribe(function(value) {

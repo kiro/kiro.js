@@ -30,9 +30,9 @@
       ];
       i = 0;
       content(items[0]);
-      return body(form.inline(input.text(text), h2(text), button("Next", function() {
+      return body(form.inline(input.text(text), h2(text)), button("Next", function() {
         return content(items[++i % items.length]);
-      }), h6("html"), div(content)));
+      }), h6("html"), div(content));
     }), example(".bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
       var f, _i, _results;
       f = model(function(x) {

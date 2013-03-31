@@ -179,10 +179,10 @@ describe("Model tests", ->
     expect(calls).toBe(7)
   )
 
-  it("Tests not", ->
+  it("Tests negate", ->
     visible = model(false)
 
-    notVisible = models.not(visible)
+    notVisible = models.negate(visible)
 
     expected = false
     calls = 0

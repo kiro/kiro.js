@@ -64,9 +64,7 @@
         return selected().score += 5;
       })).bindVisible(selected), div({
         "class": 'none'
-      }, 'Click a player to select').bindVisible(selected, function() {
-        return !selected();
-      }));
+      }, 'Click a player to select').bindVisible(negate(selected)));
     }));
   };
 

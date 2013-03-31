@@ -175,7 +175,7 @@
         }
       };
     };
-    return models.not = function(observable) {
+    return models.negate = function(observable) {
       return models.map(observable, function(x) {
         return !x;
       });
