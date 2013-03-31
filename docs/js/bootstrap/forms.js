@@ -49,17 +49,29 @@
         "class": 'checkbox'
       }, input.checkbox(), "Option 1"), label({
         "class": 'radio'
-      }, input.radio("radio", "value1"), "Option 1"), label({
+      }, input.radio({
+        name: "radio",
+        value: "value1"
+      }), "Option 1"), label({
         "class": 'radio'
-      }, input.radio("radio", "value2"), "Option 2"));
+      }, input.radio({
+        name: "radio",
+        value: "value2"
+      }), "Option 2"));
     }), example("Inline checkboxes", "Inline checkboxes", function() {
       return body(label.inline({
         "class": 'checkbox'
       }, input.checkbox(), "1"), label.inline({
         "class": 'radio'
-      }, input.radio("radio", "value1"), "2"), label.inline({
+      }, input.radio({
+        name: "radio",
+        value: "value1"
+      }), "2"), label.inline({
         "class": 'radio'
-      }, input.radio("radio", "value2"), "3"));
+      }, input.radio({
+        name: "radio",
+        value: "value2"
+      }), "3"));
     }), example("Append input", "Appending buttons and values to input, the first value is the input the rest are the controls", function() {
       return body(append(input.text(), "@"), append(input.text(), button("Do it!"), button("Another one!")));
     }), example("Prepend input", "Prepending values to input, the last value is the input the others are the prepended controls", function() {
