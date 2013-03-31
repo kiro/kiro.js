@@ -23,6 +23,8 @@
         return item;
       } else if (_.isNumber(item)) {
         return item;
+      } else if (_.isBoolean(item)) {
+        return item.toString();
       } else if (_.isArray(item)) {
         return ((function() {
           var _i, _len, _results;
@@ -36,7 +38,7 @@
       } else if (common.isModel(item)) {
         return common.toHtml(item._get());
       } else {
-        throw Error(item + " is expected to be String, Number, Array, undefined, model or have .html() function");
+        throw Error(item + " is expected to be String, Number, Array, Boolean, undefined, model or have .html() function");
       }
     };
     common.init = function(item, context) {
@@ -48,6 +50,8 @@
       } else if (_.isString(item)) {
 
       } else if (_.isNumber(item)) {
+
+      } else if (_.isBoolean(item)) {
 
       } else if (_.isArray(item)) {
         return ((function() {
@@ -62,7 +66,7 @@
       } else if (common.isModel(item)) {
         return common.init(item._get());
       } else {
-        throw Error(item + " is expected to be String, Number, Array, undefined or have .init() function");
+        throw Error(item + " is expected to be String, Number, Array, Booelan, undefined or have .init() function");
       }
     };
     common.nextId = (function() {
@@ -105,12 +109,16 @@
         return composite;
       } else if (_.isNumber(composite)) {
         return composite;
+      } else if (_.isBoolean(composite)) {
+        return composite;
       } else if (_.isFunction(composite.html)) {
         el = $(composite.html());
         composite.init(el);
         return el;
+      } else if (common.isModel(composite)) {
+        return common.element(composite._get);
       } else {
-        throw Error(composite + " is expected to be string, model, number of composite");
+        throw Error(composite + " is expected to be String, Number, Boolean or composite");
       }
     };
     common.partial = function() {

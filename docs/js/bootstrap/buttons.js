@@ -32,7 +32,7 @@
         return text("Inverse");
       }), button.link("Link", function() {
         return text("Link");
-      }), span().bindText(text));
+      }), span(text));
     }), example("Dropdown buttons", "Creating dropdown and segmented dropdown buttons", function() {
       return body(dropdown(button.info("Hello"), a("Hi"), a("How"), dropdown.divider(), a("Is it going?")), dropdown.segmented(button.info("Hello", function() {
         return console.log("Hello");

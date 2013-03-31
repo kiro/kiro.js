@@ -12,9 +12,10 @@ window.BC.define('common', (common) ->
     else if isComposite(item) then item.html()
     else if _.isString(item) then item
     else if _.isNumber(item) then item
+    else if _.isBoolean(item) then item.toString()
     else if _.isArray(item) then (common.toHtml(subitem) for subitem in item).join(" ")
     else if common.isModel(item) then common.toHtml(item._get())
-    else throw Error(item + " is expected to be String, Number, Array, undefined, model or have .html() function")
+    else throw Error(item + " is expected to be String, Number, Array, Boolean, undefined, model or have .html() function")
 
   # Initializes the item with context.
   common.init = (item, context) ->
@@ -22,9 +23,10 @@ window.BC.define('common', (common) ->
     else if isComposite(item) then item.init(context)
     else if _.isString(item)
     else if _.isNumber(item)
+    else if _.isBoolean(item)
     else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
     else if common.isModel(item) then common.init(item._get())
-    else throw Error(item + " is expected to be String, Number, Array, undefined or have .init() function")
+    else throw Error(item + " is expected to be String, Number, Array, Booelan, undefined or have .init() function")
 
   common.nextId = ( ->
     id = 0
@@ -51,12 +53,16 @@ window.BC.define('common', (common) ->
       composite
     else if _.isNumber(composite)
       composite
+    else if _.isBoolean(composite)
+      composite
     else if _.isFunction(composite.html)
       el = $(composite.html())
       composite.init(el)
       el
+    else if common.isModel(composite)
+      common.element(composite._get)
     else
-      throw Error(composite + " is expected to be string, model, number of composite")
+      throw Error(composite + " is expected to be String, Number, Boolean or composite")
 
   # Partial application of a function.
   #

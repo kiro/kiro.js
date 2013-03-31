@@ -29,7 +29,7 @@
       var text, value;
       value = model("test");
       text = input.text().bindValue(value);
-      show(text, span().bindText(value));
+      show(text, span(value));
       expect(value()).toBe("test");
       text.el().val("check check");
       text.el().change();

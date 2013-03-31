@@ -16,9 +16,13 @@
       text = model("initial");
       sex = model("female");
       married = model(false);
-      return body(form.inline(input.text(text), span().bindText(text), button.info("Clear", function() {
+      return body(form.inline(input.text(text), span(text), button.info("Clear", function() {
         return text("");
-      })), input.radio("sex", "male", sex), input.radio("sex", "female", sex), input.radio("sex", "other", sex), span().bindText(sex), input.checkbox(married), span().bindText(married));
+      })), input.radio("sex", "male", sex), input.radio("sex", "female", sex), input.radio("sex", "other", sex), span(sex), input.checkbox(married), span(married));
+    }), example("Html bindins", "When a model is passed to an html element, its\nvalue is bound to the html content of the element", function() {
+      var text;
+      text = model("");
+      return body(form.inline(input.text(text), h2(text)));
     }), example(".bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
       var f, _i, _results;
       f = model(function(x) {
@@ -59,15 +63,11 @@
     }), example(".bindClass", "Binds whether class should be set. <code>bindClass(model, className, predicate)</code>", function() {
       var count;
       count = model(0);
-      return body(span().bindText(count), button("+1", function() {
+      return body(span(count), button("+1", function() {
         return count(count() + 1);
       }).bindClass(count, 'btn-danger', function() {
         return count() > 3 && count() < 8;
       }));
-    }), example(".bindText", "Binds the text of an element.", function() {
-      var text;
-      text = model("");
-      return body(form.inline(input.text(text), h2().bindText(text)));
     }), example(".bindHtml", "Binds the html content of an element. The html value can be string, number or a composite component", function() {
       var content, i, items;
       content = model();
@@ -80,14 +80,14 @@
       content(items[0]);
       return body(button("Next", function() {
         return content(items[++i % items.length]);
-      }), h6("html"), div().bindHtml(content));
+      }), h6("html"), div(content));
     }), example(".bindDisabled", "Binds whether an element is disabled", function() {
       var isThree, number;
       number = model(0);
       isThree = function() {
         return number() === 3;
       };
-      return body(p("You've clicked ", span().bindText(number), " times"), button("Click me", function() {
+      return body(p("You've clicked ", span(number), " times"), button("Click me", function() {
         return number(number() + 1);
       }).bindDisabled(number, isThree), p("That's too many clicks!", button('Reset Clicks', function() {
         return number(0);
@@ -115,7 +115,7 @@
       clicks = model(0);
       return body(div("Click me").on('click', function() {
         return clicks(clicks() + 1);
-      }), "clicks : ", span().bindText(clicks));
+      }), "clicks : ", span(clicks));
     }));
   };
 

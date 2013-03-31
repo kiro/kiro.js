@@ -8,12 +8,22 @@ window.BC.define('common', (common) ->
         attr.merge(items[0])
         items = _.rest(items)
 
+
+      if items.length == 1 && common.isModel(items[0])
+        o = items[0]
+        items.pop()
+      else
+        for item in items
+          if common.isModel(item)
+            throw Error(items + " should have only one model")
+
       index = 0
       for item in items
         index++
         if !isValid(item)
           throw Error("Item " + item + " at position " + index + " is expected to be String, Number, Array, undefined" +
             " or have .html() function")
+
 
       bindings = common.bindings(_.clone(items))
       result = $.extend(bindings,
@@ -56,12 +66,7 @@ window.BC.define('common', (common) ->
         classes: () -> attr.get('class')
       )
 
-      if items.length == 1 && common.isModel(items[0])
-        result.bindHtml(items[0])
-      else
-        for item in items
-          if common.isModel(item)
-            throw Error(items + " should have only one model")
+      if o then result.bindHtml(o)
 
       result
 )

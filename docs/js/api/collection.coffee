@@ -38,7 +38,7 @@ docs.collectionApi = -> section(h1("Collection"),
       showCollection(numbers)
       form.inline(
         input.text(value),
-      button.success('Add all', -> numbers.addAll(value("").split(",")))
+        button.success('Add all', -> numbers.addAll(value("").split(",")))
       )
     )
   )
@@ -104,8 +104,8 @@ docs.collectionApi = -> section(h1("Collection"),
       "Click on a number to remove it",
       showCollection(numbers)
 
-      span().bindText(numbers, -> 'Count ' + numbers.count())
-      span().bindText(numbers, -> 'Even ' + numbers.count((number) -> number % 2 == 0))
+      span(map(numbers, -> 'Count ' + numbers.count()))
+      span(map(numbers, -> 'Even ' + numbers.count((number) -> number % 2 == 0)))
     )
   )
 
@@ -121,8 +121,8 @@ docs.collectionApi = -> section(h1("Collection"),
     body(
       "Click on a number to remove it",
       showCollection(numbers)
-      p().bindText(numbers, -> "Showing #{numbers.count()} of #{numbers.total()}")
-      p().bindText(numbers, -> 'Even ' + numbers.total(even))
+      p(map(numbers, -> "Showing #{numbers.count()} of #{numbers.total()}"))
+      p(map(numbers, -> 'Even ' + numbers.total(even)))
     )
   )
 
@@ -186,7 +186,7 @@ docs.collectionApi = -> section(h1("Collection"),
     body(
       "Click on a number to remove it"
       showCollection(numbers)
-      span().bindText(text)
+      span(text)
     )
   )
 )

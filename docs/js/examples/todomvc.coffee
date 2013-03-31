@@ -40,7 +40,7 @@ docs.examples.todomvc = -> section(h1("Todo MVC"),
     footer =
       div.row.fluid(
         div().span3(
-          span().bindText(todos, -> todos.count(notDone) + " of " + todos.count())
+          span(map(todos, -> todos.count(notDone) + " of " + todos.count())
         ),
         div().span6(
           button.link('All', -> todos.filter(all)),

@@ -70,13 +70,13 @@
       numbers.filter(function(number) {
         return number > 2;
       });
-      return body("Click on a number to remove it", showCollection(numbers), span().bindText(numbers, function() {
+      return body("Click on a number to remove it", showCollection(numbers), span(map(numbers, function() {
         return 'Count ' + numbers.count();
-      }), span().bindText(numbers, function() {
+      })), span(map(numbers, function() {
         return 'Even ' + numbers.count(function(number) {
           return number % 2 === 0;
         });
-      }));
+      })));
     }), example(".total", "Counts all the items in a collection, including the filtered.\n\n<p><code>.total()</code> Returns the number of items in the collection.</p>\n<p><code>.total(predicate)</code> Returns the number of items in the collection that match the predicate</p>", function() {
       var even, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
@@ -86,11 +86,11 @@
       even = function(number) {
         return number % 2 === 0;
       };
-      return body("Click on a number to remove it", showCollection(numbers), p().bindText(numbers, function() {
+      return body("Click on a number to remove it", showCollection(numbers), p(map(numbers, function() {
         return "Showing " + (numbers.count()) + " of " + (numbers.total());
-      }), p().bindText(numbers, function() {
+      })), p(map(numbers, function() {
         return 'Even ' + numbers.total(even);
-      }));
+      })));
     }), example(".replace", "Replaces an item in the collection", function() {
       var from, numbers, to;
       numbers = collection([1, 2, 3, 4, 5, 6]);
@@ -135,7 +135,7 @@
       numbers.subscribe(function(items) {
         return text("Total length " + items.length);
       });
-      return body("Click on a number to remove it", showCollection(numbers), span().bindText(text));
+      return body("Click on a number to remove it", showCollection(numbers), span(text));
     }));
   };
 

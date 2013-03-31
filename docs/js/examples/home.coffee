@@ -11,7 +11,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
     text = model("World")
     body(
       input.text(text)
-      h3().bindText(text, ->  "Hello " + text())
+      h3(map(text, ->  "Hello " + text()))
     )
   )
 
@@ -38,7 +38,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
         button.success("Success", -> text("Success"))
         button.danger("Danger", -> text("Danger"))
       )
-      span().bindText(text, -> "I am " + text())
+      span(map(text, -> "I am " + text()))
 
       h5("Forms")
       form(
@@ -62,8 +62,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
       edit = model(false)
 
       div(
-        span()
-          .bindText(text)
+        span(text)
           .bindVisible(edit, -> !edit())
           .on('click', -> edit(true))
         input.text(text)
@@ -94,12 +93,12 @@ docs.home = () -> section(h1("Enter Kiro.js"),
     todoText = model("")
 
     div(
-      span().bindText(todos, remaining),
+      span(map(todos, remaining)),
       button.link("archive", -> todos.remove(done)),
       div().foreach(todos, (todo) ->
         form.inline(
           input.checkbox(todo.done),
-          span().bindText(todo.text)
+          span(todo.text)
         )
       ),
       form.inline(

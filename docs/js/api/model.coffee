@@ -22,7 +22,7 @@ docs.modelApi = -> section(h1("Model"),
 
     body(
       button.primary("+1", -> count(count() + 1))
-      span().bindText(text)
+      span(text)
     )
   )
 
@@ -37,7 +37,7 @@ docs.modelApi = -> section(h1("Model"),
         button.danger("Pop", -> arr.pop())
         button.info("Sort", -> arr.sort())
       )
-      span().bindText(arr, -> arr.toString())
+      span(map(arr, -> arr.toString()))
     )
   )
 
@@ -62,7 +62,7 @@ docs.modelApi = -> section(h1("Model"),
         "Cool": input.checkbox(obj.cool)
         "Age": input.text(obj.age)
         "Locations" : [
-          span().bindText(obj.locations, -> obj.locations.toString())
+          span(map(obj.locations, -> obj.locations.toString()))
           append(
             input.text(location).placeholder("Add location...")
             button("Add", -> obj.locations.push(location("")))
@@ -72,9 +72,7 @@ docs.modelApi = -> section(h1("Model"),
         "Native": input.checkbox(obj.language.native)
       )
 
-      pre(code().bindText(obj, (value, path) ->
-        JSON.stringify(obj, null, 4)
-      ))
+      pre(code(map(obj, -> JSON.stringify(obj, null, 4))))
     )
   )
 )

@@ -20,7 +20,7 @@ docs.bootstrap.buttons = -> section(h1("Buttons"),
       button.danger("Danger", -> text("Danger"))
       button.inverse("Inverse", -> text("Inverse"))
       button.link("Link", -> text("Link"))
-      span().bindText(text)
+      span(text)
     )
   )
 

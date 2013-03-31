@@ -14,9 +14,9 @@
     return section(h1("Enter Kiro.js"), docs.code.home(), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
       var text;
       text = model("World");
-      return body(input.text(text), h3().bindText(text, function() {
+      return body(input.text(text), h3(map(text, function() {
         return "Hello " + text();
-      }));
+      })));
     }), example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", function() {
       var text, user;
       user = {
@@ -38,9 +38,9 @@
         return text("Success");
       }), button.danger("Danger", function() {
         return text("Danger");
-      })), span().bindText(text, function() {
+      })), span(map(text, function() {
         return "I am " + text();
-      }), h5("Forms"), form({
+      })), h5("Forms"), form({
         "First name": input.text(user.firstName),
         "Last name": input.text(user.lastName)
       }), h5("Table"), table().bordered().hover().foreach([1, 2], function(row) {
@@ -53,7 +53,7 @@
       textEdit = function(text) {
         var edit;
         edit = model(false);
-        return div(span().bindText(text).bindVisible(edit, function() {
+        return div(span(text).bindVisible(edit, function() {
           return !edit();
         }).on('click', function() {
           return edit(true);
@@ -89,10 +89,10 @@
         return todos.count(notDone) + " of " + todos.total() + " remaining";
       };
       todoText = model("");
-      return div(span().bindText(todos, remaining), button.link("archive", function() {
+      return div(span(map(todos, remaining)), button.link("archive", function() {
         return todos.remove(done);
       }), div().foreach(todos, function(todo) {
-        return form.inline(input.checkbox(todo.done), span().bindText(todo.text));
+        return form.inline(input.checkbox(todo.done), span(todo.text));
       }), form.inline(input.text(todoText), button.primary('Add', function() {
         return todos.add(todo(todoText("")));
       })));

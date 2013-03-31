@@ -57,7 +57,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
 
     body(
       textarea({rows: 3}, value)
-      span().bindText(value)
+      span(value)
     )
   )
 

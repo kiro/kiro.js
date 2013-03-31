@@ -27,7 +27,7 @@ describe("Bindings test", ->
 
     show(
       text,
-      span().bindText(value)
+      span(value)
     )
 
     expect(value()).toBe("test")
@@ -41,8 +41,8 @@ describe("Bindings test", ->
     size = model(10)
 
     orange = div(class: 'orange', "Click me!")
-        .on('click', -> size(size() + 10))
-        .bindCss(size, -> width: size(), height: size())
+      .on('click', -> size(size() + 10))
+      .bindCss(size, -> width: size(), height: size())
 
     show(orange)
 

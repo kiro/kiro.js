@@ -21,17 +21,28 @@ docs.bindingsApi = -> section(h1("Bindings"),
     body(
       form.inline(
         input.text(text)
-        span().bindText(text)
+        span(text)
         button.info("Clear", -> text(""))
       )
 
       input.radio("sex", "male", sex)
       input.radio("sex", "female", sex)
       input.radio("sex", "other", sex)
-      span().bindText(sex)
+      span(sex)
 
       input.checkbox(married)
-      span().bindText(married)
+      span(married)
+    )
+  )
+
+  example("Html bindins", """When a model is passed to an html element, its
+                          value is bound to the html content of the element""", ->
+    text = model("")
+    body(
+      form.inline(
+        input.text(text)
+        h2(text)
+      )
     )
   )
 
@@ -61,19 +72,9 @@ docs.bindingsApi = -> section(h1("Bindings"),
     count = model(0)
 
     body(
-      span().bindText(count),
+      span(count),
       button("+1", -> count(count() + 1))
         .bindClass(count, 'btn-danger', -> count() > 3 and count() < 8)
-    )
-  )
-
-  example(".bindText", "Binds the text of an element.", ->
-    text = model("")
-    body(
-      form.inline(
-        input.text(text)
-        h2().bindText(text)
-      )
     )
   )
 
@@ -88,7 +89,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
     body(
       button("Next", -> content(items[++i % items.length]))
       h6("html")
-      div().bindHtml(content)
+      div(content)
     )
   )
 
@@ -98,7 +99,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
     isThree = -> number() == 3
 
     body(
-      p("You've clicked ", span().bindText(number), " times"),
+      p("You've clicked ", span(number), " times"),
       button("Click me", -> number(number() + 1))
         .bindDisabled(number, isThree),
       p("That's too many clicks!", button('Reset Clicks', -> number(0)))
@@ -145,7 +146,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
 
     body(
       div("Click me").on('click', -> clicks(clicks() + 1))
-      "clicks : ", span().bindText(clicks)
+      "clicks : ", span(clicks)
     )
   )
 )

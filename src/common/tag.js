@@ -8,16 +8,27 @@
         initialAttr = {};
       }
       return function() {
-        var attr, bindings, index, item, items, result, _i, _j, _len, _len1;
+        var attr, bindings, index, item, items, o, result, _i, _j, _len, _len1;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         attr = common.attributes(_.clone(initialAttr));
         if (items.length > 0 && attr.isAttributes(items[0])) {
           attr.merge(items[0]);
           items = _.rest(items);
         }
+        if (items.length === 1 && common.isModel(items[0])) {
+          o = items[0];
+          items.pop();
+        } else {
+          for (_i = 0, _len = items.length; _i < _len; _i++) {
+            item = items[_i];
+            if (common.isModel(item)) {
+              throw Error(items + " should have only one model");
+            }
+          }
+        }
         index = 0;
-        for (_i = 0, _len = items.length; _i < _len; _i++) {
-          item = items[_i];
+        for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+          item = items[_j];
           index++;
           if (!isValid(item)) {
             throw Error("Item " + item + " at position " + index + " is expected to be String, Number, Array, undefined" + " or have .html() function");
@@ -80,15 +91,8 @@
             return attr.get('class');
           }
         });
-        if (items.length === 1 && common.isModel(items[0])) {
-          result.bindHtml(items[0]);
-        } else {
-          for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
-            item = items[_j];
-            if (common.isModel(item)) {
-              throw Error(items + " should have only one model");
-            }
-          }
+        if (o) {
+          result.bindHtml(o);
         }
         return result;
       };

@@ -20,7 +20,7 @@
       });
       return body(button.primary("+1", function() {
         return count(count() + 1);
-      }), span().bindText(text));
+      }), span(text));
     }), example("Observable array", "Using <code>models.array(arr)</code> to construct an observable array.", function() {
       var arr, value;
       arr = array([1, 2, 3, 4]);
@@ -33,9 +33,9 @@
         return arr.pop();
       }), button.info("Sort", function() {
         return arr.sort();
-      })), span().bindText(arr, function() {
+      })), span(map(arr, function() {
         return arr.toString();
-      }));
+      })));
     }), example("Observable objects", "Using <code>models.object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects and arrays are converted to observables.\nChanges to a field within the object are propagated upwards, so if you subscribe\not an object changes to all fields and subfields will result in updating the object.", function() {
       var location, obj;
       obj = object({
@@ -54,17 +54,17 @@
         "Cool": input.checkbox(obj.cool),
         "Age": input.text(obj.age),
         "Locations": [
-          span().bindText(obj.locations, function() {
+          span(map(obj.locations, function() {
             return obj.locations.toString();
-          }), append(input.text(location).placeholder("Add location..."), button("Add", function() {
+          })), append(input.text(location).placeholder("Add location..."), button("Add", function() {
             return obj.locations.push(location(""));
           }))
         ],
         "Language": input.text(obj.language.name),
         "Native": input.checkbox(obj.language["native"])
-      }), pre(code().bindText(obj, function(value, path) {
+      }), pre(code(map(obj, function() {
         return JSON.stringify(obj, null, 4);
-      })));
+      }))));
     }));
   };
 
