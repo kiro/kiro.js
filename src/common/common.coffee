@@ -37,14 +37,16 @@ window.BC.define('common', (common) ->
   common.observable = () ->
     listeners = []
     subscribe: (listener) ->
-      for existingListener in listeners
-        if existingListener == listener
-          return
-      listeners.push(listener)
+      if !_.contains(listeners, listener)
+        listeners.push(listener)
       this
     publish: (newValue, path) ->
       listener(newValue, path) for listener in listeners
       this
+    unsubscribe: (listener) ->
+      for index in [0..listeners.length]
+        if listeners[index] == listener
+          listeners.splice(index, index)
 
   # Constructs a DOM element from composite, string, number, array.
   common.element = (composite) ->

@@ -37,8 +37,8 @@ window.BC.define('models', (models) ->
         allItems.sort(compareFunction)
         path = COLLECTION_CHANGE
 
+      items = _.filter(allItems, filter)
       if filter != all
-        items = _.filter(allItems, filter)
         path = COLLECTION_CHANGE
 
       for item in allItems

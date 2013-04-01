@@ -175,10 +175,17 @@
         }
       };
     };
-    return models.negate = function(observable) {
+    models.negate = function(observable) {
       return models.map(observable, function(x) {
         return !x;
       });
+    };
+    return models.bind = function(field) {
+      var latestObservable, result;
+      assert(latestObservable, "bind should be used like bind(obj.field)");
+      result = latestObservable;
+      latestObservable = null;
+      return result;
     };
   });
 

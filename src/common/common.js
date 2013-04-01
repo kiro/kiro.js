@@ -81,14 +81,9 @@
       listeners = [];
       return {
         subscribe: function(listener) {
-          var existingListener, _i, _len;
-          for (_i = 0, _len = listeners.length; _i < _len; _i++) {
-            existingListener = listeners[_i];
-            if (existingListener === listener) {
-              return;
-            }
+          if (!_.contains(listeners, listener)) {
+            listeners.push(listener);
           }
-          listeners.push(listener);
           return this;
         },
         publish: function(newValue, path) {
@@ -98,6 +93,18 @@
             listener(newValue, path);
           }
           return this;
+        },
+        unsubscribe: function(listener) {
+          var index, _i, _ref, _results;
+          _results = [];
+          for (index = _i = 0, _ref = listeners.length; 0 <= _ref ? _i <= _ref : _i >= _ref; index = 0 <= _ref ? ++_i : --_i) {
+            if (listeners[index] === listener) {
+              _results.push(listeners.splice(index, index));
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
         }
       };
     };

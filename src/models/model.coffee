@@ -126,4 +126,10 @@ window.BC.define('models', (models) ->
     )
 
   models.negate = (observable) -> models.map(observable, (x) -> !x)
+
+  models.bind = (field) ->
+    assert(latestObservable, "bind should be used like bind(obj.field)")
+    result = latestObservable
+    latestObservable = null
+    result
 )

@@ -45,8 +45,8 @@
           allItems.sort(compareFunction);
           path = COLLECTION_CHANGE;
         }
+        items = _.filter(allItems, filter);
         if (filter !== all) {
-          items = _.filter(allItems, filter);
           path = COLLECTION_CHANGE;
         }
         for (_i = 0, _len = allItems.length; _i < _len; _i++) {

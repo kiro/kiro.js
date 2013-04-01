@@ -13,20 +13,44 @@
   $.extend(this, common, models, util, bootstrap);
 
   describe("Bindings test", function() {
-    return it("Tests observable", function() {
-      var calls, listener, o;
-      o = observable();
+    var newListener;
+    newListener = function() {
+      var callback, calls;
       calls = 0;
-      listener = function() {
+      callback = function() {
         return calls++;
       };
+      callback.calls = function() {
+        return calls;
+      };
+      return callback;
+    };
+    it("Tests subscribe", function() {
+      var listener, o;
+      o = observable();
+      listener = newListener();
       o.subscribe(listener);
       o.subscribe(listener);
       o.subscribe(listener);
       o.publish(1);
-      expect(calls).toBe(1);
+      expect(listener.calls()).toBe(1);
       o.publish(2);
-      return expect(calls).toBe(2);
+      return expect(listener.calls()).toBe(2);
+    });
+    return it("Tests unsubscribe", function() {
+      var listener1, listener2, o;
+      o = observable();
+      listener1 = newListener();
+      listener2 = newListener();
+      o.subscribe(listener1);
+      o.subscribe(listener2);
+      o.publish(1);
+      expect(listener1.calls()).toBe(1);
+      expect(listener2.calls()).toBe(1);
+      o.unsubscribe(listener2);
+      o.publish(1);
+      expect(listener1.calls()).toBe(2);
+      return expect(listener2.calls()).toBe(1);
     });
   });
 
