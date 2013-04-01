@@ -6,7 +6,7 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.examples.index = () ->
-  content = model(docs.examples.players())
+  content = model(docs.examples.email())
 
   div(
     div().span3(

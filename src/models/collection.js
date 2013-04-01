@@ -132,8 +132,14 @@
         return update('change.replace');
       };
       _get = function(arg) {
+        var result;
         if (_.isFunction(arg)) {
-          return _.filter(items, arg);
+          result = _.filter(items, arg);
+          if (result.length === 1) {
+            return result[0];
+          } else {
+            return result;
+          }
         } else {
           return items[arg];
         }
@@ -153,6 +159,9 @@
         }
         compareFunction = f;
         return update('change.sort');
+      };
+      collection.contains = function(item) {
+        return _.contains(items, item);
       };
       collection.toJSON = function() {
         return items;

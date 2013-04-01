@@ -13,4 +13,3 @@ docs.example = (title, description, content) ->
 
 docs.body = (items...) ->
   div(items).addClass('bs-docs-example')
-

@@ -14,7 +14,7 @@
 
   docs.examples.index = function() {
     var content;
-    content = model(docs.examples.players());
+    content = model(docs.examples.email());
     return div(div().span3(nav(a("Players", function() {
       return content(docs.examples.players());
     }), a("Email", function() {

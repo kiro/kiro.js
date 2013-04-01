@@ -129,7 +129,11 @@ window.BC.define('models', (models) ->
     # match the predicate
     _get = (arg) ->
       if _.isFunction(arg)
-        _.filter(items, arg)
+        result = _.filter(items, arg)
+        if result.length == 1
+          result[0]
+        else
+          result
       else
         items[arg]
 
@@ -142,6 +146,8 @@ window.BC.define('models', (models) ->
     collection.sort = (f = defaultCompare) ->
       compareFunction = f
       update('change.sort')
+
+    collection.contains = (item) -> _.contains(items, item)
 
     # converts the collection to JSON
     collection.toJSON = () -> items

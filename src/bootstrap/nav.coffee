@@ -13,7 +13,8 @@ window.BC.define('bootstrap', (bootstrap) ->
     item.on('click', -> activate(this)) for item in items
     items = (li(item) for item in items)
 
-    items[0].addClass('active')
+    if items.length
+      items[0].addClass('active')
     ul(class: 'nav').foreach(items, (item) -> item)
 
   # tabs

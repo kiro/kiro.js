@@ -29,7 +29,9 @@
         }
         return _results;
       })();
-      items[0].addClass('active');
+      if (items.length) {
+        items[0].addClass('active');
+      }
       return ul({
         "class": 'nav'
       }).foreach(items, function(item) {

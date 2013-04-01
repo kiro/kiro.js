@@ -111,9 +111,13 @@
         multiple: 'multiple'
       });
     };
-    bootstrap.option = function(text, value) {
+    bootstrap.option = function(text, value, selected) {
+      if (selected == null) {
+        selected = false;
+      }
       return tag('option', {
-        value: value
+        value: value,
+        selected: selected
       })(text);
     };
     bootstrap.textarea = function() {

@@ -5,22 +5,48 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
+body = (items...) -> div(items)
+
 docs.examples.email = -> section(h1("Email"),
   docs.code.email()
 
   example("Email client", "", ->
-    currentUser = "kiril.minkov@gmail.com"
-    data = docs.examples.emailData()
+    byFolder = (folder) -> (email) -> email.folders.contains(folder)
+    byId = (id) -> (item) -> item.id == id
 
-    emails = collection(data.mail)
-    selectedFolder = model()
+    currentUser = "kiril.minkov@gmail.com"
+    data = object(docs.examples.emailData())
+
+    selectedFolder = model("inbox")
+    data.mail.filter(byFolder('inbox'))
     selectedEmail = model()
 
+    nextId = (->
+      value = 100000
+      (-> value++)
+    )()
+
+    email = (init) ->
+      object(
+        $.extend(
+          {"id": "mail_" + nextId(),
+          "contact_id": data.contacts.get(0).id,
+          "folders": ['sent'],
+          "time": new Date().getTime(),
+          "subject": ""
+          "message": ""},
+          init
+        )
+      )
+
     emailList = () ->
-      table().foreach(emails, (email) ->
+      table().foreach(data.mail, (email) ->
+        contact = data.contacts.get(byId(email.contact_id))
+        console.log(contact)
+
         tr(
           td().span2(type.label().important('important') if email.important)
-          td().span3(strong(email.from))
+          td().span3(strong(contact.firstName + " " + contact.lastName))
           td().span7(strong(email.subject))
         ).on('click', -> selectedEmail(email))
          .bindClass(selectedEmail, -> 'info' if selectedEmail() == email)
@@ -28,23 +54,34 @@ docs.examples.email = -> section(h1("Email"),
 
     rightContent = model(emailList())
 
-    sendEmail = (baseEmail) ->
+    sendEmail = (email) ->
+      toSelector = select(bind(email.contact_id))
+        .foreach(data.contacts, (contact) -> option(contact.email, contact.id))
+
       form.horizontal(
-        From: currentUser
-        To: input.text(baseEmail.from)
-        Subject: input.text(baseEmail.subject)
-        Email: textarea(baseEmail.message)
+        {From: span(currentUser)
+        To: toSelector
+        Subject: input.text(bind(email.subject))
+        Email: textarea(bind(email.message))},
+        form.actions(
+          button("Send", ->
+            data.mail.add(email)
+            rightContent(emailList())
+          ),
+          button("Cancel", -> rightContent(emailList()))
+        )
       )
 
     leftPanel = () ->
       div().span2(
-        button("New", -> rightContent(sendEmail(object(to: "", subject: "", message: ""))))
-        ul().foreach(data.folders, (folder) ->
-          li(folder)
-            .on('click', ->
+        button("New", -> rightContent(sendEmail(email())))
+        br()
+        pills.stacked().foreach(data.folders, (folder) ->
+          pill(folder, ->
+              selectedEmail("")
               selectedFolder(folder)
-              emails.filter((email) -> _.contains(emails.folders, folder)))
-            .bindClass(selectedFolder, -> 'selected' if selectedFolder() == folder)
+              data.mail.filter(byFolder(folder)))
+            .bindClass(selectedFolder, -> 'active' if selectedFolder() == folder)
         )
       )
 
@@ -52,20 +89,24 @@ docs.examples.email = -> section(h1("Email"),
       div().span10(
         button.group(
           button(icon.trash, "Delete", ->
-            selectedEmail().folders.length = 0
-            selectedEmail().folders.push('trash')
+            selectedEmail().folders(['trash'])
           ).bindDisabled(negate(selectedEmail))
 
+          dropdown(
+            button("Move").bindDisabled(negate(selectedEmail))
+            (a(folder, -> selectedEmail().folders([folder])) for folder in data.folders)
+          )
+
           button(icon.forward, "Forward", ->
-            rightContent(sendEmail(object(
-              subject: "FW: " + selectedEmail.subject
+            rightContent(sendEmail(email(
+              subject: "FW: " + selectedEmail().subject
             )))
           ).bindDisabled(negate(selectedEmail))
 
           button(icon.pencil, "Reply", ->
-            rightContent(sendEmail(object(
+            rightContent(sendEmail(email(
               to: selectedEmail().from,
-              subject: "RE: " + selectedEmail.subject
+              subject: "RE: " + selectedEmail().subject
             )))
           ).bindDisabled(negate(selectedEmail))
         )
