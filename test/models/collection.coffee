@@ -17,7 +17,7 @@ describe("Collection tests", ->
     expect(collection([1])()).toEqual([1])
   )
 
-  it("Tests add and addAll", ->
+  it("Tests add", ->
     subscriptionCalls = 0
     numbers = collection([1, 2])
 
@@ -29,16 +29,6 @@ describe("Collection tests", ->
     numbers.add(3)
     expect(numbers()).toEqual([1..3])
     expect(subscriptionCalls).toEqual(1)
-
-    total = 5
-    numbers.addAll([4, 5])
-    expect(numbers()).toEqual([1..5])
-    expect(subscriptionCalls).toEqual(2)
-
-    total = 7
-    numbers.addAll([6, 7])
-    expect(numbers()).toEqual([1..7])
-    expect(subscriptionCalls).toEqual(3)
   )
 
   it("Tests remove", ->
@@ -47,7 +37,9 @@ describe("Collection tests", ->
     numbers.remove(3)
     expect(numbers()).toEqual([1, 2, 2])
 
-    numbers.addAll([4, 5, 6])
+    numbers.add(4)
+    numbers.add(5)
+    numbers.add(6)
     numbers.remove((number) -> 2 < number < 6)
     expect(numbers()).toEqual([1, 2, 2, 6])
 
@@ -59,17 +51,8 @@ describe("Collection tests", ->
     expect(subscriptionCalls).toEqual(1)
   )
 
-  it("Tests removeAll", ->
-    subscriptionCalls = 0
-    numbers = collection([1, 2, 3])
+  it("Tests clear", ->
 
-    numbers.subscribe((values) ->
-      subscriptionCalls++
-      expect(values).toEqual([]))
-
-    numbers.removeAll()
-    expect(numbers()).toEqual([])
-    expect(subscriptionCalls).toEqual(1)
   )
 
   it("Tests get", ->
@@ -104,26 +87,6 @@ describe("Collection tests", ->
     expectedValues = [1, 2, 2, 3]
     numbers.replace(((number) -> number == 4), 2)
     expect(numbers()).toEqual([1, 2, 2, 3])
-    expect(subscriptionCalls).toEqual(2)
-  )
-
-  it("Tests replaceAll", ->
-    subscriptionCalls = 0
-
-    expectedValues = [4, 5, 6]
-    numbers = collection([1, 2, 3])
-    numbers.subscribe((values) ->
-      subscriptionCalls++
-      expect(values).toEqual(expectedValues)
-    )
-
-    numbers.replaceAll([4, 5, 6])
-    expect(numbers()).toEqual([4, 5, 6])
-    expect(subscriptionCalls).toEqual(1)
-
-    expectedValues = [7, 8, 9]
-    numbers.replaceAll([7, 8, 9])
-    expect(numbers()).toEqual([7, 8, 9])
     expect(subscriptionCalls).toEqual(2)
   )
 
@@ -181,9 +144,6 @@ describe("Collection tests", ->
     expect(numbers()).toEqual([4, 5])
     numbers.replace(7, 3)
     expect(numbers()).toEqual([3, 4, 5])
-
-    numbers.replaceAll([1, 2, 3])
-    expect(numbers()).toEqual([3])
   )
 
   it("Tests filter with remove and removeAll", ->
@@ -194,7 +154,7 @@ describe("Collection tests", ->
     expect(numbers()).toEqual([4, 5])
     numbers.remove(1)
     expect(numbers()).toEqual([4, 5])
-    numbers.removeAll()
+    numbers.clear()
     expect(numbers()).toEqual([])
   )
 

@@ -30,19 +30,6 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".addAll", """<p><code>.addAll([array])</code> <code>.addAll([1,2,3])</code>Appends an array of items to the collection. </p>""", ->
-    numbers = collection([1, 2, 3])
-    value = model("4,5,6")
-
-    body(
-      showCollection(numbers)
-      form.inline(
-        input.text(value),
-        button.success('Add all', -> numbers.addAll(value("").split(",")))
-      )
-    )
-  )
-
   example(".remove", """<p><code>.remove(value)</code> removes items that have the same value.</p>
                         <p><code>.remove(predicate)</code> remove all items for which the predicate function returns true.</p>""", ->
     numbers = collection([1, 2, 3, 4, 5, 6])
@@ -61,12 +48,12 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".removeAll", "Removes all numbers from a collection.", ->
+  example(".clear", "Removes all items from a collection.", ->
     numbers = collection([1, 2, 3, 4])
 
     body(
       showCollection(numbers)
-      button.danger("Remove all", -> numbers.removeAll())
+      button.danger("clear", -> numbers.clear())
     )
   )
 
@@ -139,15 +126,6 @@ docs.collectionApi = -> section(h1("Collection"),
         " with ",
         input.text(to).span1()
       )
-    )
-  )
-
-  example(".replaceAll", """Replaces all items in the collection.""", ->
-    numbers = collection([1, 2, 3, 4, 5])
-
-    body(
-      showCollection(numbers)
-      button.danger("Replace all", -> numbers.replaceAll([7, 8, 9]))
     )
   )
 

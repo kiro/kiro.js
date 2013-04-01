@@ -62,12 +62,6 @@ window.BC.define('models', (models) ->
       allItems.push(arg)
       update('change.add')
 
-    # Adds all elements in the array to the collection
-    collection.addAll = (items) ->
-      assertArray(items)
-      allItems = allItems.concat(items)
-      update('change.addAll')
-
     # Removes elements from the collection
     #
     # It can accept an element and remove all values that are equal
@@ -78,7 +72,7 @@ window.BC.define('models', (models) ->
       update('change.remove')
 
     # Removes all elements from the collection
-    collection.removeAll = () ->
+    collection.clear = () ->
       allItems = []
       update('change.removeAll')
 
@@ -130,12 +124,6 @@ window.BC.define('models', (models) ->
           allItems[i] = newValue
 
       update('change.replace')
-
-    # Replaces all elements in the collection with new values.
-    collection.replaceAll = (items) ->
-      assertArray(items)
-      allItems = items
-      update('change.replaceAll')
 
     # Returns a value with index arg, or if arg is function all values that
     # match the predicate

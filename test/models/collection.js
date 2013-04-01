@@ -23,7 +23,7 @@
       expect(numbers()).toEqual([7, 8, 9]);
       return expect(collection([1])()).toEqual([1]);
     });
-    it("Tests add and addAll", function() {
+    it("Tests add", function() {
       var numbers, subscriptionCalls, total;
       subscriptionCalls = 0;
       numbers = collection([1, 2]);
@@ -39,22 +39,16 @@
       });
       numbers.add(3);
       expect(numbers()).toEqual([1, 2, 3]);
-      expect(subscriptionCalls).toEqual(1);
-      total = 5;
-      numbers.addAll([4, 5]);
-      expect(numbers()).toEqual([1, 2, 3, 4, 5]);
-      expect(subscriptionCalls).toEqual(2);
-      total = 7;
-      numbers.addAll([6, 7]);
-      expect(numbers()).toEqual([1, 2, 3, 4, 5, 6, 7]);
-      return expect(subscriptionCalls).toEqual(3);
+      return expect(subscriptionCalls).toEqual(1);
     });
     it("Tests remove", function() {
       var numbers, subscriptionCalls;
       numbers = collection([1, 2, 2, 3, 3]);
       numbers.remove(3);
       expect(numbers()).toEqual([1, 2, 2]);
-      numbers.addAll([4, 5, 6]);
+      numbers.add(4);
+      numbers.add(5);
+      numbers.add(6);
       numbers.remove(function(number) {
         return (2 < number && number < 6);
       });
@@ -67,18 +61,7 @@
       numbers.remove(2);
       return expect(subscriptionCalls).toEqual(1);
     });
-    it("Tests removeAll", function() {
-      var numbers, subscriptionCalls;
-      subscriptionCalls = 0;
-      numbers = collection([1, 2, 3]);
-      numbers.subscribe(function(values) {
-        subscriptionCalls++;
-        return expect(values).toEqual([]);
-      });
-      numbers.removeAll();
-      expect(numbers()).toEqual([]);
-      return expect(subscriptionCalls).toEqual(1);
-    });
+    it("Tests clear", function() {});
     it("Tests get", function() {
       var numbers;
       numbers = collection([1, 2, 3]);
@@ -119,23 +102,6 @@
         return number === 4;
       }), 2);
       expect(numbers()).toEqual([1, 2, 2, 3]);
-      return expect(subscriptionCalls).toEqual(2);
-    });
-    it("Tests replaceAll", function() {
-      var expectedValues, numbers, subscriptionCalls;
-      subscriptionCalls = 0;
-      expectedValues = [4, 5, 6];
-      numbers = collection([1, 2, 3]);
-      numbers.subscribe(function(values) {
-        subscriptionCalls++;
-        return expect(values).toEqual(expectedValues);
-      });
-      numbers.replaceAll([4, 5, 6]);
-      expect(numbers()).toEqual([4, 5, 6]);
-      expect(subscriptionCalls).toEqual(1);
-      expectedValues = [7, 8, 9];
-      numbers.replaceAll([7, 8, 9]);
-      expect(numbers()).toEqual([7, 8, 9]);
       return expect(subscriptionCalls).toEqual(2);
     });
     it("Tests filter", function() {
@@ -193,9 +159,7 @@
       numbers.replace(3, 7);
       expect(numbers()).toEqual([4, 5]);
       numbers.replace(7, 3);
-      expect(numbers()).toEqual([3, 4, 5]);
-      numbers.replaceAll([1, 2, 3]);
-      return expect(numbers()).toEqual([3]);
+      return expect(numbers()).toEqual([3, 4, 5]);
     });
     it("Tests filter with remove and removeAll", function() {
       var numbers;
@@ -205,7 +169,7 @@
       expect(numbers()).toEqual([4, 5]);
       numbers.remove(1);
       expect(numbers()).toEqual([4, 5]);
-      numbers.removeAll();
+      numbers.clear();
       return expect(numbers()).toEqual([]);
     });
     it("Tests total", function() {

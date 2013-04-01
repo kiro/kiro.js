@@ -75,11 +75,6 @@
         allItems.push(arg);
         return update('change.add');
       };
-      collection.addAll = function(items) {
-        assertArray(items);
-        allItems = allItems.concat(items);
-        return update('change.addAll');
-      };
       collection.remove = function(arg) {
         var predicate;
         predicate = toPredicate(arg);
@@ -88,7 +83,7 @@
         });
         return update('change.remove');
       };
-      collection.removeAll = function() {
+      collection.clear = function() {
         allItems = [];
         return update('change.removeAll');
       };
@@ -135,11 +130,6 @@
           }
         }
         return update('change.replace');
-      };
-      collection.replaceAll = function(items) {
-        assertArray(items);
-        allItems = items;
-        return update('change.replaceAll');
       };
       _get = function(arg) {
         if (_.isFunction(arg)) {

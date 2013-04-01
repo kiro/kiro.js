@@ -40,7 +40,7 @@
         "Age": input.text(bind(obj.age)),
         "Locations": [
           span(map(obj.locations, function() {
-            return obj.locations.toString();
+            return obj.locations().toString();
           })), append(input.text(location).placeholder("Add location..."), button("Add", function() {
             return obj.locations.add(location(""));
           }))

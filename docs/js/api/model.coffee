@@ -47,7 +47,7 @@ docs.modelApi = -> section(h1("Model"),
         "Cool": input.checkbox(bind(obj.cool))
         "Age": input.text(bind(obj.age))
         "Locations" : [
-          span(map(obj.locations, -> obj.locations.toString()))
+          span(map(obj.locations, -> obj.locations().toString()))
           append(
             input.text(location).placeholder("Add location...")
             button("Add", -> obj.locations.add(location("")))
