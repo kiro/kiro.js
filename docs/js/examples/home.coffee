@@ -59,17 +59,16 @@ docs.home = () -> section(h1("Enter Kiro.js"),
 
   example("Html templating", "Allows building responsive html components", ->
     textEdit = (text) ->
-      edit = model(false)
+      edit = () -> input.text({autofocus: true}, text)
+        .on('blur', -> content(view()))
+        .on('keydown', (e) -> if e.keyCode == 13 then content(view()))
 
-      div(
-        span(text)
-          .bindVisible(edit, -> !edit())
-          .on('click', -> edit(true))
-        input.text({autofocus: true}, text)
-          .bindVisible(edit)
-          .on('blur', -> edit(false))
-          .on('keydown', (e) -> if e.keyCode == 13 then edit(false))
-      )
+      view = () -> span(text)
+        .on('click', -> content(edit()))
+
+      content = model(view())
+
+      div().bindHtml(content)
 
     text = model("Click to edit")
 

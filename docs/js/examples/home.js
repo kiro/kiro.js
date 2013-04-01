@@ -51,21 +51,25 @@
     }), example("Html templating", "Allows building responsive html components", function() {
       var text, textEdit;
       textEdit = function(text) {
-        var edit;
-        edit = model(false);
-        return div(span(text).bindVisible(edit, function() {
-          return !edit();
-        }).on('click', function() {
-          return edit(true);
-        }), input.text({
-          autofocus: true
-        }, text).bindVisible(edit).on('blur', function() {
-          return edit(false);
-        }).on('keydown', function(e) {
-          if (e.keyCode === 13) {
-            return edit(false);
-          }
-        }));
+        var content, edit, view;
+        edit = function() {
+          return input.text({
+            autofocus: true
+          }, text).on('blur', function() {
+            return content(view());
+          }).on('keydown', function(e) {
+            if (e.keyCode === 13) {
+              return content(view());
+            }
+          });
+        };
+        view = function() {
+          return span(text).on('click', function() {
+            return content(edit());
+          });
+        };
+        content = model(view());
+        return div().bindHtml(content);
       };
       text = model("Click to edit");
       return body(textEdit(text));
