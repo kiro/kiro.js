@@ -43,9 +43,9 @@
           "class": 'player'
         }, span({
           "class": 'name'
-        }, player.name), span({
+        }, bind(player.name)), span({
           "class": 'score'
-        }, player.score)).bindClass(selected, 'selected', function() {
+        }, bind(player.score))).bindClass(selected, 'selected', function() {
           return selected() === player;
         }).on('click', function() {
           return selected(player);

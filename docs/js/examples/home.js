@@ -19,10 +19,10 @@
       })));
     }), example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", function() {
       var text, user;
-      user = {
-        firstName: model("Kiril"),
-        lastName: model("Minkov")
-      };
+      user = object({
+        firstName: "Kiril",
+        lastName: "Minkov"
+      });
       text = model("");
       return body(h5("Buttons"), button.primary("Primary", function() {
         return text("Primary");
@@ -41,9 +41,11 @@
       })), span(map(text, function() {
         return "I am " + text();
       })), h5("Forms"), form({
-        "First name": input.text(user.firstName),
-        "Last name": input.text(user.lastName)
-      }), h5("Table"), table().bordered().hover().foreach([1, 2], function(row) {
+        "First name": input.text(bind(user.firstName)),
+        "Last name": input.text(bind(user.lastName))
+      }), pre(code(map(user, function() {
+        return JSON.stringify(user, null, 4);
+      }))), h5("Table"), table().bordered().hover().foreach([1, 2], function(row) {
         return tr().foreach([1, 2, 3], function(col) {
           return td(row + ", " + col);
         });
@@ -69,7 +71,7 @@
           });
         };
         content = model(view());
-        return div().bindHtml(content);
+        return div(content);
       };
       text = model("Click to edit");
       return body(textEdit(text));
@@ -98,7 +100,7 @@
       return div(span(map(todos, remaining)), button.link("archive", function() {
         return todos.remove(done);
       }), div().foreach(todos, function(todo) {
-        return form.inline(input.checkbox(todo.done), span(todo.text));
+        return form.inline(input.checkbox(bind(todo.done)), span(bind(todo.text)));
       }), form.inline(input.text(todoText), button.primary('Add', function() {
         return todos.add(todo(todoText("")));
       })));

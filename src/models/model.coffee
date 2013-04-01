@@ -40,7 +40,10 @@ window.BC.define('models', (models) ->
       o = common.observable((-> result), (newValue) -> throw Error('set is not supported for root objects'))
 
     for key, value of obj
-      observables[key] = common.observable((-> result[key]), ((newValue) -> result[key] = newValue))
+      keyObservable = (key) ->
+        common.observable((-> result[key]), ((newValue) -> result[key] = newValue))
+
+      observables[key] = keyObservable(key)
 
       value = makeObservable(value, observables[key])
 
@@ -51,6 +54,7 @@ window.BC.define('models', (models) ->
       prop = (key, value) ->
         get: () ->
           latestObservable = observables[key]
+          latestObservable.key = key
           value
         set: (newValue) ->
           oldValue = value
@@ -65,6 +69,8 @@ window.BC.define('models', (models) ->
     $.extend(result, o)
 
   models.map = (observable, map = (x) -> x) ->
+    if !common.isModel(observable)
+      observable = latestObservable
     value = map(observable.get())
 
     o = common.observable((-> value), -> throw Error("Mapped values don't support set"))

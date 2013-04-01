@@ -16,7 +16,7 @@
     return section(h1("Email"), docs.code.email(), example("Email client", "", function() {
       var currentUser, data, emailList, emails, leftPanel, rightContent, rightPanel, selectedEmail, selectedFolder, sendEmail;
       currentUser = "kiril.minkov@gmail.com";
-      data = object(docs.examples.emailData());
+      data = docs.examples.emailData();
       emails = collection(data.mail);
       selectedFolder = model();
       selectedEmail = model();

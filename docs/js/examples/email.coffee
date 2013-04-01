@@ -10,7 +10,7 @@ docs.examples.email = -> section(h1("Email"),
 
   example("Email client", "", ->
     currentUser = "kiril.minkov@gmail.com"
-    data = object(docs.examples.emailData())
+    data = docs.examples.emailData()
 
     emails = collection(data.mail)
     selectedFolder = model()

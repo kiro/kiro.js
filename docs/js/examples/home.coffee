@@ -16,9 +16,10 @@ docs.home = () -> section(h1("Enter Kiro.js"),
   )
 
   example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", ->
-    user =
-      firstName: model("Kiril")
-      lastName: model("Minkov")
+    user = object(
+      firstName: "Kiril"
+      lastName: "Minkov"
+    )
 
     text = model("")
 
@@ -42,9 +43,10 @@ docs.home = () -> section(h1("Enter Kiro.js"),
 
       h5("Forms")
       form(
-        "First name" : input.text(user.firstName)
-        "Last name" : input.text(user.lastName)
+        "First name" : input.text(bind(user.firstName))
+        "Last name" : input.text(bind(user.lastName))
       )
+      pre(code(map(user, -> JSON.stringify(user, null, 4))))
 
       h5("Table")
       table().bordered().hover().foreach([1, 2], (row) ->
@@ -68,7 +70,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
 
       content = model(view())
 
-      div().bindHtml(content)
+      div(content)
 
     text = model("Click to edit")
 
@@ -96,8 +98,8 @@ docs.home = () -> section(h1("Enter Kiro.js"),
       button.link("archive", -> todos.remove(done)),
       div().foreach(todos, (todo) ->
         form.inline(
-          input.checkbox(todo.done),
-          span(todo.text)
+          input.checkbox(bind(todo.done)),
+          span(bind(todo.text))
         )
       ),
       form.inline(

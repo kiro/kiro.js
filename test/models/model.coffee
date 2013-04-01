@@ -206,4 +206,18 @@ describe("Model tests", ->
     obj.value = 2
     expect(calls).toBe(1)
   )
+
+  it("Tests bind", ->
+    obj = object(
+      name: "Test"
+      value:
+        check: false
+        name: "name"
+    )
+
+    check = bind(obj.value.check)
+    expect(obj.value.check).toBe(false)
+    check.set(true)
+    expect(obj.value.check).toBe(true)
+  )
 )

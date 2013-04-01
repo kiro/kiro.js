@@ -91,11 +91,10 @@ window.BC.define('common', (common) ->
 
       if _.isFunction(collection)
         collection.subscribe( (newItems, path) =>
-          if path.indexOf("change.") != -1
-            elements = (common.element(item) for item in initialItems)
-            index = 0
-            elements = elements.concat (common.element(render(item, index++)) for item in newItems)
-            el.html(elements)
+          elements = (common.element(item) for item in initialItems)
+          index = 0
+          elements = elements.concat (common.element(render(item, index++)) for item in newItems)
+          el.html(elements)
         )
       this
 

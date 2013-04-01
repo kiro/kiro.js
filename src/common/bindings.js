@@ -154,28 +154,26 @@
           if (_.isFunction(collection)) {
             collection.subscribe(function(newItems, path) {
               var elements;
-              if (path.indexOf("change.") !== -1) {
-                elements = (function() {
-                  var _i, _len, _results;
-                  _results = [];
-                  for (_i = 0, _len = initialItems.length; _i < _len; _i++) {
-                    item = initialItems[_i];
-                    _results.push(common.element(item));
-                  }
-                  return _results;
-                })();
-                index = 0;
-                elements = elements.concat((function() {
-                  var _i, _len, _results;
-                  _results = [];
-                  for (_i = 0, _len = newItems.length; _i < _len; _i++) {
-                    item = newItems[_i];
-                    _results.push(common.element(render(item, index++)));
-                  }
-                  return _results;
-                })());
-                return el.html(elements);
-              }
+              elements = (function() {
+                var _i, _len, _results;
+                _results = [];
+                for (_i = 0, _len = initialItems.length; _i < _len; _i++) {
+                  item = initialItems[_i];
+                  _results.push(common.element(item));
+                }
+                return _results;
+              })();
+              index = 0;
+              elements = elements.concat((function() {
+                var _i, _len, _results;
+                _results = [];
+                for (_i = 0, _len = newItems.length; _i < _len; _i++) {
+                  item = newItems[_i];
+                  _results.push(common.element(render(item, index++)));
+                }
+                return _results;
+              })());
+              return el.html(elements);
             });
           }
           return this;

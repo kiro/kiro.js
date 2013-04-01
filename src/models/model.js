@@ -46,7 +46,7 @@
       return value;
     };
     models.object = function(obj, o) {
-      var key, listener, observables, prop, result, value;
+      var key, keyObservable, listener, observables, prop, result, value;
       if (!_.isObject(obj)) {
         throw Error(obj + " is expected to be an object");
       }
@@ -61,11 +61,14 @@
       }
       for (key in obj) {
         value = obj[key];
-        observables[key] = common.observable((function() {
-          return result[key];
-        }), (function(newValue) {
-          return result[key] = newValue;
-        }));
+        keyObservable = function(key) {
+          return common.observable((function() {
+            return result[key];
+          }), (function(newValue) {
+            return result[key] = newValue;
+          }));
+        };
+        observables[key] = keyObservable(key);
         value = makeObservable(value, observables[key]);
         listener = function(key) {
           return function(newValue, valuePath) {
@@ -77,6 +80,7 @@
           return {
             get: function() {
               latestObservable = observables[key];
+              latestObservable.key = key;
               return value;
             },
             set: function(newValue) {
@@ -100,6 +104,9 @@
         map = function(x) {
           return x;
         };
+      }
+      if (!common.isModel(observable)) {
+        observable = latestObservable;
       }
       value = map(observable.get());
       o = common.observable((function() {

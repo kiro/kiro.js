@@ -204,7 +204,7 @@
       bind(obj.name.value).set(true);
       return expect(obj.name.value).toBe(true);
     });
-    return it("Tests a trivial object", function() {
+    it("Tests a trivial object", function() {
       var calls, obj;
       obj = object({
         value: 1
@@ -215,6 +215,20 @@
       });
       obj.value = 2;
       return expect(calls).toBe(1);
+    });
+    return it("Tests bind", function() {
+      var check, obj;
+      obj = object({
+        name: "Test",
+        value: {
+          check: false,
+          name: "name"
+        }
+      });
+      check = bind(obj.value.check);
+      expect(obj.value.check).toBe(false);
+      check.set(true);
+      return expect(obj.value.check).toBe(true);
     });
   });
 

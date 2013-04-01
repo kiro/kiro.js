@@ -30,8 +30,8 @@ docs.examples.players = -> section(h1("Players"),
       div(id:'outer',
         div(class: 'leader board').foreach(players, (player) ->
           div(class:'player',
-            span({class:'name'}, player.name)
-            span({class: 'score'}, player.score)
+            span({class:'name'}, bind(player.name))
+            span({class: 'score'}, bind(player.score))
           ).bindClass(selected, 'selected', -> selected() == player)
             .on('click', -> selected(player))
         )
