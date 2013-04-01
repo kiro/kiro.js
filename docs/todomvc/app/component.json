@@ -1,0 +1,9 @@
+{
+    "name": "todomvc-kirojs",
+    "version": "0.0.0",
+    "dependencies": {
+        "lodash": "~1.1.1",
+        "jquery": "~1.9.1",
+        "todomvc-common": "~0.1.0"
+    }
+}

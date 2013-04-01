@@ -25,9 +25,9 @@ docs.bindingsApi = -> section(h1("Bindings"),
         button.info("Clear", -> text(""))
       )
 
-      input.radio("sex", "male", sex)
-      input.radio("sex", "female", sex)
-      input.radio("sex", "other", sex)
+      input.radio({name: "sex", value: "male"}, sex)
+      input.radio({name: "sex", value: "female"}, sex)
+      input.radio({name: "sex", value: "other"}, sex)
       span(sex)
 
       input.checkbox(married)

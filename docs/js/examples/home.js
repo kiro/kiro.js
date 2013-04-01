@@ -57,7 +57,9 @@
           return !edit();
         }).on('click', function() {
           return edit(true);
-        }), input.text(text).bindVisible(edit).on('blur', function() {
+        }), input.text({
+          autofocus: true
+        }, text).bindVisible(edit).on('blur', function() {
           return edit(false);
         }).on('keydown', function(e) {
           if (e.keyCode === 13) {

@@ -1,5 +1,6 @@
 html = window.BC.namespace("html")
 common = window.BC.namespace("common")
+models = window.BC.namespace("models")
 
 $.extend(this, common)
 
@@ -10,23 +11,62 @@ composite = [
   "html", "i", "iframe", "img", "input", "ins", "isindex", "kbd", "label", "legend", "li", "link", "map", "menu",
   "meta", "noframes", "noscript", "object", "ol", "optgroup", "option", "p", "param", "pre", "q", "s", "samp", "script",
   "select", "small", "span", "strike", "strong", "style", "sub", "sup", "table", "tbody", "td","tfoot",
-  "th", "thead", "title", "tr", "tt", "u", "ul", "var"
+  "th", "thead", "title", "tr", "tt", "u", "ul", "var", "header", "section", "footer"
 ]
 
 for tagname in composite
   html[tagname] = tag(tagname)
 
+  getModel = (items) ->
+    model = _.last(items)
+    if _.isUndefined(model) or !common.isModel(model)
+      model = models.model("")
+    else
+      items.pop()
+    model
+
+# Input
+html.input =
+  text: (items...) ->
+    model = getModel(items)
+
+    $.extend(
+      tag('input', {type: 'text'})(items...)
+        .observable()
+        .on('keyup change', (e) -> e.data.publish($(this).val()))
+        .bindValue(model),
+      placeholder: (value) -> this.addAttr('placeholder' : value),
+    )
+
+  password: (model) -> this.text({type: 'password'}, model)
+  search: (model) -> this.text({class: "search-query", type: 'text'}, model)
+
+  checkbox : (items...) ->
+    model = getModel(items)
+
+    $.extend(
+      tag('input')(items...)
+        .addAttr({type: 'checkbox', checked: 'checked'})
+        .observable()
+        .on('click', (e) -> e.data.publish($(this).is(':checked'))),
+      bindValue: (observable) ->
+        this.bindAttr(observable, -> checked: observable._get().valueOf())
+        this.subscribe((value) -> observable._set(value))
+    ).bindValue(model)
+
+  radio: (items...) ->
+    model = getModel(items)
+    value = items[0].value
+
+    $.extend(
+      tag('input', type: 'radio')(items...)
+        .observable()
+        .on('click', (e) -> model._set(value))
+    ).bindAttr(model, -> checked:(model._get() == value))
+
+  submit: (name, click) -> tag('input')(name).addAttr(type: 'submit').on('click', click)
+
 html.div = tag("div")
-html.input = (config) -> tag('input', config)()
-    .observable()
-    .on('keyup change', (e) -> e.data.publish($(this).val()))
-
-html.input.text = ->
-  $.extend(
-    html.input(type: 'text')
-    placeholder: (value) -> this.addAttr('placeholder', value)
-  )
-
 html.span = tag("span")
 html.textarea = (config) ->
   tag('textarea', config)()
@@ -43,7 +83,7 @@ html.button = (args...) ->
       return false
     args = args.slice(0, args.length - 1)
 
-  tag('button', init)(args...).on('click', click)
+  tag('button')(args...).on('click', click)
 
 html.a = (args...) ->
   last = _.last(args)
@@ -56,9 +96,10 @@ html.a = (args...) ->
 
   tag('a', {href:'#'})(args...).on('click', click)
 
-html.body = (composite) -> $('body').html(
-  common.element(composite)
-)
+html.body = (composite) ->
+  $('body').html(
+    common.element(composite)
+  )
 
 html.select = (items...) ->
   $.extend(

@@ -3,7 +3,7 @@
 
   window.BC.define('common', function(common) {
     return common.bindings = function(initialItems) {
-      var addInitializer, binder, el, identity, initializers;
+      var addInitializer, binder, el, eva, identity, initializers;
       el = null;
       initializers = [];
       identity = function(x) {
@@ -18,6 +18,13 @@
         initializers.push(initializer);
         return this;
       };
+      eva = function(obj) {
+        if (_.isString(obj)) {
+          return obj.valueOf();
+        } else {
+          return obj;
+        }
+      };
       binder = function(f, defaultMap) {
         if (defaultMap == null) {
           defaultMap = identity;
@@ -27,11 +34,11 @@
             map = defaultMap;
           }
           addInitializer.call(this, function() {
-            return el[f](map(observable._get()));
+            return el[f](map(eva(observable._get())));
           });
           addInitializer.call(this, function() {
             return observable.subscribe(function(newValue) {
-              return el[f](map(newValue));
+              return el[f](eva(map(newValue)));
             });
           });
           return this;
@@ -152,28 +159,30 @@
             return _results;
           })());
           if (_.isFunction(collection)) {
-            collection.subscribe(function(newItems) {
+            collection.subscribe(function(newItems, path) {
               var elements;
-              elements = (function() {
-                var _i, _len, _results;
-                _results = [];
-                for (_i = 0, _len = initialItems.length; _i < _len; _i++) {
-                  item = initialItems[_i];
-                  _results.push(common.element(item));
-                }
-                return _results;
-              })();
-              index = 0;
-              elements = elements.concat((function() {
-                var _i, _len, _results;
-                _results = [];
-                for (_i = 0, _len = newItems.length; _i < _len; _i++) {
-                  item = newItems[_i];
-                  _results.push(common.element(render(item, index++)));
-                }
-                return _results;
-              })());
-              return el.html(elements);
+              if (path === "collection.change") {
+                elements = (function() {
+                  var _i, _len, _results;
+                  _results = [];
+                  for (_i = 0, _len = initialItems.length; _i < _len; _i++) {
+                    item = initialItems[_i];
+                    _results.push(common.element(item));
+                  }
+                  return _results;
+                })();
+                index = 0;
+                elements = elements.concat((function() {
+                  var _i, _len, _results;
+                  _results = [];
+                  for (_i = 0, _len = newItems.length; _i < _len; _i++) {
+                    item = newItems[_i];
+                    _results.push(common.element(render(item, index++)));
+                  }
+                  return _results;
+                })());
+                return el.html(elements);
+              }
             });
           }
           return this;

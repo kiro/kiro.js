@@ -18,7 +18,16 @@
       married = model(false);
       return body(form.inline(input.text(text), span(text), button.info("Clear", function() {
         return text("");
-      })), input.radio("sex", "male", sex), input.radio("sex", "female", sex), input.radio("sex", "other", sex), span(sex), input.checkbox(married), span(married));
+      })), input.radio({
+        name: "sex",
+        value: "male"
+      }, sex), input.radio({
+        name: "sex",
+        value: "female"
+      }, sex), input.radio({
+        name: "sex",
+        value: "other"
+      }, sex), span(sex), input.checkbox(married), span(married));
     }), example("Html bindings", "When a model is passed to an html element, its\nvalue is bound to the html content of the element", function() {
       var content, i, items, text;
       text = model("");

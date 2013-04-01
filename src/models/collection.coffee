@@ -24,9 +24,9 @@ window.BC.define('models', (models) ->
         allItems = arg
         update()
 
-    callUpdate = -> update.call(collection)
+    callUpdate = (item, path) -> update(path)
 
-    update = () ->
+    update = (path = "collection.change") ->
       if compareFunction
         allItems.sort(compareFunction)
       items = _.filter(allItems, filter)
@@ -37,7 +37,7 @@ window.BC.define('models', (models) ->
           # won't be added again
           item.subscribe(callUpdate)
 
-      o.publish(items)
+      o.publish(items, path)
 
     toPredicate = (arg) ->
       if _.isFunction(arg)
@@ -51,13 +51,13 @@ window.BC.define('models', (models) ->
     # otherwise it pushes it at the end of the collection
     collection.add = (arg) ->
       allItems.push(arg)
-      update.call(collection)
+      update()
 
     # Adds all elements in the array to the collection
     collection.addAll = (items) ->
       assertArray(items)
       allItems = allItems.concat(items)
-      update.call(collection)
+      update()
 
     # Removes elements from the collection
     #
@@ -66,12 +66,12 @@ window.BC.define('models', (models) ->
     collection.remove = (arg) ->
       predicate = toPredicate(arg)
       allItems = _.filter(allItems, (item) -> !predicate(item))
-      update.call(collection)
+      update()
 
     # Removes all elements from the collection
     collection.removeAll = () ->
       allItems = []
-      update.call(collection)
+      update()
 
     # It filters the elements in the collection. The operation does not remove
     # the filtered elements, so if a new filter is set the collection will be
@@ -80,7 +80,7 @@ window.BC.define('models', (models) ->
     # arg can be a function or a value
     collection.filter = (arg) ->
       filter = toPredicate(arg)
-      update.call(collection)
+      update()
 
     # Counts the elements in the collection
     #
@@ -120,13 +120,13 @@ window.BC.define('models', (models) ->
         if predicate(allItems[i])
           allItems[i] = newValue
 
-      update.call(collection)
+      update()
 
     # Replaces all elements in the collection with new values.
     collection.replaceAll = (items) ->
       assertArray(items)
       allItems = items
-      update.call(collection)
+      update()
 
     # Returns a value with index arg, or if arg is function all values that
     # match the predicate
@@ -136,6 +136,16 @@ window.BC.define('models', (models) ->
       else
         items[arg]
 
+    defaultCompare = (a, b) ->
+      if a > b then 1
+      else if a < b then -1
+      else 0
+
+    # Sorts the items in the collection and maintains them in sorted order
+    collection.sort = (f = defaultCompare) ->
+      compareFunction = f
+      update()
+
     collection.subscribe = (listener) ->
       o.subscribe(listener)
       this
@@ -144,15 +154,6 @@ window.BC.define('models', (models) ->
     collection._set = (arg) ->
       assertArray(arg)
       allItems = arg
-      update()
-
-    defaultCompare = (a, b) ->
-      if a > b then 1
-      else if a < b then -1
-      else 0
-
-    collection.sort = (f = defaultCompare) ->
-      compareFunction = f
       update()
 
     collection

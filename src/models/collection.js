@@ -31,11 +31,14 @@
           return update();
         }
       };
-      callUpdate = function() {
-        return update.call(collection);
+      callUpdate = function(item, path) {
+        return update(path);
       };
-      update = function() {
+      update = function(path) {
         var item, _i, _len;
+        if (path == null) {
+          path = "collection.change";
+        }
         if (compareFunction) {
           allItems.sort(compareFunction);
         }
@@ -46,7 +49,7 @@
             item.subscribe(callUpdate);
           }
         }
-        return o.publish(items);
+        return o.publish(items, path);
       };
       toPredicate = function(arg) {
         if (_.isFunction(arg)) {
@@ -59,12 +62,12 @@
       };
       collection.add = function(arg) {
         allItems.push(arg);
-        return update.call(collection);
+        return update();
       };
       collection.addAll = function(items) {
         assertArray(items);
         allItems = allItems.concat(items);
-        return update.call(collection);
+        return update();
       };
       collection.remove = function(arg) {
         var predicate;
@@ -72,15 +75,15 @@
         allItems = _.filter(allItems, function(item) {
           return !predicate(item);
         });
-        return update.call(collection);
+        return update();
       };
       collection.removeAll = function() {
         allItems = [];
-        return update.call(collection);
+        return update();
       };
       collection.filter = function(arg) {
         filter = toPredicate(arg);
-        return update.call(collection);
+        return update();
       };
       collection.count = function(arg) {
         if (_.isUndefined(arg)) {
@@ -120,12 +123,12 @@
             allItems[i] = newValue;
           }
         }
-        return update.call(collection);
+        return update();
       };
       collection.replaceAll = function(items) {
         assertArray(items);
         allItems = items;
-        return update.call(collection);
+        return update();
       };
       collection.get = function(arg) {
         if (_.isFunction(arg)) {
@@ -133,18 +136,6 @@
         } else {
           return items[arg];
         }
-      };
-      collection.subscribe = function(listener) {
-        o.subscribe(listener);
-        return this;
-      };
-      collection._get = function() {
-        return items;
-      };
-      collection._set = function(arg) {
-        assertArray(arg);
-        allItems = arg;
-        return update();
       };
       defaultCompare = function(a, b) {
         if (a > b) {
@@ -160,6 +151,18 @@
           f = defaultCompare;
         }
         compareFunction = f;
+        return update();
+      };
+      collection.subscribe = function(listener) {
+        o.subscribe(listener);
+        return this;
+      };
+      collection._get = function() {
+        return items;
+      };
+      collection._set = function(arg) {
+        assertArray(arg);
+        allItems = arg;
         return update();
       };
       return collection;

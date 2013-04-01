@@ -6,12 +6,11 @@ models = window.BC.namespace("models")
 $.extend(this, bootstrap, models, docs)
 
 docs.examples.index = () ->
-  content = model(docs.examples.todomvc())
+  content = model(docs.examples.players())
 
   div(
     div().span3(
       nav(
-        a("Todo MVC", -> content(docs.examples.todomvc()))
         a("Players", -> content(docs.examples.players()))
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )

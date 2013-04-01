@@ -12,10 +12,16 @@ window.BC.define('common', (common) ->
       initializers.push(initializer)
       this
 
+    eva = (obj) ->
+      if _.isString(obj)
+        obj.valueOf()
+      else
+        obj
+
     binder = (f, defaultMap = identity) ->
       (observable, map = defaultMap) ->
-        addInitializer.call(this, ->  el[f](map(observable._get())))
-        addInitializer.call(this, -> observable.subscribe( (newValue) -> el[f](map(newValue)) ))
+        addInitializer.call(this, ->  el[f](map(eva(observable._get()))))
+        addInitializer.call(this, -> observable.subscribe( (newValue) -> el[f](eva(map(newValue))) ))
         this
 
     initBindings: (element) ->
@@ -90,11 +96,12 @@ window.BC.define('common', (common) ->
       this.addItems((render(item, index++) for item in collectionItems)...)
 
       if _.isFunction(collection)
-        collection.subscribe( (newItems) =>
-          elements = (common.element(item) for item in initialItems)
-          index = 0
-          elements = elements.concat (common.element(render(item, index++)) for item in newItems)
-          el.html(elements)
+        collection.subscribe( (newItems, path) =>
+          if path == "collection.change"
+            elements = (common.element(item) for item in initialItems)
+            index = 0
+            elements = elements.concat (common.element(render(item, index++)) for item in newItems)
+            el.html(elements)
         )
       this
 

@@ -65,7 +65,7 @@ docs.home = () -> section(h1("Enter Kiro.js"),
         span(text)
           .bindVisible(edit, -> !edit())
           .on('click', -> edit(true))
-        input.text(text)
+        input.text({autofocus: true}, text)
           .bindVisible(edit)
           .on('blur', -> edit(false))
           .on('keydown', (e) -> if e.keyCode == 13 then edit(false))

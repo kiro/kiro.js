@@ -14,10 +14,8 @@
 
   docs.examples.index = function() {
     var content;
-    content = model(docs.examples.todomvc());
-    return div(div().span3(nav(a("Todo MVC", function() {
-      return content(docs.examples.todomvc());
-    }), a("Players", function() {
+    content = model(docs.examples.players());
+    return div(div().span3(nav(a("Players", function() {
       return content(docs.examples.players());
     })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
