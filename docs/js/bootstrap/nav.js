@@ -43,7 +43,11 @@
       disabled = model(true);
       return body(pills.stacked(pill("Home", function() {
         return console.log("Going home");
-      }), pill("About"), pill("Blog").bindClass(disabled, 'disabled')));
+      }), pill("About"), pill("Blog").bindClass(disabled, function() {
+        if (disabled()) {
+          return 'disabled';
+        }
+      })));
     }), example("Basic navbar", "Displays basic navbar, with brand and dividers", function() {
       return body(div.container.fluid(navbar(navbar.brand('Sample brand'), nav(navbar.divider(), a("Home"), a("Examples"), navbar.divider(), a("About")))));
     }), example("Navbar forms", "navbar.form and navbar.search can be used for normal\nand search styled forms respectively. The can be aligned\nusing left and right", function() {

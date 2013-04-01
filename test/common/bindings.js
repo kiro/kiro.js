@@ -70,12 +70,18 @@
       isOrange = model(false);
       div1 = div({
         "class": 'box'
-      }).bindClass(isOrange, 'orange');
+      }).bindClass(isOrange, function() {
+        if (isOrange) {
+          return 'orange';
+        }
+      });
       count = model(5);
       div2 = div({
         "class": 'box'
-      }).bindClass(count, 'orange', function(value) {
-        return value === 5;
+      }).bindClass(count, function() {
+        if (count() === 5) {
+          return 'orange';
+        }
       });
       show(div1, div2);
       expect(div1.el().hasClass('orange')).toBe(false);

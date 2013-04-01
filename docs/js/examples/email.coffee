@@ -23,7 +23,7 @@ docs.examples.email = -> section(h1("Email"),
           td().span3(strong(email.from))
           td().span7(strong(email.subject))
         ).on('click', -> selectedEmail(email))
-         .bindClass(selectedEmail, 'info', -> selectedEmail() == email)
+         .bindClass(selectedEmail, -> 'info' if selectedEmail() == email)
       )
 
     rightContent = model(emailList())
@@ -44,7 +44,7 @@ docs.examples.email = -> section(h1("Email"),
             .on('click', ->
               selectedFolder(folder)
               emails.filter((email) -> _.contains(emails.folders, folder)))
-            .bindClass(selectedFolder, 'selected', -> selectedFolder() == folder)
+            .bindClass(selectedFolder, -> 'selected' if selectedFolder() == folder)
         )
       )
 

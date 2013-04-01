@@ -13,7 +13,7 @@
   showCollection = function() {};
 
   docs.collectionApi = function() {
-    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>", function() {
+    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> Appends an item to the collection. </p>", function() {
       var numbers, value;
       numbers = collection([1, 2, 3]);
       value = model("");
@@ -31,7 +31,7 @@
       return body(showCollection(numbers), form.inline(input.text(value), button.success('Add', function() {
         return numbers.add(value(""));
       })));
-    }), example(".remove", "<p><code>.remove(value)</code> removes items that have the same value.</p>\n<p><code>.remove(predicate)</code> remove all items for which the predicate function returns true.</p>", function() {
+    }), example(".remove", "<p><code>.remove(item)</code> removes item.</p>\n<p><code>.remove(predicate)</code> remove all items that match the predicate.</p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);
@@ -47,7 +47,7 @@
       return body(showCollection(numbers), button.danger("clear", function() {
         return numbers.clear();
       }));
-    }), example(".filter", "Filters items from the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all the initial items.\n\n<p><code>.filter(predicate)</code> filters all items for which predicate returns false </p>", function() {
+    }), example(".filter", "Filters items from the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);
@@ -57,7 +57,7 @@
       return body(showCollection(numbers), form.inline(button.danger("Filter", function() {
         return numbers.filter(biggerThan);
       }), " bigger than ", input.text(limit).span1()));
-    }), example(".count", "Counts the current number of items in a collection. If there is a filter it counts only the\nitems that match it.\n\n<p><code>.count()</code> Returns the number of the current items in the collection.</p>\n<p><code>.count(predicate)</code> Returns the number of the current items in the collection that match the predicate</p>", function() {
+    }), example(".count", "Counts the current items in a collection. If there is a filter it counts only the\nitems that match it.\n\n<p><code>.count()</code> Returns the number of the current items in the collection.</p>\n<p><code>.count(predicate)</code> Returns the number of the current items in the collection that match the predicate.</p>", function() {
       var numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       numbers.filter(function(number) {
@@ -70,7 +70,7 @@
           return number % 2 === 0;
         });
       })));
-    }), example(".total", "Counts all the items in a collection, including the filtered.\n\n<p><code>.total()</code> Returns the number of items in the collection.</p>\n<p><code>.total(predicate)</code> Returns the number of items in the collection that match the predicate</p>", function() {
+    }), example(".total", "Counts all items in a collection, including the filtered.\n\n<p><code>.total()</code> Returns the number of items in the collection.</p>\n<p><code>.total(predicate)</code> Returns the number of items in the collection that match the predicate</p>", function() {
       var even, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       numbers.filter(function(number) {
@@ -92,7 +92,7 @@
       return body(showCollection(numbers), form.inline(button.warning("Replace", function() {
         return numbers.replace(parseInt(from()), parseInt(to()));
       }), input.text(from).span1(), " with ", input.text(to).span1()));
-    }), example(".get", "Gets an item matching a predicate", function() {
+    }), example(".get", "<p><code>get(index)</code> gets the item at index.</p>\n<p><code>get(predicate)</code> gets the items matching the predicate.</p>", function() {
       var byId, user, users;
       user = function(id, name) {
         return {
@@ -107,7 +107,7 @@
         };
       };
       return body(p("User 1 : ", users.get(byId(1))[0].name), p("User 2 : ", users.get(byId(2))[0].name));
-    }), example(".sort", "Sorts the elements in the collection", function() {
+    }), example(".sort", "<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order ", function() {
       var numbers, text;
       numbers = collection([2, 6, 3]);
       numbers.sort();
@@ -115,14 +115,28 @@
       return body("Click on a number to remove it", showCollection(numbers), form.inline(input.text(text), button("Add", function() {
         return numbers.add(Number(text()));
       })));
-    }), example(".subscribe", "Subscribes to changes in the collection, useful for building custom controls", function() {
-      var numbers, text;
-      numbers = collection([1, 2, 3, 4, 5, 6]);
-      text = model("Total length " + numbers.count());
-      numbers.subscribe(function(items) {
-        return text("Total length " + items.length);
+    }), example(".subscribe", "<code>subscribe(handler)</code>Subscribes to changes in the collection. This includes changes to the models\nwithin the collection. The subscription handler receives the items in the collection\nand a string which describes the changed value.", function() {
+      var count, pathModel, player, players, values;
+      player = object({
+        name: "Name",
+        count: 0
       });
-      return body("Click on a number to remove it", showCollection(numbers), span(text));
+      count = model(2);
+      pathModel = model("");
+      values = model();
+      players = collection([player, count, 3]);
+      players.subscribe(function(items, path) {
+        pathModel(path);
+        return values(JSON.stringify(items));
+      });
+      return body(form({
+        "Name": input.text(bind(player.name)),
+        "Count": input.text(bind(player.count))
+      }), form.inline(span(count), button("+1", function() {
+        return count(count() + 1);
+      }), button("-1", function() {
+        return count(count() - 1);
+      })), "Path : ", span(pathModel), pre(code(values)));
     }));
   };
 

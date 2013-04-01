@@ -32,7 +32,7 @@ docs.examples.players = -> section(h1("Players"),
           div(class:'player',
             span({class:'name'}, bind(player.name))
             span({class: 'score'}, bind(player.score))
-          ).bindClass(selected, 'selected', -> selected() == player)
+          ).bindClass(selected, -> 'selected' if selected() == player)
             .on('click', -> selected(player))
         )
       )

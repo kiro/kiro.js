@@ -9,14 +9,14 @@ docs.bindingsApi = -> section(h1("Bindings"),
 
   p("""Each html element offers number of bindings, which allow to bind the value of a certain
       property to a model. The values of the bindings update automatically when the
-      model changes. Each binding applies the builder pattern so they can be chained.
+      model changes.
     """)
   example("Value bindings", """
-    The input elements accept observable model and bind their value to it.
+    Input elements can accept one model and bind their value to it.
     """, ->
     text = model("initial")
     sex = model("female")
-    married = model(false)
+    married = object(value: false)
 
     body(
       form.inline(
@@ -30,13 +30,12 @@ docs.bindingsApi = -> section(h1("Bindings"),
       input.radio({name: "sex", value: "other"}, sex)
       span(sex)
 
-      input.checkbox(married)
-      span(married)
+      input.checkbox(bind(married.value))
+      span(bind(married.value))
     )
   )
 
-  example("Html bindings", """When a model is passed to an html element, its
-                          value is bound to the html content of the element""", ->
+  example("Html bindings", """Html can accept one model and bind their html content to it.""", ->
     text = model("")
     content = model()
 
@@ -59,9 +58,9 @@ docs.bindingsApi = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindCss", """Binds css properties of an element to a model. It expects the value of the model to be
-      an object whose fields are names of css properties and have corresponding values.""", ->
-
+  example(".bindCss", """<code>.bindCss(model, map)<code> binds css properties of an element to a model.
+                      It expects the value of the model to be an object whose fields are names of
+                      css properties and have corresponding values or it can map a model to css properties.""", ->
     f = model((x) -> x)
 
     body(
@@ -81,17 +80,17 @@ docs.bindingsApi = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindClass", "Binds whether class should be set. <code>bindClass(model, className, predicate)</code>", ->
+  example(".bindClass", "<code>bindClass(model, map)</code> binds a class to a model.", ->
     count = model(0)
 
     body(
       span(count),
       button("+1", -> count(count() + 1))
-        .bindClass(count, 'btn-danger', -> count() > 3 and count() < 8)
+        .bindClass(count, -> 'btn-danger' if count() > 3 and count() < 8)
     )
   )
 
-  example(".bindDisabled", "Binds whether an element is disabled", ->
+  example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled.", ->
     number = model(0)
 
     isThree = -> number() == 3
@@ -105,7 +104,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindVisible", "Binds whether an element is visible.", ->
+  example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible.", ->
     visible = model(false)
 
     body(

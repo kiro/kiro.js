@@ -24,8 +24,10 @@
         return table().foreach(emails, function(email) {
           return tr(td().span2(email.important ? type.label().important('important') : void 0), td().span3(strong(email.from)), td().span7(strong(email.subject))).on('click', function() {
             return selectedEmail(email);
-          }).bindClass(selectedEmail, 'info', function() {
-            return selectedEmail() === email;
+          }).bindClass(selectedEmail, function() {
+            if (selectedEmail() === email) {
+              return 'info';
+            }
           });
         });
       };
@@ -51,8 +53,10 @@
             return emails.filter(function(email) {
               return _.contains(emails.folders, folder);
             });
-          }).bindClass(selectedFolder, 'selected', function() {
-            return selectedFolder() === folder;
+          }).bindClass(selectedFolder, function() {
+            if (selectedFolder() === folder) {
+              return 'selected';
+            }
           });
         }));
       };

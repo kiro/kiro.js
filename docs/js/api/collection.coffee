@@ -10,7 +10,7 @@ docs.collectionApi = -> section(h1("Collection"),
   docs.code.collection()
   p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> ")
 
-  example(".add", """<p><code>.add(value)</code> <code>.add(1)</code>Appends an item to the collection. </p>""", ->
+  example(".add", """<p><code>.add(value)</code> Appends an item to the collection. </p>""", ->
     numbers = collection([1, 2, 3])
     value = model("")
 
@@ -30,8 +30,8 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".remove", """<p><code>.remove(value)</code> removes items that have the same value.</p>
-                        <p><code>.remove(predicate)</code> remove all items for which the predicate function returns true.</p>""", ->
+  example(".remove", """<p><code>.remove(item)</code> removes item.</p>
+                        <p><code>.remove(predicate)</code> remove all items that match the predicate.</p>""", ->
     numbers = collection([1, 2, 3, 4, 5, 6])
     limit = model(3)
 
@@ -61,7 +61,7 @@ docs.collectionApi = -> section(h1("Collection"),
                     Filters items from the collection. The filtered items are not removed and
                     once a new filter is set it's applied on all the initial items.
 
-                    <p><code>.filter(predicate)</code> filters all items for which predicate returns false </p>
+                    <p><code>.filter(predicate)</code> filters all items that match the predicate </p>
                     """, ->
     numbers = collection([1, 2, 3, 4, 5, 6])
     limit = model(3)
@@ -78,11 +78,11 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".count", """Counts the current number of items in a collection. If there is a filter it counts only the
+  example(".count", """Counts the current items in a collection. If there is a filter it counts only the
                     items that match it.
 
                     <p><code>.count()</code> Returns the number of the current items in the collection.</p>
-                    <p><code>.count(predicate)</code> Returns the number of the current items in the collection that match the predicate</p>
+                    <p><code>.count(predicate)</code> Returns the number of the current items in the collection that match the predicate.</p>
                     """, ->
     numbers = collection([1, 2, 3, 4, 5, 6])
     numbers.filter((number) -> number > 2)
@@ -96,7 +96,7 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".total", """Counts all the items in a collection, including the filtered.
+  example(".total", """Counts all items in a collection, including the filtered.
 
                     <p><code>.total()</code> Returns the number of items in the collection.</p>
                     <p><code>.total(predicate)</code> Returns the number of items in the collection that match the predicate</p>
@@ -129,7 +129,9 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".get", """Gets an item matching a predicate""", ->
+  example(".get", """<p><code>get(index)</code> gets the item at index.</p>
+                     <p><code>get(predicate)</code> gets the items matching the predicate.</p>
+                  """, ->
     user = (id, name) ->
       id: id
       name: name
@@ -144,7 +146,7 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".sort", """Sorts the elements in the collection""", ->
+  example(".sort", """<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order """, ->
     numbers = collection([2, 6, 3])
     numbers.sort()
 
@@ -156,15 +158,32 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".subscribe", """Subscribes to changes in the collection, useful for building custom controls""", ->
-    numbers = collection([1, 2, 3, 4, 5, 6])
-    text = model("Total length " + numbers.count())
-    numbers.subscribe((items) -> text("Total length " + items.length))
+  example(".subscribe", """<code>subscribe(handler)</code>Subscribes to changes in the collection. This includes changes to the models
+                        within the collection. The subscription handler receives the items in the collection
+                        and a string which describes the changed value.""", ->
+    player = object(name: "Name", count: 0)
+    count = model(2)
+    pathModel = model("")
+    values = model()
+
+    players = collection([player, count, 3])
+    players.subscribe((items, path) ->
+      pathModel(path)
+      values(JSON.stringify(items))
+    )
 
     body(
-      "Click on a number to remove it"
-      showCollection(numbers)
-      span(text)
+      form(
+        "Name": input.text(bind(player.name))
+        "Count": input.text(bind(player.count))
+      )
+      form.inline(
+        span(count),
+        button("+1", -> count(count() + 1))
+        button("-1", -> count(count() - 1))
+      )
+      "Path : ", span(pathModel)
+      pre(code(values))
     )
   )
 )

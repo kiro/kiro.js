@@ -22,7 +22,7 @@ docs.examples.meteortodo = -> section(h1("Meteor todo"), ->
           div(class:"label", "Show:").foreach(tags, (tag) ->
             div(class: "tag",
               tag.text, span({class: "count"}, tag.count)
-            ).bindClass(selectedTag, 'selected', -> selectedTag() == tag)
+            ).bindClass(selectedTag, -> 'selected' if selectedTag() == tag)
              .on('click', -> selectedTag(tag))
           )
         )
@@ -102,7 +102,7 @@ docs.examples.meteortodo = -> section(h1("Meteor todo"), ->
           "+tag"
         ).bindVisible(addingTag, -> !addingTag())
           .on('click', -> addingTag(true))
-      ).bindClass(todo.done, 'done')
+      ).bindClass(todo.done, -> 'done' if todo.done)
 
     body(
       filter()

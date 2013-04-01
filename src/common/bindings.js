@@ -65,9 +65,10 @@
           return element(x);
         }),
         bindCss: binder('css'),
-        bindClass: function(observable, className, condition) {
-          if (condition == null) {
-            condition = function(x) {
+        bindClass: function(observable, map) {
+          var prevClass;
+          if (map == null) {
+            map = function(x) {
               return x;
             };
           }
@@ -76,17 +77,14 @@
               id: common.nextId()
             });
           }
-          if (condition(observable.get())) {
-            this.addAttr({
-              "class": className
-            });
-          }
+          prevClass = map(observable.get());
+          this.addAttr({
+            "class": prevClass
+          });
           observable.subscribe(function(value) {
-            if (condition(value)) {
-              return el.addClass(className);
-            } else {
-              return el.removeClass(className);
-            }
+            el.removeClass(prevClass);
+            prevClass = map(value);
+            return el.addClass(prevClass);
           });
           return this;
         },

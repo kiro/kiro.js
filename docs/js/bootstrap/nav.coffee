@@ -53,7 +53,7 @@ docs.bootstrap.nav = -> section(h1("Navigation"),
       pills.stacked(
         pill("Home", -> console.log("Going home"))
         pill("About")
-        pill("Blog").bindClass(disabled, 'disabled')
+        pill("Blog").bindClass(disabled, -> 'disabled' if disabled())
       )
     )
   )

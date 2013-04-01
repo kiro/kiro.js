@@ -76,8 +76,10 @@
     return a(name, function() {
       todos.filter(filter);
       return selectedFilter(name);
-    }).bindClass(selectedFilter, 'selected', function() {
-      return selectedFilter() === name;
+    }).bindClass(selectedFilter, function() {
+      if (selectedFilter() === name) {
+        return 'selected';
+      }
     });
   };
 
@@ -102,9 +104,15 @@
       return editing(false);
     }).bindVisible(editing).on('blur', function() {
       return editing(false);
-    })).bindClass(todo.completed, 'completed', function() {
-      return todo.completed.valueOf();
-    }).bindClass(editing, 'editing');
+    })).bindClass(todo.completed, function() {
+      if (todo.completed) {
+        return 'completed';
+      }
+    }).bindClass(editing, function() {
+      if (editing()) {
+        return 'editing';
+      }
+    });
   };
 
   body(section({

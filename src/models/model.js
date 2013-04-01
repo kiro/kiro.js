@@ -18,6 +18,9 @@
           return oldValue;
         }
       };
+      model.toJSON = function() {
+        return value;
+      };
       if (!o) {
         o = common.observable((function() {
           return model();

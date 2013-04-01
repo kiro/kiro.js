@@ -30,7 +30,7 @@ filter = (name, filter) ->
   a(name, ->
     todos.filter(filter)
     selectedFilter(name)
-  ).bindClass(selectedFilter, 'selected', -> selectedFilter() == name)
+  ).bindClass(selectedFilter, -> 'selected' if selectedFilter() == name)
 
 renderTodo = (todo) ->
   editing = model(false)
@@ -47,8 +47,8 @@ renderTodo = (todo) ->
     textInput({class:"edit"}, todo.title, -> editing(false))
       .bindVisible(editing)
       .on('blur', -> editing(false))
-  ).bindClass(todo.completed, 'completed', -> todo.completed.valueOf())
-   .bindClass(editing, 'editing')
+  ).bindClass(todo.completed, -> 'completed' if todo.completed)
+   .bindClass(editing, -> 'editing' if editing())
 
 body(
   section(id:"todoapp",

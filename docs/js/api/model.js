@@ -11,7 +11,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.modelApi = function() {
-    return section(h1("Model"), docs.code.model(), p("Models are observable. Creating a model returns a function <code>text = model('Hello')</code>.\nTo access the values of a model the function can be called <code>text() # -> Hello</code>.\nTo set the value, the function is called with a parameter for the new value <code>text(\"New Value\")</code>.\nWhen seeting the value of a model it returns the old value.\nModels has subscribe method which is used to listen to changes to models and generally is used in bindings."), example("Observable primitive", "Making primitive values observable", function() {
+    return section(h1("Model"), docs.code.model(), p("Models constructs observables from values or objects."), example("Model", "Creates an observable value. <code>x = model(value)</code> creates a new observable.\nCalling <code>x()</code> gets the value of the observable. <code>x(newValue)</code> sets\nthe value of the observable. Observable values can be bound to properties of the dom elements\nand they will be automatically updated when the value changes.", function() {
       var count, text;
       count = model(0);
       text = model("");
@@ -21,7 +21,7 @@
       return body(button.primary("+1", function() {
         return count(count() + 1);
       }), span(text));
-    }), example("Observable objects", "Using <code>models.object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects and arrays are converted to observables.\nChanges to a field within the object are propagated upwards, so if you subscribe\not an object changes to all fields and subfields will result in updating the object.", function() {
+    }), example("Object", "Using <code>object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects are also converted to observable\nand nested arrays to collection, the objects it arrays are also converted to\nobservables. To get the observable for a field <code>bind(obj.field)</code> must\nbe used. Changes to a field within the object are propagated upwards,\nso if you subscribe to an object changes to all fields and subfields will\nresult calling the subscription.", function() {
       var location, obj;
       obj = object({
         name: "Kiril Minkov",
@@ -39,9 +39,11 @@
         "Cool": input.checkbox(bind(obj.cool)),
         "Age": input.text(bind(obj.age)),
         "Locations": [
-          span(map(obj.locations, function() {
-            return obj.locations().toString();
-          })), append(input.text(location).placeholder("Add location..."), button("Add", function() {
+          div().foreach(obj.locations, function(location) {
+            return span(type.label(location).on('click', function() {
+              return obj.locations.remove(location);
+            }), "&nbsp;");
+          }), append(input.text(location).placeholder("Add location..."), button("Add", function() {
             return obj.locations.add(location(""));
           }))
         ],
@@ -50,6 +52,16 @@
       }), pre(code(map(obj, function() {
         return JSON.stringify(obj, null, 4);
       }))));
+    }), example("Map", "Creates a new model that maps the value of a model. ", function() {
+      var count;
+      count = object({
+        value: 1
+      });
+      return body(button("+1", function() {
+        return count.value++;
+      }).bindDisabled(map(bind(count.value), function() {
+        return count.value > 3;
+      })), span(bind(count.value)));
     }));
   };
 

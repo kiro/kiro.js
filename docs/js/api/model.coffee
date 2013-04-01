@@ -7,14 +7,13 @@ $.extend(this, bootstrap, models, docs)
 docs.modelApi = -> section(h1("Model"),
   docs.code.model()
 
-  p("""Models are observable. Creating a model returns a function <code>text = model('Hello')</code>.
-      To access the values of a model the function can be called <code>text() # -> Hello</code>.
-      To set the value, the function is called with a parameter for the new value <code>text("New Value")</code>.
-      When seeting the value of a model it returns the old value.
-      Models has subscribe method which is used to listen to changes to models and generally is used in bindings.
-    """)
+  p("""Models constructs observables from values or objects.""")
 
-  example("Observable primitive", "Making primitive values observable", ->
+  example("Model", """Creates an observable value. <code>x = model(value)</code> creates a new observable.
+                   Calling <code>x()</code> gets the value of the observable. <code>x(newValue)</code> sets
+                   the value of the observable. Observable values can be bound to properties of the dom elements
+                   and they will be automatically updated when the value changes.
+                   """, ->
     count = model(0)
     text = model("")
 
@@ -26,10 +25,13 @@ docs.modelApi = -> section(h1("Model"),
     )
   )
 
-  example("Observable objects", """Using <code>models.object(obj)</code> makes a new object each field of
-                                which is observable. Nested objects and arrays are converted to observables.
-                                Changes to a field within the object are propagated upwards, so if you subscribe
-                                ot an object changes to all fields and subfields will result in updating the object.""", ->
+  example("Object", """Using <code>object(obj)</code> makes a new object each field of
+                       which is observable. Nested objects are also converted to observable
+                       and nested arrays to collection, the objects it arrays are also converted to
+                       observables. To get the observable for a field <code>bind(obj.field)</code> must
+                       be used. Changes to a field within the object are propagated upwards,
+                       so if you subscribe to an object changes to all fields and subfields will
+                       result calling the subscription.""", ->
     obj = object(
       name: "Kiril Minkov"
       cool: true
@@ -47,7 +49,12 @@ docs.modelApi = -> section(h1("Model"),
         "Cool": input.checkbox(bind(obj.cool))
         "Age": input.text(bind(obj.age))
         "Locations" : [
-          span(map(obj.locations, -> obj.locations().toString()))
+          div().foreach(obj.locations, (location) ->
+            span(
+              type.label(location).on('click', -> obj.locations.remove(location))
+              "&nbsp;"
+            )
+          )
           append(
             input.text(location).placeholder("Add location...")
             button("Add", -> obj.locations.add(location("")))
@@ -58,6 +65,16 @@ docs.modelApi = -> section(h1("Model"),
       )
 
       pre(code(map(obj, -> JSON.stringify(obj, null, 4))))
+    )
+  )
+
+  example("Map", "Creates a new model that maps the value of a model. ", ->
+    count = object(value: 1)
+
+    body(
+      button("+1", -> count.value++)
+        .bindDisabled(map(bind(count.value), -> count.value > 3))
+      span(bind(count.value))
     )
   )
 )

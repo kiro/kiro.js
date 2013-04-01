@@ -11,11 +11,13 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.bindingsApi = function() {
-    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes. Each binding applies the builder pattern so they can be chained."), example("Value bindings", "The input elements accept observable model and bind their value to it.", function() {
+    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
       var married, sex, text;
       text = model("initial");
       sex = model("female");
-      married = model(false);
+      married = object({
+        value: false
+      });
       return body(form.inline(input.text(text), span(text), button.info("Clear", function() {
         return text("");
       })), input.radio({
@@ -27,8 +29,8 @@
       }, sex), input.radio({
         name: "sex",
         value: "other"
-      }, sex), span(sex), input.checkbox(married), span(married));
-    }), example("Html bindings", "When a model is passed to an html element, its\nvalue is bound to the html content of the element", function() {
+      }, sex), span(sex), input.checkbox(bind(married.value)), span(bind(married.value)));
+    }), example("Html bindings", "Html can accept one model and bind their html content to it.", function() {
       var content, i, items, text;
       text = model("");
       content = model();
@@ -42,7 +44,7 @@
       return body(form.inline(input.text(text), h2(text)), button("Next", function() {
         return content(items[++i % items.length]);
       }), h6("html"), div(content));
-    }), example(".bindCss", "Binds css properties of an element to a model. It expects the value of the model to be\nan object whose fields are names of css properties and have corresponding values.", function() {
+    }), example(".bindCss", "<code>.bindCss(model, map)<code> binds css properties of an element to a model.\nIt expects the value of the model to be an object whose fields are names of\ncss properties and have corresponding values or it can map a model to css properties.", function() {
       var f, _i, _results;
       f = model(function(x) {
         return x;
@@ -79,15 +81,17 @@
           };
         });
       }));
-    }), example(".bindClass", "Binds whether class should be set. <code>bindClass(model, className, predicate)</code>", function() {
+    }), example(".bindClass", "<code>bindClass(model, map)</code> binds a class to a model.", function() {
       var count;
       count = model(0);
       return body(span(count), button("+1", function() {
         return count(count() + 1);
-      }).bindClass(count, 'btn-danger', function() {
-        return count() > 3 && count() < 8;
+      }).bindClass(count, function() {
+        if (count() > 3 && count() < 8) {
+          return 'btn-danger';
+        }
       }));
-    }), example(".bindDisabled", "Binds whether an element is disabled", function() {
+    }), example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled.", function() {
       var isThree, number;
       number = model(0);
       isThree = function() {
@@ -98,7 +102,7 @@
       }).bindDisabled(number, isThree), p("That's too many clicks!", button('Reset Clicks', function() {
         return number(0);
       })).bindVisible(number, isThree));
-    }), example(".bindVisible", "Binds whether an element is visible.", function() {
+    }), example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible.", function() {
       var visible;
       visible = model(false);
       return body(button.success("Hide", function() {

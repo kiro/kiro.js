@@ -43,15 +43,15 @@ window.BC.define('common', (common) ->
     bindCss: binder('css')
 
     # Binds the class of an element
-    bindClass: (observable, className, condition = (x) -> x) ->
+    bindClass: (observable, map = (x) -> x) ->
       this.addAttr(id: common.nextId()) if !this.id()
-      this.addAttr(class: className) if condition(observable.get())
+      prevClass = map(observable.get())
+      this.addAttr(class: prevClass)
 
       observable.subscribe((value) ->
-        if condition(value)
-          el.addClass(className)
-        else
-          el.removeClass(className)
+        el.removeClass(prevClass)
+        prevClass = map(value)
+        el.addClass(prevClass)
       )
       this
 

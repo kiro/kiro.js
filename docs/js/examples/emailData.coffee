@@ -1,3 +1,4 @@
+docs = window.BC.namespace("docs")
 docs.examples = window.BC.namespace("docs.examples")
 
 docs.examples.emailData = ->

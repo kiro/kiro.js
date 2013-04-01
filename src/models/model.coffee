@@ -14,6 +14,8 @@ window.BC.define('models', (models) ->
         o.publish(value)
         oldValue
 
+    model.toJSON = () -> value
+
     if !o
       o = common.observable((-> model()), (newValue) -> model(newValue))
     $.extend(model, o)

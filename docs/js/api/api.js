@@ -12,13 +12,13 @@
 
   docs.api = function() {
     var content;
-    content = model(docs.bindingsApi());
-    return div(div().span3(nav(a("Bindings", function() {
+    content = model(docs.modelApi());
+    return div(div().span3(nav(a("Model", function() {
+      return content(docs.modelApi());
+    }), a("Bindings", function() {
       return content(docs.bindingsApi());
     }), a("Collection", function() {
       return content(docs.collectionApi());
-    }), a("Model", function() {
-      return content(docs.modelApi());
     })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
 
