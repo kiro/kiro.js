@@ -88,7 +88,7 @@ window.BC.define('common', (common) ->
       this.addAttr(id: common.nextId()) if !this.id()
 
       collectionItems =
-        if _.isFunction(collection.subscribe) then collection()
+        if _.isFunction(collection) then collection()
         else if _.isArray(collection) then collection
         else throw Error(collection + " is expected to be an Array or model")
 

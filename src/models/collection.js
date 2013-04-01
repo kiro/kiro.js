@@ -2,15 +2,16 @@
 (function() {
 
   window.BC.define('models', function(models) {
-    var assertArray, common;
+    var COLLECTION_CHANGE, assertArray, common;
     common = window.BC.namespace("common");
+    COLLECTION_CHANGE = "collection.change";
     assertArray = function(arr) {
       if (!_.isArray(arr)) {
         throw Error(arr + " is expected to be an array");
       }
     };
     return models.collection = function(initial) {
-      var allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, o, toPredicate, update;
+      var all, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, o, toPredicate, update;
       if (initial == null) {
         initial = [];
       }
@@ -19,9 +20,10 @@
       items = allItems;
       compareFunction = void 0;
       o = common.observable();
-      filter = function() {
+      all = function() {
         return true;
       };
+      filter = all;
       collection = function(arg) {
         if (_.isUndefined(arg)) {
           return items;
@@ -37,12 +39,16 @@
       update = function(path) {
         var item, _i, _len;
         if (path == null) {
-          path = "collection.change";
+          path = COLLECTION_CHANGE;
         }
         if (compareFunction) {
           allItems.sort(compareFunction);
+          path = COLLECTION_CHANGE;
         }
-        items = _.filter(allItems, filter);
+        if (filter !== all) {
+          items = _.filter(allItems, filter);
+          path = COLLECTION_CHANGE;
+        }
         for (_i = 0, _len = allItems.length; _i < _len; _i++) {
           item = allItems[_i];
           if (common.isModel(item)) {

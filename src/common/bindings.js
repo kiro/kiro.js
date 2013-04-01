@@ -140,7 +140,7 @@
             });
           }
           collectionItems = (function() {
-            if (_.isFunction(collection.subscribe)) {
+            if (_.isFunction(collection)) {
               return collection();
             } else if (_.isArray(collection)) {
               return collection;

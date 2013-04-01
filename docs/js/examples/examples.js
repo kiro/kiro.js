@@ -17,6 +17,8 @@
     content = model(docs.examples.players());
     return div(div().span3(nav(a("Players", function() {
       return content(docs.examples.players());
+    }), a("Email", function() {
+      return content(docs.examples.email());
     })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
 

@@ -291,7 +291,8 @@
     });
     bootstrap.header = tag('header');
     bootstrap.section = tag('section');
-    return bootstrap.footer = tag('footer');
+    bootstrap.footer = tag('footer');
+    return bootstrap.br = tag('br');
   });
 
 }).call(this);

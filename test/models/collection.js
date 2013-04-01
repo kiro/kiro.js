@@ -232,6 +232,39 @@
       names.add("ABC");
       return expect(names()).toEqual(["ABC", "Ada", "C++", "Java", "Test"]);
     });
+    it("Tests sort on objects", function() {
+      var one, player, players, three, two;
+      player = function(name, score) {
+        return object({
+          name: name,
+          score: score
+        });
+      };
+      one = player("C++", 5);
+      two = player("Java", 10);
+      three = player("Javascript", 15);
+      players = collection([one, two, three]);
+      players.sort(function(player1, player2) {
+        if (player1.score < player2.score) {
+          return -1;
+        } else {
+          if (player1.score > player2.score) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
+      });
+      expect(players()).toEqual([one, two, three]);
+      one.score = 20;
+      expect(players()).toEqual([two, three, one]);
+      two.score = 5;
+      expect(players()).toEqual([two, three, one]);
+      three.score = 1;
+      expect(players()).toEqual([three, two, one]);
+      one.score = -1;
+      return expect(players()).toEqual([one, three, two]);
+    });
     return it("Tests subscription to models", function() {
       var four, one, player, players, two;
       player = function(name, score) {

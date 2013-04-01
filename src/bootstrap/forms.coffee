@@ -177,4 +177,5 @@ window.BC.define('bootstrap', (bootstrap) ->
   bootstrap.header = tag('header')
   bootstrap.section = tag('section')
   bootstrap.footer = tag('footer')
+  bootstrap.br = tag('br')
 )

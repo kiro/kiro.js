@@ -17,7 +17,7 @@ window.BC.define('bootstrap', (bootstrap) ->
     mixins.contextual('')
   )
 
-  bootstrap.td = tag('td')
+  bootstrap.td = (args...) -> $.extend(tag('td')(args...), mixins.spannable())
   bootstrap.thead = tag('thead')
   bootstrap.tbody = tag('tbody')
   bootstrap.th = tag('th')

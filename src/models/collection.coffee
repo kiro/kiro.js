@@ -2,6 +2,8 @@ window.BC.define('models', (models) ->
 
   common = window.BC.namespace("common")
 
+  COLLECTION_CHANGE = "collection.change"
+
   assertArray = (arr) ->
     if not _.isArray(arr)
       throw Error(arr + " is expected to be an array")
@@ -15,7 +17,8 @@ window.BC.define('models', (models) ->
 
     o = common.observable()
 
-    filter = () -> true
+    all = () -> true
+    filter = all
     collection = (arg) ->
       if _.isUndefined(arg)
         items
@@ -26,10 +29,17 @@ window.BC.define('models', (models) ->
 
     callUpdate = (item, path) -> update(path)
 
-    update = (path = "collection.change") ->
+    # TODO(kiro) : Make it to do colleciton_change when the collection has actually changed
+    # and make it to pass the changes to the subscribers, so foreach binding can update the
+    # DOM more efficiently
+    update = (path = COLLECTION_CHANGE) ->
       if compareFunction
         allItems.sort(compareFunction)
-      items = _.filter(allItems, filter)
+        path = COLLECTION_CHANGE
+
+      if filter != all
+        items = _.filter(allItems, filter)
+        path = COLLECTION_CHANGE
 
       for item in allItems
         if common.isModel(item)

@@ -40,7 +40,11 @@
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return $.extend(tag('tr').apply(null, args), mixins.contextual(''));
     };
-    bootstrap.td = tag('td');
+    bootstrap.td = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return $.extend(tag('td').apply(null, args), mixins.spannable());
+    };
     bootstrap.thead = tag('thead');
     bootstrap.tbody = tag('tbody');
     bootstrap.th = tag('th');
