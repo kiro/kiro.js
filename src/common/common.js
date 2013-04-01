@@ -3,12 +3,12 @@
   var __slice = [].slice;
 
   window.BC.define('common', function(common) {
-    var isComposite;
+    var isComposite, isModel;
     isComposite = function(item) {
       return item && _.isFunction(item.html) && _.isFunction(item.init);
     };
-    common.isModel = function(item) {
-      return item && _.isFunction(item.subscribe) && _.isFunction(item._get) && _.isFunction(item._set);
+    isModel = function(item) {
+      return item && !isComposite(item) && _.isFunction(item.subscribe) && _.isFunction(item.get) && _.isFunction(item.set) && _.isFunction(item.publish);
     };
     common.isValid = function(item) {
       return _.isUndefined(item) || _.isString(item) || _.isNumber(item) || _.isArray(item) || _.isFunction(item.html) || common.isModel(item);
@@ -35,8 +35,8 @@
           }
           return _results;
         })()).join(" ");
-      } else if (common.isModel(item)) {
-        return common.toHtml(item._get());
+      } else if (isModel(item)) {
+        return common.toHtml(item.get());
       } else {
         throw Error(item + " is expected to be String, Number, Array, Boolean, undefined, model or have .html() function");
       }
@@ -63,10 +63,10 @@
           }
           return _results;
         })()).join(" ");
-      } else if (common.isModel(item)) {
-        return common.init(item._get());
+      } else if (isModel(item)) {
+        return common.init(item.get());
       } else {
-        throw Error(item + " is expected to be String, Number, Array, Booelan, undefined or have .init() function");
+        throw Error(item + " is expected to be String, Number, Array, Booelan, undefined, model or have .init() function");
       }
     };
     common.nextId = (function() {
@@ -76,7 +76,7 @@
         return ++id;
       };
     })();
-    common.observable = function() {
+    common.observable = function(_get, _set) {
       var listeners;
       listeners = [];
       return {
@@ -105,6 +105,12 @@
             }
           }
           return _results;
+        },
+        get: function() {
+          return _get();
+        },
+        set: function(newValue) {
+          return _set(newValue);
         }
       };
     };
@@ -149,7 +155,8 @@
         }
       };
     };
-    return common.isComposite = isComposite;
+    common.isComposite = isComposite;
+    return common.isModel = isModel;
   });
 
 }).call(this);

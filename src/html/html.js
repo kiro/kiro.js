@@ -69,11 +69,11 @@
         bindValue: function(observable) {
           this.bindAttr(observable, function() {
             return {
-              checked: observable._get().valueOf()
+              checked: observable.get()
             };
           });
           return this.subscribe(function(value) {
-            return observable._set(value);
+            return observable.set(value);
           });
         }
       }).bindValue(model);
@@ -86,10 +86,10 @@
       return $.extend(tag('input', {
         type: 'radio'
       }).apply(null, items).observable().on('click', function(e) {
-        return model._set(value);
+        return model.set(value);
       })).bindAttr(model, function() {
         return {
-          checked: model._get() === value
+          checked: model.get() === value
         };
       });
     },

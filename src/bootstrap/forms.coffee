@@ -40,8 +40,8 @@ window.BC.define('bootstrap', (bootstrap) ->
           .observable()
           .on('click', (e) -> e.data.publish($(this).is(':checked')))),
         bindValue: (observable) ->
-          this.bindAttr(observable, -> checked: observable._get().valueOf())
-          this.subscribe((value) -> observable._set(value))
+          this.bindAttr(observable, -> checked: observable.get())
+          this.subscribe((value) -> observable.set(value))
         isCheckbox: true
       ).bindValue(model)
 
@@ -55,8 +55,8 @@ window.BC.define('bootstrap', (bootstrap) ->
           .observable()
           .on('click', (e) -> e.data.publish(value)),
         bindValue: (observable) ->
-          this.bindAttr(observable, -> checked:(observable._get() == value))
-          this.subscribe((value) -> observable._set(value))
+          this.bindAttr(observable, -> checked:(observable.get() == value))
+          this.subscribe((value) -> observable.set(value))
         isRadio: true
       ).bindValue(model)
 

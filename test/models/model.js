@@ -46,11 +46,11 @@
         return objCalls++;
       });
       firstCalls = 0;
-      obj.firstName.subscribe(function() {
+      bind(obj.firstName).subscribe(function() {
         return firstCalls++;
       });
       lastCalls = 0;
-      obj.lastName.subscribe(function() {
+      bind(obj.lastName).subscribe(function() {
         return lastCalls++;
       });
       obj.firstName = "Test";
@@ -65,23 +65,6 @@
       expect(firstCalls).toBe(1);
       expect(lastCalls).toBe(2);
       return expect(objCalls).toBe(3);
-    });
-    it("Tests array observable", function() {
-      var arr, calls;
-      arr = models.array([1, 4, 2]);
-      calls = 0;
-      arr.subscribe(function() {
-        return calls++;
-      });
-      arr.push(1);
-      expect(calls).toBe(1);
-      expect(arr.toString()).toEqual([1, 4, 2, 1].toString());
-      arr.pop();
-      expect(arr.toString()).toEqual([1, 4, 2].toString());
-      expect(calls).toBe(2);
-      arr.sort();
-      expect(calls).toBe(3);
-      return expect(arr.toString()).toEqual([1, 2, 4].toString());
     });
     it("Tests nested object observable", function() {
       var languageCalls, languageNameCalls, obj, objCalls;
@@ -102,11 +85,11 @@
       obj.firstName = "Mente";
       expect(objCalls).toBe(1);
       languageCalls = 0;
-      obj.language.subscribe(function() {
+      bind(obj.language).subscribe(function() {
         return languageCalls++;
       });
       languageNameCalls = 0;
-      obj.language.name.subscribe(function() {
+      bind(obj.language.name).subscribe(function() {
         return languageNameCalls++;
       });
       obj.language.name = "Test";
@@ -166,6 +149,7 @@
       expectedPath = "";
       calls = 0;
       obj.subscribe(function(value, path) {
+        console.log(path);
         expect(path).toEqual(expectedPath);
         return calls++;
       });
@@ -175,14 +159,14 @@
       expectedPath = "checked";
       obj.checked = false;
       expect(calls).toBe(2);
-      expectedPath = "numbers";
-      obj.numbers.push(4);
+      expectedPath = "numbers.change.add";
+      obj.numbers.add(4);
       expect(calls).toBe(3);
       expectedPath = "sub.key";
-      obj.sub[0].key = "kkk";
+      obj.sub.get(0).key = "kkk";
       expect(calls).toBe(4);
       expectedPath = "sub.value";
-      obj.sub[0].value = "vvv";
+      obj.sub.get(0).value = "vvv";
       expect(calls).toBe(5);
       expectedPath = "subsub.name.first";
       obj.subsub.name.first = "first";
@@ -201,14 +185,14 @@
         calls++;
         return expect(value).toEqual(expected);
       });
-      expect(notVisible._get()).toEqual(true);
+      expect(notVisible.get()).toEqual(true);
       visible(true);
       expect(calls).toEqual(1);
       expected = true;
       visible(false);
       return expect(calls).toEqual(2);
     });
-    return it("Tests a bug with _set", function() {
+    it("Tests a bug with set", function() {
       var obj;
       obj = object({
         name: {
@@ -216,9 +200,21 @@
           value: false
         }
       });
-      expect(obj.name.value._get().valueOf()).toBe(false);
-      obj.name.value._set(true);
-      return expect(obj.name.value._get().valueOf()).toBe(true);
+      expect(obj.name.value).toBe(false);
+      bind(obj.name.value).set(true);
+      return expect(obj.name.value).toBe(true);
+    });
+    return it("Tests a trivial object", function() {
+      var calls, obj;
+      obj = object({
+        value: 1
+      });
+      calls = 0;
+      obj.subscribe(function() {
+        return calls++;
+      });
+      obj.value = 2;
+      return expect(calls).toBe(1);
     });
   });
 

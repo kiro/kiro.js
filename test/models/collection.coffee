@@ -270,4 +270,19 @@ describe("Collection tests", ->
     four.score = 10
     expect(players()).toEqual([four, two, one])
   )
+
+  it("Tests that a collection subscribes to changes in it's underlying models", ->
+    c = collection([object(value: 1), object(value: 2), object(value: 3)])
+    calls = 0
+    c.subscribe(-> calls++)
+    c.get(0).value = 3
+    expect(calls).toBe(1)
+
+    c.get(1).value = 5
+    expect(calls).toBe(2)
+
+    map(c, -> c.total()).subscribe(-> calls++)
+    c.get(0).value = 5
+    expect(calls).toBe(3)
+  )
 )

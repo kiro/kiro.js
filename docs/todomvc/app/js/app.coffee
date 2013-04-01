@@ -17,9 +17,9 @@ selectedFilter = model("")
 
 # helpers
 pluralize = (count) -> if count == 1 then "1 item" else count + " items"
-done = (todo) -> todo.completed.valueOf()
-notDone = (todo) -> !todo.completed.valueOf()
-allDone = () -> _.all((todo.completed.valueOf() for todo in todos()))
+done = (todo) -> todo.completed
+notDone = (todo) -> !todo.completed
+allDone = () -> _.all((todo.completed for todo in todos()))
 
 # controls
 textInput = (config, model, handler) ->

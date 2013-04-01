@@ -50,8 +50,8 @@ html.input =
         .observable()
         .on('click', (e) -> e.data.publish($(this).is(':checked'))),
       bindValue: (observable) ->
-        this.bindAttr(observable, -> checked: observable._get().valueOf())
-        this.subscribe((value) -> observable._set(value))
+        this.bindAttr(observable, -> checked: observable.get())
+        this.subscribe((value) -> observable.set(value))
     ).bindValue(model)
 
   radio: (items...) ->
@@ -61,8 +61,8 @@ html.input =
     $.extend(
       tag('input', type: 'radio')(items...)
         .observable()
-        .on('click', (e) -> model._set(value))
-    ).bindAttr(model, -> checked:(model._get() == value))
+        .on('click', (e) -> model.set(value))
+    ).bindAttr(model, -> checked:(model.get() == value))
 
   submit: (name, click) -> tag('input')(name).addAttr(type: 'submit').on('click', click)
 

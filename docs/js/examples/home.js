@@ -82,10 +82,10 @@
       };
       todos = collection([todo('first todo')]);
       notDone = function(todo) {
-        return !todo.done.valueOf();
+        return !todo.done;
       };
       done = function(todo) {
-        return todo.done.valueOf();
+        return todo.done;
       };
       remaining = function() {
         return todos.count(notDone) + " of " + todos.total() + " remaining";

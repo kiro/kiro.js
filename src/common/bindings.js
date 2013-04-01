@@ -3,7 +3,7 @@
 
   window.BC.define('common', function(common) {
     return common.bindings = function(initialItems) {
-      var addInitializer, binder, el, eva, identity, initializers;
+      var addInitializer, binder, el, identity, initializers;
       el = null;
       initializers = [];
       identity = function(x) {
@@ -18,13 +18,6 @@
         initializers.push(initializer);
         return this;
       };
-      eva = function(obj) {
-        if (_.isString(obj)) {
-          return obj.valueOf();
-        } else {
-          return obj;
-        }
-      };
       binder = function(f, defaultMap) {
         if (defaultMap == null) {
           defaultMap = identity;
@@ -34,11 +27,11 @@
             map = defaultMap;
           }
           addInitializer.call(this, function() {
-            return el[f](map(eva(observable._get())));
+            return el[f](map(observable.get()));
           });
           addInitializer.call(this, function() {
             return observable.subscribe(function(newValue) {
-              return el[f](eva(map(newValue)));
+              return el[f](map(newValue));
             });
           });
           return this;
@@ -61,7 +54,7 @@
           }
           if (this.subscribe) {
             this.subscribe(function(newValue) {
-              return observable._set(newValue);
+              return observable.set(newValue);
             });
           }
           binder('val').call(this, observable, map);
@@ -83,7 +76,7 @@
               id: common.nextId()
             });
           }
-          if (condition(observable._get())) {
+          if (condition(observable.get())) {
             this.addAttr({
               "class": className
             });
@@ -161,7 +154,7 @@
           if (_.isFunction(collection)) {
             collection.subscribe(function(newItems, path) {
               var elements;
-              if (path === "collection.change") {
+              if (path.indexOf("change.") !== -1) {
                 elements = (function() {
                   var _i, _len, _results;
                   _results = [];

@@ -26,21 +26,6 @@ docs.modelApi = -> section(h1("Model"),
     )
   )
 
-  example("Observable array", "Using <code>models.array(arr)</code> to construct an observable array.", ->
-    arr = array([1, 2, 3, 4])
-    value = model()
-
-    body(
-      form.inline(
-        input.text(value).span1()
-        button.primary("Push", -> if value() then arr.push(value()))
-        button.danger("Pop", -> arr.pop())
-        button.info("Sort", -> arr.sort())
-      )
-      span(map(arr, -> arr.toString()))
-    )
-  )
-
   example("Observable objects", """Using <code>models.object(obj)</code> makes a new object each field of
                                 which is observable. Nested objects and arrays are converted to observables.
                                 Changes to a field within the object are propagated upwards, so if you subscribe
@@ -58,18 +43,18 @@ docs.modelApi = -> section(h1("Model"),
     location = model("")
     body(
       form(
-        "Name": input.text(obj.name)
-        "Cool": input.checkbox(obj.cool)
-        "Age": input.text(obj.age)
+        "Name": input.text(bind(obj.name))
+        "Cool": input.checkbox(bind(obj.cool))
+        "Age": input.text(bind(obj.age))
         "Locations" : [
           span(map(obj.locations, -> obj.locations.toString()))
           append(
             input.text(location).placeholder("Add location...")
-            button("Add", -> obj.locations.push(location("")))
+            button("Add", -> obj.locations.add(location("")))
           )
         ]
-        "Language": input.text(obj.language.name)
-        "Native": input.checkbox(obj.language.native)
+        "Language": input.text(bind(obj.language.name))
+        "Native": input.checkbox(bind(obj.language.native))
       )
 
       pre(code(map(obj, -> JSON.stringify(obj, null, 4))))

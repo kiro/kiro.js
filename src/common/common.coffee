@@ -1,7 +1,6 @@
 window.BC.define('common', (common) ->
   isComposite = (item) -> item and _.isFunction(item.html) and _.isFunction(item.init)
-
-  common.isModel = (item) -> item and _.isFunction(item.subscribe) and _.isFunction(item._get) and _.isFunction(item._set)
+  isModel = (item) -> item and !isComposite(item) and _.isFunction(item.subscribe) and _.isFunction(item.get) and _.isFunction(item.set) and _.isFunction(item.publish)
 
   common.isValid = (item) ->
     _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html) or common.isModel(item)
@@ -14,7 +13,7 @@ window.BC.define('common', (common) ->
     else if _.isNumber(item) then item
     else if _.isBoolean(item) then item.toString()
     else if _.isArray(item) then (common.toHtml(subitem) for subitem in item).join(" ")
-    else if common.isModel(item) then common.toHtml(item._get())
+    else if isModel(item) then common.toHtml(item.get())
     else throw Error(item + " is expected to be String, Number, Array, Boolean, undefined, model or have .html() function")
 
   # Initializes the item with context.
@@ -25,8 +24,8 @@ window.BC.define('common', (common) ->
     else if _.isNumber(item)
     else if _.isBoolean(item)
     else if _.isArray(item) then (common.init(subitem, context) for subitem in item).join(" ")
-    else if common.isModel(item) then common.init(item._get())
-    else throw Error(item + " is expected to be String, Number, Array, Booelan, undefined or have .init() function")
+    else if isModel(item) then common.init(item.get())
+    else throw Error(item + " is expected to be String, Number, Array, Booelan, undefined, model or have .init() function")
 
   common.nextId = ( ->
     id = 0
@@ -34,7 +33,7 @@ window.BC.define('common', (common) ->
   )()
 
   # Observable
-  common.observable = () ->
+  common.observable = (_get, _set) ->
     listeners = []
     subscribe: (listener) ->
       if !_.contains(listeners, listener)
@@ -47,6 +46,8 @@ window.BC.define('common', (common) ->
       for index in [0..listeners.length]
         if listeners[index] == listener
           listeners.splice(index, index)
+    get: () -> _get()
+    set: (newValue) -> _set(newValue)
 
   # Constructs a DOM element from composite, string, number, array.
   common.element = (composite) ->
@@ -86,4 +87,5 @@ window.BC.define('common', (common) ->
         return undefined
 
   common.isComposite = isComposite
+  common.isModel = isModel
 )

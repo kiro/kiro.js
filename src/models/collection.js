@@ -2,24 +2,25 @@
 (function() {
 
   window.BC.define('models', function(models) {
-    var COLLECTION_CHANGE, assertArray, common;
+    var assertArray, common;
     common = window.BC.namespace("common");
-    COLLECTION_CHANGE = "collection.change";
     assertArray = function(arr) {
       if (!_.isArray(arr)) {
         throw Error(arr + " is expected to be an array");
       }
     };
-    return models.collection = function(initial) {
-      var all, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, o, toPredicate, update;
+    return models.collection = function(initial, o) {
+      var all, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, toPredicate, update, _get;
       if (initial == null) {
         initial = [];
+      }
+      if (o == null) {
+        o = null;
       }
       assertArray(initial);
       allItems = initial;
       items = allItems;
       compareFunction = void 0;
-      o = common.observable();
       all = function() {
         return true;
       };
@@ -30,25 +31,28 @@
         } else {
           assertArray(arg);
           allItems = arg;
-          return update();
+          return update('change.replaceAll');
         }
       };
+      if (!o) {
+        o = common.observable((function() {
+          return collection();
+        }), function(newValue) {
+          return collection(newValue);
+        });
+      }
       callUpdate = function(item, path) {
         return update(path);
       };
       update = function(path) {
         var item, _i, _len;
         if (path == null) {
-          path = COLLECTION_CHANGE;
+          path = "";
         }
         if (compareFunction) {
           allItems.sort(compareFunction);
-          path = COLLECTION_CHANGE;
         }
         items = _.filter(allItems, filter);
-        if (filter !== all) {
-          path = COLLECTION_CHANGE;
-        }
         for (_i = 0, _len = allItems.length; _i < _len; _i++) {
           item = allItems[_i];
           if (common.isModel(item)) {
@@ -57,6 +61,7 @@
         }
         return o.publish(items, path);
       };
+      update('init');
       toPredicate = function(arg) {
         if (_.isFunction(arg)) {
           return arg;
@@ -68,12 +73,12 @@
       };
       collection.add = function(arg) {
         allItems.push(arg);
-        return update();
+        return update('change.add');
       };
       collection.addAll = function(items) {
         assertArray(items);
         allItems = allItems.concat(items);
-        return update();
+        return update('change.addAll');
       };
       collection.remove = function(arg) {
         var predicate;
@@ -81,15 +86,15 @@
         allItems = _.filter(allItems, function(item) {
           return !predicate(item);
         });
-        return update();
+        return update('change.remove');
       };
       collection.removeAll = function() {
         allItems = [];
-        return update();
+        return update('change.removeAll');
       };
       collection.filter = function(arg) {
         filter = toPredicate(arg);
-        return update();
+        return update('change.filter');
       };
       collection.count = function(arg) {
         if (_.isUndefined(arg)) {
@@ -129,14 +134,14 @@
             allItems[i] = newValue;
           }
         }
-        return update();
+        return update('change.replace');
       };
       collection.replaceAll = function(items) {
         assertArray(items);
         allItems = items;
-        return update();
+        return update('change.replaceAll');
       };
-      collection.get = function(arg) {
+      _get = function(arg) {
         if (_.isFunction(arg)) {
           return _.filter(items, arg);
         } else {
@@ -157,21 +162,14 @@
           f = defaultCompare;
         }
         compareFunction = f;
-        return update();
+        return update('change.sort');
       };
-      collection.subscribe = function(listener) {
-        o.subscribe(listener);
-        return this;
-      };
-      collection._get = function() {
+      collection.toJSON = function() {
         return items;
       };
-      collection._set = function(arg) {
-        assertArray(arg);
-        allItems = arg;
-        return update();
-      };
-      return collection;
+      return $.extend(collection, o, {
+        get: _get
+      });
     };
   });
 

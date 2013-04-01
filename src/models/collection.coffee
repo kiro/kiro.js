@@ -2,44 +2,41 @@ window.BC.define('models', (models) ->
 
   common = window.BC.namespace("common")
 
-  COLLECTION_CHANGE = "collection.change"
-
   assertArray = (arr) ->
     if not _.isArray(arr)
       throw Error(arr + " is expected to be an array")
 
-  models.collection = (initial = []) ->
+  models.collection = (initial = [], o = null) ->
     assertArray(initial)
 
     allItems = initial
     items = allItems
     compareFunction = undefined
 
-    o = common.observable()
-
     all = () -> true
     filter = all
+
     collection = (arg) ->
       if _.isUndefined(arg)
         items
       else
         assertArray(arg)
         allItems = arg
-        update()
+        update('change.replaceAll')
+
+    if !o
+      o = common.observable((-> collection()), (newValue) -> collection(newValue))
 
     callUpdate = (item, path) -> update(path)
 
     # TODO(kiro) : Make it to do colleciton_change when the collection has actually changed
     # and make it to pass the changes to the subscribers, so foreach binding can update the
     # DOM more efficiently
-    update = (path = COLLECTION_CHANGE) ->
+    update = (path = "") ->
       if compareFunction
         allItems.sort(compareFunction)
-        path = COLLECTION_CHANGE
 
       items = _.filter(allItems, filter)
-      if filter != all
-        path = COLLECTION_CHANGE
 
       for item in allItems
         if common.isModel(item)
@@ -48,6 +45,8 @@ window.BC.define('models', (models) ->
           item.subscribe(callUpdate)
 
       o.publish(items, path)
+
+    update('init')
 
     toPredicate = (arg) ->
       if _.isFunction(arg)
@@ -61,13 +60,13 @@ window.BC.define('models', (models) ->
     # otherwise it pushes it at the end of the collection
     collection.add = (arg) ->
       allItems.push(arg)
-      update()
+      update('change.add')
 
     # Adds all elements in the array to the collection
     collection.addAll = (items) ->
       assertArray(items)
       allItems = allItems.concat(items)
-      update()
+      update('change.addAll')
 
     # Removes elements from the collection
     #
@@ -76,12 +75,12 @@ window.BC.define('models', (models) ->
     collection.remove = (arg) ->
       predicate = toPredicate(arg)
       allItems = _.filter(allItems, (item) -> !predicate(item))
-      update()
+      update('change.remove')
 
     # Removes all elements from the collection
     collection.removeAll = () ->
       allItems = []
-      update()
+      update('change.removeAll')
 
     # It filters the elements in the collection. The operation does not remove
     # the filtered elements, so if a new filter is set the collection will be
@@ -90,7 +89,7 @@ window.BC.define('models', (models) ->
     # arg can be a function or a value
     collection.filter = (arg) ->
       filter = toPredicate(arg)
-      update()
+      update('change.filter')
 
     # Counts the elements in the collection
     #
@@ -130,17 +129,17 @@ window.BC.define('models', (models) ->
         if predicate(allItems[i])
           allItems[i] = newValue
 
-      update()
+      update('change.replace')
 
     # Replaces all elements in the collection with new values.
     collection.replaceAll = (items) ->
       assertArray(items)
       allItems = items
-      update()
+      update('change.replaceAll')
 
     # Returns a value with index arg, or if arg is function all values that
     # match the predicate
-    collection.get = (arg) ->
+    _get = (arg) ->
       if _.isFunction(arg)
         _.filter(items, arg)
       else
@@ -154,17 +153,10 @@ window.BC.define('models', (models) ->
     # Sorts the items in the collection and maintains them in sorted order
     collection.sort = (f = defaultCompare) ->
       compareFunction = f
-      update()
+      update('change.sort')
 
-    collection.subscribe = (listener) ->
-      o.subscribe(listener)
-      this
+    # converts the collection to JSON
+    collection.toJSON = () -> items
 
-    collection._get = () -> items
-    collection._set = (arg) ->
-      assertArray(arg)
-      allItems = arg
-      update()
-
-    collection
+    $.extend(collection, o, get: _get)
 )

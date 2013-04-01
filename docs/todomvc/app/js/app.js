@@ -43,11 +43,11 @@
   };
 
   done = function(todo) {
-    return todo.completed.valueOf();
+    return todo.completed;
   };
 
   notDone = function(todo) {
-    return !todo.completed.valueOf();
+    return !todo.completed;
   };
 
   allDone = function() {
@@ -58,7 +58,7 @@
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         todo = _ref[_i];
-        _results.push(todo.completed.valueOf());
+        _results.push(todo.completed);
       }
       return _results;
     })());
