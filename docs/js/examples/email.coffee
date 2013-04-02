@@ -40,9 +40,10 @@ docs.examples.email = -> section(h1("Email"),
       )
 
     emailList = () ->
-      table().foreach(data.mail, (email) ->
+      table(
+
+      ).foreach(data.mail, (email) ->
         contact = data.contacts.get(byId(email.contact_id))
-        console.log(contact)
 
         tr(
           td().span2(type.label().important('important') if email.important)
@@ -105,7 +106,7 @@ docs.examples.email = -> section(h1("Email"),
 
           button(icon.pencil, "Reply", ->
             rightContent(sendEmail(email(
-              to: selectedEmail().from,
+              contact_id: selectedEmail().contact_id,
               subject: "RE: " + selectedEmail().subject
             )))
           ).bindDisabled(negate(selectedEmail))

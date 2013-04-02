@@ -58,7 +58,6 @@
         return table().foreach(data.mail, function(email) {
           var contact;
           contact = data.contacts.get(byId(email.contact_id));
-          console.log(contact);
           return tr(td().span2(email.important ? type.label().important('important') : void 0), td().span3(strong(contact.firstName + " " + contact.lastName)), td().span7(strong(email.subject))).on('click', function() {
             return selectedEmail(email);
           }).bindClass(selectedEmail, function() {
@@ -122,7 +121,7 @@
           })));
         }).bindDisabled(negate(selectedEmail)), button(icon.pencil, "Reply", function() {
           return rightContent(sendEmail(email({
-            to: selectedEmail().from,
+            contact_id: selectedEmail().contact_id,
             subject: "RE: " + selectedEmail().subject
           })));
         }).bindDisabled(negate(selectedEmail))), div(rightContent));
