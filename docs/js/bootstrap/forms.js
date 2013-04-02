@@ -25,9 +25,7 @@
         "class": "search-query"
       }).medium(), button.submit('Search')));
     }), example("Inline form", "Usage of form.inline", function() {
-      return body(form.inline(input.text().small().placeholder("Email"), input.password().small().placeholder("Password"), label({
-        "class": 'checkbox'
-      }, input.checkbox(), "Remember me"), button.submit("Sign in")));
+      return body(form.inline(input.text().small().placeholder("Email"), input.password().small().placeholder("Password"), input.checkbox().label("Remember me"), button.submit("Sign in")));
     }), example("Horizontal form", "Creating horizontal form, it can have field without label", function() {
       return body(form.horizontal({
         'Email': input.text().placeholder('Email'),
@@ -42,33 +40,21 @@
         rows: 3
       }, value), span(value));
     }), example("Stacked radio and checkbox", "Radio and checkbox inputs", function() {
-      return body(label({
-        "class": 'checkbox'
-      }, input.checkbox(), "Option 1"), label({
-        "class": 'radio'
-      }, input.radio({
+      return body(input.checkbox().label("Option 1"), input.radio({
         name: "radio",
         value: "value1"
-      }), "Option 1"), label({
-        "class": 'radio'
-      }, input.radio({
+      }).label("Option 1"), input.radio({
         name: "radio",
         value: "value2"
-      }), "Option 2"));
+      }).label("Option 2"));
     }), example("Inline checkboxes", "Inline checkboxes", function() {
-      return body(label.inline({
-        "class": 'checkbox'
-      }, input.checkbox(), "1"), label.inline({
-        "class": 'radio'
-      }, input.radio({
+      return body(input.checkbox().inlineLabel("1"), input.radio({
         name: "radio",
         value: "value1"
-      }), "2"), label.inline({
-        "class": 'radio'
-      }, input.radio({
+      }).inlineLabel("2"), input.radio({
         name: "radio",
         value: "value2"
-      }), "3"));
+      }).inlineLabel("3"));
     }), example("Append input", "Appending buttons and values to input, the first value is the input the rest are the controls", function() {
       return body(append(input.text(), "@"), append(input.text(), button("Do it!"), button("Another one!")));
     }), example("Prepend input", "Prepending values to input, the last value is the input the others are the prepended controls", function() {

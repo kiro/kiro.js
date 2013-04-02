@@ -54,7 +54,7 @@
         var items, model;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         model = getModel(items);
-        return text.apply(null, items).addClass("search-query").bindValue(model);
+        return this.text.apply(this, items).addClass("search-query").bindValue(model);
       },
       checkbox: function() {
         var items, model;
@@ -65,7 +65,17 @@
         }, 'click', (function(el) {
           return $(el).is(':checked');
         })].concat(__slice.call(items))), {
-          isCheckbox: true
+          isCheckbox: true,
+          label: function(value) {
+            return label({
+              "class": 'checkbox'
+            }, this, value);
+          },
+          inlineLabel: function(value) {
+            return label.inline({
+              "class": 'checkbox'
+            }, this, value);
+          }
         }).bindValue(model).bindAttr(model, function() {
           return {
             checked: model.get()
@@ -82,6 +92,16 @@
         }, 'click', (function() {
           return value;
         })].concat(__slice.call(items))), {
+          label: function(value) {
+            return label({
+              "class": 'radio'
+            }, this, value);
+          },
+          inlineLabel: function(value) {
+            return label.inline({
+              "class": 'radio'
+            }, this, value);
+          },
           isRadio: true
         }).bindValue(model).bindAttr(model, function() {
           return {

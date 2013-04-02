@@ -36,7 +36,7 @@ window.BC.define('bootstrap', (bootstrap) ->
 
     search: (items...) ->
       model = getModel(items)
-      text(items...)
+      this.text(items...)
         .addClass("search-query")
         .bindValue(model)
 
@@ -45,6 +45,8 @@ window.BC.define('bootstrap', (bootstrap) ->
       $.extend(
         input({type: 'checkbox'}, 'click', ((el) -> $(el).is(':checked')), items...)
         isCheckbox: true
+        label: (value) -> label({class: 'checkbox'}, this, value)
+        inlineLabel: (value) -> label.inline({class: 'checkbox'}, this, value)
       ).bindValue(model)
        .bindAttr(model, -> checked: model.get())
 
@@ -53,6 +55,8 @@ window.BC.define('bootstrap', (bootstrap) ->
       value = items[0].value
       $.extend(
         input({type: 'radio'}, 'click', (-> value), items...)
+        label: (value) -> label({class: 'radio'}, this, value)
+        inlineLabel: (value) -> label.inline({class: 'radio'}, this, value)
         isRadio: true
       ).bindValue(model)
        .bindAttr(model, -> checked: model.get() == value)

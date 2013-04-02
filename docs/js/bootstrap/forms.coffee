@@ -36,7 +36,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
       form.inline(
         input.text().small().placeholder("Email")
         input.password().small().placeholder("Password")
-        label({class: 'checkbox'}, input.checkbox(), "Remember me")
+        input.checkbox().label("Remember me")
         button.submit("Sign in")
       )
     )
@@ -64,17 +64,17 @@ docs.bootstrap.forms = -> section(h1("Forms"),
 
   example("Stacked radio and checkbox", "Radio and checkbox inputs", ->
     body(
-      label({class: 'checkbox'}, input.checkbox(), "Option 1")
-      label({class: 'radio'}, input.radio(name: "radio", value: "value1"), "Option 1")
-      label({class: 'radio'}, input.radio(name: "radio", value: "value2"), "Option 2")
+      input.checkbox().label("Option 1")
+      input.radio(name: "radio", value: "value1").label("Option 1")
+      input.radio(name: "radio", value: "value2").label("Option 2")
     )
   )
 
   example("Inline checkboxes", "Inline checkboxes", ->
     body(
-      label.inline({class: 'checkbox'}, input.checkbox(), "1")
-      label.inline({class: 'radio'}, input.radio(name: "radio", value: "value1"), "2")
-      label.inline({class: 'radio'}, input.radio(name: "radio", value: "value2"), "3")
+      input.checkbox().inlineLabel("1")
+      input.radio(name: "radio", value: "value1").inlineLabel("2")
+      input.radio(name: "radio", value: "value2").inlineLabel("3")
     )
   )
 
