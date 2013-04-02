@@ -141,8 +141,8 @@ docs.collectionApi = -> section(h1("Collection"),
 
     body(
       # TODO(kiro): make get to return the value directly if it's only one
-      p("User 1 : ", users.get(byId(1))[0].name)
-      p("User 2 : ", users.get(byId(2))[0].name)
+      p("User 1 : ", users.get(byId(1)).name)
+      p("User 2 : ", users.get(byId(2)).name)
     )
   )
 

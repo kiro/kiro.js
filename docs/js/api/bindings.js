@@ -44,7 +44,7 @@
       return body(form.inline(input.text(text), h2(text)), button("Next", function() {
         return content(items[++i % items.length]);
       }), h6("html"), div(content));
-    }), example(".bindCss", "<code>.bindCss(model, map)<code> binds css properties of an element to a model.\nIt expects the value of the model to be an object whose fields are names of\ncss properties and have corresponding values or it can map a model to css properties.", function() {
+    }), example(".bindCss", "<code>.bindCss(model, map)</code> binds css properties of an element to a model.\nIt expects the value of the model to be an object whose fields are names of\ncss properties and have corresponding values or it can map a model to css properties.", function() {
       var f, _i, _results;
       f = model(function(x) {
         return x;
@@ -81,7 +81,7 @@
           };
         });
       }));
-    }), example(".bindClass", "<code>bindClass(model, map)</code> binds a class to a model.", function() {
+    }), example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model.", function() {
       var count;
       count = model(0);
       return body(span(count), button("+1", function() {

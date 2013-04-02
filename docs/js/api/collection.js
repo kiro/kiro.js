@@ -106,7 +106,7 @@
           return user.id.toString() === id.toString();
         };
       };
-      return body(p("User 1 : ", users.get(byId(1))[0].name), p("User 2 : ", users.get(byId(2))[0].name));
+      return body(p("User 1 : ", users.get(byId(1)).name), p("User 2 : ", users.get(byId(2)).name));
     }), example(".sort", "<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order ", function() {
       var numbers, text;
       numbers = collection([2, 6, 3]);

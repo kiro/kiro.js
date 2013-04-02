@@ -58,7 +58,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindCss", """<code>.bindCss(model, map)<code> binds css properties of an element to a model.
+  example(".bindCss", """<code>.bindCss(model, map)</code> binds css properties of an element to a model.
                       It expects the value of the model to be an object whose fields are names of
                       css properties and have corresponding values or it can map a model to css properties.""", ->
     f = model((x) -> x)
@@ -80,7 +80,7 @@ docs.bindingsApi = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindClass", "<code>bindClass(model, map)</code> binds a class to a model.", ->
+  example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model.", ->
     count = model(0)
 
     body(
