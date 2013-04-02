@@ -46,8 +46,9 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     body(
       form.horizontal(
         'Email': input.text().placeholder('Email')
-        'Password': input.text().placeholder('Password')
-        '' : [ label({class: 'checkbox'}, input.checkbox(), "Remember me"), button.submit("Sign in") ]
+        'Password': input.password().placeholder('Password')
+        'Remember me' : input.checkbox()
+        '': button.submit("Sign in")
       )
     )
   )

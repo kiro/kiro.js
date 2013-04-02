@@ -31,12 +31,9 @@
     }), example("Horizontal form", "Creating horizontal form, it can have field without label", function() {
       return body(form.horizontal({
         'Email': input.text().placeholder('Email'),
-        'Password': input.text().placeholder('Password'),
-        '': [
-          label({
-            "class": 'checkbox'
-          }, input.checkbox(), "Remember me"), button.submit("Sign in")
-        ]
+        'Password': input.password().placeholder('Password'),
+        'Remember me': input.checkbox(),
+        '': button.submit("Sign in")
       }));
     }), example("Textarea", "Textarea input, it can bind the value", function() {
       var value;

@@ -38,12 +38,14 @@
     it("Tests value binding", function() {
       var text, value;
       value = model("test");
-      text = input.text().bindValue(value);
+      text = input.text(value);
       show(text, span(value));
       expect(value()).toBe("test");
       text.el().val("check check");
       text.el().change();
-      return expect(value()).toBe("check check");
+      expect(value()).toBe("check check");
+      value('mente');
+      return expect(text.el().val()).toBe('mente');
     });
     it("Tests css binding", function() {
       var orange, size;

@@ -13,52 +13,49 @@ window.BC.define('bootstrap', (bootstrap) ->
       items.pop()
     model
 
+  input = (init, changeEvents, getValue, items...) ->
+    tag('input', init)(items...)
+      .on(changeEvents, (e) -> e.data.setValue(getValue(this)))
+
   # Input
   bootstrap.input =
     text: (items...) ->
       model = getModel(items)
-
       $.extend(
-        tag('input', {type: 'text'})(items...)
-          .observable()
-          .on('keyup change', (e) -> e.data.publish($(this).val()))
-          .bindValue(model),
-        placeholder: (value) -> this.addAttr('placeholder' : value),
-        mixins.sizeable("input"),
+        input({type: 'text'}, 'keyup change', ((el) -> $(el).val()), items...)
+        placeholder: (value) -> this.addAttr('placeholder' : value)
+        mixins.sizeable("input")
         mixins.spannable()
-      )
+      ).bindValue(model)
 
-    password: (model) -> this.text({type: 'password'}, model)
-    search: (model) -> this.text({class: "search-query", type: 'text'}, model)
+    password: (items...) ->
+      model = getModel(items)
+      this.text(items...)
+        .addAttr(type: 'password')
+        .bindValue(model)
+
+    search: (items...) ->
+      model = getModel(items)
+      text(items...)
+        .addClass("search-query")
+        .bindValue(model)
 
     checkbox : (items...) ->
       model = getModel(items)
-
       $.extend(
-        (tag('input')()
-          .addAttr({type: 'checkbox', checked: 'checked'})
-          .observable()
-          .on('click', (e) -> e.data.publish($(this).is(':checked')))),
-        bindValue: (observable) ->
-          this.bindAttr(observable, -> checked: observable.get())
-          this.subscribe((value) -> observable.set(value))
+        input({type: 'checkbox'}, 'click', ((el) -> $(el).is(':checked')), items...)
         isCheckbox: true
       ).bindValue(model)
+       .bindAttr(model, -> checked: model.get())
 
     radio: (items...) ->
       model = getModel(items)
-
       value = items[0].value
-
       $.extend(
-        tag('input', type: 'radio')(items...)
-          .observable()
-          .on('click', (e) -> e.data.publish(value)),
-        bindValue: (observable) ->
-          this.bindAttr(observable, -> checked:(observable.get() == value))
-          this.subscribe((value) -> observable.set(value))
+        input({type: 'radio'}, 'click', (-> value), items...)
         isRadio: true
       ).bindValue(model)
+       .bindAttr(model, -> checked: model.get() == value)
 
     submit: (name, click) -> tag('input')(name).addAttr(type: 'submit').on('click', click)
 
@@ -68,8 +65,7 @@ window.BC.define('bootstrap', (bootstrap) ->
 
     $.extend(
       tag('select')(items...)
-        .observable()
-        .on('change', (e) -> e.data.publish($(this).val()) )
+        .on('change', (e) -> e.data.setValue($(this).val()) )
         .bindValue(model),
       mixins.spannable()
     )
@@ -82,8 +78,7 @@ window.BC.define('bootstrap', (bootstrap) ->
     model = getModel(items)
 
     tag('textarea')(items...)
-      .observable()
-      .on('keyup', (e) -> e.data.publish($(this).val()))
+      .on('keyup change', (e) -> e.data.setValue($(this).val()))
       .bindValue(model)
 
   # Forms

@@ -31,17 +31,21 @@ describe("Bindings test", ->
     o = observable()
     listener1 = newListener()
     listener2 = newListener()
+    listener3 = newListener()
 
     o.subscribe(listener1)
     o.subscribe(listener2)
+    o.subscribe(listener3)
 
     o.publish(1)
     expect(listener1.calls()).toBe(1)
     expect(listener2.calls()).toBe(1)
+    expect(listener3.calls()).toBe(1)
 
     o.unsubscribe(listener2)
     o.publish(1)
     expect(listener1.calls()).toBe(2)
     expect(listener2.calls()).toBe(1)
+    expect(listener3.calls()).toBe(2)
   )
 )

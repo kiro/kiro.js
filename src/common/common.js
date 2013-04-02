@@ -95,16 +95,9 @@
           return this;
         },
         unsubscribe: function(listener) {
-          var index, _i, _ref, _results;
-          _results = [];
-          for (index = _i = 0, _ref = listeners.length; 0 <= _ref ? _i <= _ref : _i >= _ref; index = 0 <= _ref ? ++_i : --_i) {
-            if (listeners[index] === listener) {
-              _results.push(listeners.splice(index, index));
-            } else {
-              _results.push(void 0);
-            }
-          }
-          return _results;
+          return listeners = _.filter(listeners, function(item) {
+            return item !== listener;
+          });
         },
         get: function() {
           return _get();

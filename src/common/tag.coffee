@@ -61,10 +61,6 @@ window.BC.define('common', (common) ->
           attr.merge(value)
           this
 
-        observable: () ->
-          $.extend(this, common.observable())
-          this
-
         classes: () -> attr.get('class')
       )
 

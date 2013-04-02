@@ -24,13 +24,19 @@ window.BC.define('common', (common) ->
       for initializer in initializers
         initializer()
 
+    setValue: ->
+
     # Binds the value of an element to an observable
-    # TODO(kiro): maybe add get and set mapping, or move all the
-    # mapping to the observable
-    bindValue: (observable, map = identity) ->
-      if this.subscribe
-        this.subscribe((newValue) -> observable.set(newValue))
-      binder('val').call(this, observable, map)
+    bindValue: (observable) ->
+      valueHandler = (newValue) -> el.val(newValue)
+
+      this.setValue = (newValue) ->
+        observable.unsubscribe(valueHandler)
+        observable.set(newValue)
+        observable.subscribe(valueHandler)
+
+      addInitializer.call(this, ->  el.val(observable.get()))
+      addInitializer.call(this, -> observable.subscribe(valueHandler))
       this
 
     # Binds the text of an element

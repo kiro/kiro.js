@@ -10,8 +10,11 @@
         isAttributes: function(obj) {
           return obj && !_.isArray(obj) && _.isObject(obj) && !_.isFunction(obj['html']) && !_.isFunction(obj['init']) && !_.isFunction(obj) && !common.isModel(obj);
         },
-        merge: function(attr2) {
+        merge: function(attr2, override) {
           var key, value, _results;
+          if (override == null) {
+            override = false;
+          }
           if (!this.isAttributes(attr2)) {
             throw Error(attr2 + " is expected to be attributes");
           }
@@ -26,7 +29,11 @@
                   _results.push(void 0);
                 }
               } else if (_.isString(value)) {
-                _results.push(attr[key] = attr[key] + " " + attr2[key]);
+                if (key === 'class') {
+                  _results.push(attr[key] = attr[key] + " " + attr2[key]);
+                } else {
+                  _results.push(attr[key] = attr2[key]);
+                }
               } else if (_.isNumber(value)) {
                 _results.push(attr[key] = attr2[key]);
               } else if (_.isUndefined(value)) {

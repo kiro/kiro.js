@@ -3,7 +3,7 @@
   var __slice = [].slice;
 
   window.BC.define('bootstrap', function(bootstrap) {
-    var common, form, getModel, img, mixins, models, toAddOn;
+    var common, form, getModel, img, input, mixins, models, toAddOn;
     mixins = window.BC.namespace("bootstrap.mixins");
     common = window.BC.namespace("common");
     models = window.BC.namespace("models");
@@ -18,79 +18,76 @@
       }
       return model;
     };
+    input = function() {
+      var changeEvents, getValue, init, items;
+      init = arguments[0], changeEvents = arguments[1], getValue = arguments[2], items = 4 <= arguments.length ? __slice.call(arguments, 3) : [];
+      return tag('input', init).apply(null, items).on(changeEvents, function(e) {
+        return e.data.setValue(getValue(this));
+      });
+    };
     bootstrap.input = {
       text: function() {
         var items, model;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         model = getModel(items);
-        return $.extend(tag('input', {
+        return $.extend(input.apply(null, [{
           type: 'text'
-        }).apply(null, items).observable().on('keyup change', function(e) {
-          return e.data.publish($(this).val());
-        }).bindValue(model), {
+        }, 'keyup change', (function(el) {
+          return $(el).val();
+        })].concat(__slice.call(items))), {
           placeholder: function(value) {
             return this.addAttr({
               'placeholder': value
             });
           }
-        }, mixins.sizeable("input"), mixins.spannable());
+        }, mixins.sizeable("input"), mixins.spannable()).bindValue(model);
       },
-      password: function(model) {
-        return this.text({
+      password: function() {
+        var items, model;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        model = getModel(items);
+        return this.text.apply(this, items).addAttr({
           type: 'password'
-        }, model);
+        }).bindValue(model);
       },
-      search: function(model) {
-        return this.text({
-          "class": "search-query",
-          type: 'text'
-        }, model);
+      search: function() {
+        var items, model;
+        items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        model = getModel(items);
+        return text.apply(null, items).addClass("search-query").bindValue(model);
       },
       checkbox: function() {
         var items, model;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         model = getModel(items);
-        return $.extend(tag('input')().addAttr({
-          type: 'checkbox',
-          checked: 'checked'
-        }).observable().on('click', function(e) {
-          return e.data.publish($(this).is(':checked'));
-        }), {
-          bindValue: function(observable) {
-            this.bindAttr(observable, function() {
-              return {
-                checked: observable.get()
-              };
-            });
-            return this.subscribe(function(value) {
-              return observable.set(value);
-            });
-          },
+        return $.extend(input.apply(null, [{
+          type: 'checkbox'
+        }, 'click', (function(el) {
+          return $(el).is(':checked');
+        })].concat(__slice.call(items))), {
           isCheckbox: true
-        }).bindValue(model);
+        }).bindValue(model).bindAttr(model, function() {
+          return {
+            checked: model.get()
+          };
+        });
       },
       radio: function() {
         var items, model, value;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         model = getModel(items);
         value = items[0].value;
-        return $.extend(tag('input', {
+        return $.extend(input.apply(null, [{
           type: 'radio'
-        }).apply(null, items).observable().on('click', function(e) {
-          return e.data.publish(value);
-        }), {
-          bindValue: function(observable) {
-            this.bindAttr(observable, function() {
-              return {
-                checked: observable.get() === value
-              };
-            });
-            return this.subscribe(function(value) {
-              return observable.set(value);
-            });
-          },
+        }, 'click', (function() {
+          return value;
+        })].concat(__slice.call(items))), {
           isRadio: true
-        }).bindValue(model);
+        }).bindValue(model).bindAttr(model, function() {
+          return {
+            checked: model.get() === value
+          };
+        });
       },
       submit: function(name, click) {
         return tag('input')(name).addAttr({
@@ -102,8 +99,8 @@
       var items, model;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       model = getModel(items);
-      return $.extend(tag('select').apply(null, items).observable().on('change', function(e) {
-        return e.data.publish($(this).val());
+      return $.extend(tag('select').apply(null, items).on('change', function(e) {
+        return e.data.setValue($(this).val());
       }).bindValue(model), mixins.spannable());
     };
     bootstrap.select.multiple = function(model) {
@@ -124,8 +121,8 @@
       var items, model;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       model = getModel(items);
-      return tag('textarea').apply(null, items).observable().on('keyup', function(e) {
-        return e.data.publish($(this).val());
+      return tag('textarea').apply(null, items).on('keyup change', function(e) {
+        return e.data.setValue($(this).val());
       }).bindValue(model);
     };
     form = tag('form');

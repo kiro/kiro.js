@@ -43,9 +43,7 @@ window.BC.define('common', (common) ->
       listener(newValue, path) for listener in listeners
       this
     unsubscribe: (listener) ->
-      for index in [0..listeners.length]
-        if listeners[index] == listener
-          listeners.splice(index, index)
+      listeners = _.filter(listeners, (item) -> item != listener)
     get: () -> _get()
     set: (newValue) -> _set(newValue)
 

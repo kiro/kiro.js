@@ -36,7 +36,7 @@ describe("Bindings test", ->
 
   it("Tests value binding", ->
     value = model("test")
-    text = input.text().bindValue(value)
+    text = input.text(value)
 
     show(
       text,
@@ -48,6 +48,9 @@ describe("Bindings test", ->
     text.el().val("check check")
     text.el().change()
     expect(value()).toBe("check check")
+
+    value('mente')
+    expect(text.el().val()).toBe('mente')
   )
 
   it("Tests css binding", ->

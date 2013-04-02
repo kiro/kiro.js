@@ -48,16 +48,23 @@
           }
           return _results;
         },
-        bindValue: function(observable, map) {
-          if (map == null) {
-            map = identity;
-          }
-          if (this.subscribe) {
-            this.subscribe(function(newValue) {
-              return observable.set(newValue);
-            });
-          }
-          binder('val').call(this, observable, map);
+        setValue: function() {},
+        bindValue: function(observable) {
+          var valueHandler;
+          valueHandler = function(newValue) {
+            return el.val(newValue);
+          };
+          this.setValue = function(newValue) {
+            observable.unsubscribe(valueHandler);
+            observable.set(newValue);
+            return observable.subscribe(valueHandler);
+          };
+          addInitializer.call(this, function() {
+            return el.val(observable.get());
+          });
+          addInitializer.call(this, function() {
+            return observable.subscribe(valueHandler);
+          });
           return this;
         },
         bindText: binder('text'),

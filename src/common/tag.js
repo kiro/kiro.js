@@ -83,10 +83,6 @@
             attr.merge(value);
             return this;
           },
-          observable: function() {
-            $.extend(this, common.observable());
-            return this;
-          },
           classes: function() {
             return attr.get('class');
           }

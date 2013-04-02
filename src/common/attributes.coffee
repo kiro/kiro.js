@@ -4,7 +4,7 @@ window.BC.define('common', (common) ->
     isAttributes: (obj) ->
       obj and not _.isArray(obj) and _.isObject(obj) and !_.isFunction(obj['html']) and !_.isFunction(obj['init']) and !_.isFunction(obj) and !common.isModel(obj)
 
-    merge: (attr2) ->
+    merge: (attr2, override = false) ->
       if !this.isAttributes(attr2)
         throw Error(attr2 + " is expected to be attributes")
 
@@ -13,7 +13,10 @@ window.BC.define('common', (common) ->
           if _.isBoolean(value)
             attr[key] = attr2[key] if value
           else if _.isString(value)
-            attr[key] = attr[key] + " " + attr2[key]
+            if key == 'class'
+              attr[key] = attr[key] + " " + attr2[key]
+            else
+              attr[key] = attr2[key]
           else if _.isNumber(value)
             attr[key] = attr2[key]
           else if _.isUndefined(value)
