@@ -113,22 +113,6 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".replace", """Replaces an item in the collection""", ->
-    numbers = collection([1, 2, 3, 4, 5, 6])
-    from = model("")
-    to = model("")
-
-    body(
-      showCollection(numbers),
-      form.inline(
-        button.warning("Replace", -> numbers.replace(parseInt(from()), parseInt(to()))),
-        input.text(from).span1(),
-        " with ",
-        input.text(to).span1()
-      )
-    )
-  )
-
   example(".get", """<p><code>get(index)</code> gets the item at index.</p>
                      <p><code>get(predicate)</code> gets the items matching the predicate.</p>
                   """, ->

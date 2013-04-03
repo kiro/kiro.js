@@ -95,12 +95,32 @@ window.BC.define('common', (common) ->
       index = 0
       this.addItems((render(item, index++) for item in collectionItems)...)
 
-      if _.isFunction(collection)
-        collection.subscribe( (newItems, path) =>
-          elements = (common.element(item) for item in initialItems)
-          index = 0
-          elements = elements.concat (common.element(render(item, index++)) for item in newItems)
-          el.html(elements)
+      add = (action) ->
+        if el.children().length == 0 or action.index == 0
+          el.prepend(common.element(render(action.value)))
+        else
+          el.children().eq(action.index - 1).after(common.element(render(action.value)))
+
+      remove = (index) -> el.children().eq(index).remove()
+
+      if _.isFunction(collection.subscribe)
+        collection.subscribe( (newItems, action) =>
+          if action.name == collection.actions.CHANGE or action.name == collection.actions.FILTER
+            elements = (common.element(render(item, index++)) for item in action.value)
+            el.html(elements)
+          else if action.name == collection.actions.ADD
+            add(action)
+          else if action.name == collection.actions.REMOVE
+            reversedIndexes = action.index.slice(0).reverse()
+            for index in reversedIndexes
+              remove(index)
+          else if action.name == collection.actions.UPDATE
+            if action.index < action.oldIndex
+              add(action)
+              remove(action.oldIndex + 1)
+            else if action.index > action.oldIndex
+              remove(action.oldIndex)
+              add(action)
         )
       this
 

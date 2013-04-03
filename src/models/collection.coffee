@@ -6,6 +6,26 @@ window.BC.define('models', (models) ->
     if not _.isArray(arr)
       throw Error(arr + " is expected to be an array")
 
+  getIndexes = (items, allItems, predicate) ->
+    indexes = []
+    usedIndex = {}
+
+    for item in allItems
+      if predicate(item)
+        for i in [0...items.length]
+          if !usedIndex[i] and items[i] == item
+            indexes.push(i)
+            usedIndex[i] = true
+
+    return indexes
+
+  actions =
+    CHANGE: 'change' # all items in the collection are changed
+    FILTER: 'filter' # items in the collection are filtered
+    ADD: 'add' # an item gets added in the collection
+    REMOVE: 'remove' # items are removed from the collection
+    UPDATE: 'update' # an item is updated
+
   models.collection = (initial = [], o = null) ->
     assertArray(initial)
 
@@ -13,8 +33,16 @@ window.BC.define('models', (models) ->
     items = allItems
     compareFunction = undefined
 
-    all = () -> true
-    filter = all
+    filter = () -> true
+
+    action = (name, value, index = -1, oldIndex = -1) ->
+      name: name
+      value: value
+      index: index
+      oldIndex: oldIndex
+
+    if !o
+      o = common.observable((-> collection()), (newValue) -> collection(newValue))
 
     collection = (arg) ->
       if _.isUndefined(arg)
@@ -22,17 +50,16 @@ window.BC.define('models', (models) ->
       else
         assertArray(arg)
         allItems = arg
-        update('change.replaceAll')
+        update(-> action(actions.CHANGE, items))
 
-    if !o
-      o = common.observable((-> collection()), (newValue) -> collection(newValue))
-
-    callUpdate = (item, path) -> update(path)
+    callUpdate = (item, path) ->
+      oldIndex = items.indexOf(item)
+      update(-> action(actions.UPDATE, item, items.indexOf(item), oldIndex))
 
     # TODO(kiro) : Make it to do colleciton_change when the collection has actually changed
     # and make it to pass the changes to the subscribers, so foreach binding can update the
     # DOM more efficiently
-    update = (path = "") ->
+    update = (action) ->
       if compareFunction
         allItems.sort(compareFunction)
 
@@ -44,9 +71,9 @@ window.BC.define('models', (models) ->
           # won't be added again
           item.subscribe(callUpdate)
 
-      o.publish(items, path)
+      o.publish(items, action())
 
-    update('init')
+    update(-> action(actions.CHANGE, items))
 
     toPredicate = (arg) ->
       if _.isFunction(arg)
@@ -58,23 +85,26 @@ window.BC.define('models', (models) ->
     #
     # if arg is an array it concats it to the colection,
     # otherwise it pushes it at the end of the collection
-    collection.add = (arg) ->
-      allItems.push(arg)
-      update('change.add')
+    collection.add = (item) ->
+      allItems.push(item)
+      update(-> action(actions.ADD, item, items.lastIndexOf(item)))
 
     # Removes elements from the collection
     #
     # It can accept an element and remove all values that are equal
-    # or a predicate function and removes all values that satisfy it
-    collection.remove = (arg) ->
-      predicate = toPredicate(arg)
+    # or a predicate function and removes all values that satisfy it.
+    collection.remove = (item) ->
+      predicate = toPredicate(item)
+
+      removeIndexes = getIndexes(items, allItems, predicate)
+      removeItems = _.filter(allItems, predicate)
       allItems = _.filter(allItems, (item) -> !predicate(item))
-      update('change.remove')
+      update(-> action(actions.REMOVE, removeItems, removeIndexes))
 
     # Removes all elements from the collection
     collection.clear = () ->
       allItems = []
-      update('change.removeAll')
+      update(-> action(actions.CHANGE, items))
 
     # It filters the elements in the collection. The operation does not remove
     # the filtered elements, so if a new filter is set the collection will be
@@ -83,7 +113,7 @@ window.BC.define('models', (models) ->
     # arg can be a function or a value
     collection.filter = (arg) ->
       filter = toPredicate(arg)
-      update('change.filter')
+      update(-> action(actions.FILTER, items))
 
     # Counts the elements in the collection
     #
@@ -111,20 +141,6 @@ window.BC.define('models', (models) ->
       else
         throw Error(arg + " is expected to be function or undefined")
 
-    # Replaces an element in the collection
-    #
-    # If old value is an object it looks for an equal objects in the collection.
-    # If old value is a function, it's expected to be a predicate and it replaces
-    # all elements that match it.
-    collection.replace = (oldValue, newValue) ->
-      predicate = toPredicate(oldValue)
-
-      for i in [0..allItems.length]
-        if predicate(allItems[i])
-          allItems[i] = newValue
-
-      update('change.replace')
-
     # Returns a value with index arg, or if arg is function all values that
     # match the predicate
     _get = (arg) ->
@@ -145,12 +161,14 @@ window.BC.define('models', (models) ->
     # Sorts the items in the collection and maintains them in sorted order
     collection.sort = (f = defaultCompare) ->
       compareFunction = f
-      update('change.sort')
+      update(-> action(actions.CHANGE, items))
 
     collection.contains = (item) -> _.contains(items, item)
 
     # converts the collection to JSON
     collection.toJSON = () -> items
+
+    collection.actions = actions
 
     $.extend(collection, o, get: _get)
 )

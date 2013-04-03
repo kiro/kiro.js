@@ -84,14 +84,6 @@
       })), p(map(numbers, function() {
         return 'Even ' + numbers.total(even);
       })));
-    }), example(".replace", "Replaces an item in the collection", function() {
-      var from, numbers, to;
-      numbers = collection([1, 2, 3, 4, 5, 6]);
-      from = model("");
-      to = model("");
-      return body(showCollection(numbers), form.inline(button.warning("Replace", function() {
-        return numbers.replace(parseInt(from()), parseInt(to()));
-      }), input.text(from).span1(), " with ", input.text(to).span1()));
     }), example(".get", "<p><code>get(index)</code> gets the item at index.</p>\n<p><code>get(predicate)</code> gets the items matching the predicate.</p>", function() {
       var byId, user, users;
       user = function(id, name) {

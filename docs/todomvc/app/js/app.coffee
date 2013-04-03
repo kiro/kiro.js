@@ -54,28 +54,25 @@ main = ->
   ).bindVisible(todos, -> todos.count() > 0)
 
 renderTodo = (todo) ->
-  editing = model(false)
+  edit = () -> textInput(class:"edit", autofocus: true,
+    bind(todo.title), -> content(view())
+  )
+  view = () -> div(class: "view",
+    input.checkbox(class:"toggle",
+      bind(todo.completed)
+    ).on('click', -> checkAll(allDone()))
 
-  li(
-    div(class: "view",
-      input.checkbox(class:"toggle",
-        bind(todo.completed)
-      ).on('click', -> checkAll(allDone()))
+    label(bind(todo.title))
+    button(class: "destroy", -> todos.remove(todo))
+  ).on('dblclick', -> content(edit()))
 
-      label(todo.title)
-      button(class: "destroy",
-        -> todos.remove(todo)
-      )
-    ).bindVisible(negate(editing))
-     .on('dblclick', -> editing(true))
+  content = model(view())
+  isEdit = false
+  content.subscribe(-> isEdit = !isEdit)
 
-    textInput(class:"edit",
-      bind(todo.title), -> editing(false)
-    ).bindVisible(editing)
-     .on('blur', -> editing(false))
-
-  ).bindClass(bind(todo.completed), -> 'completed' if todo.completed)
-   .bindClass(editing, -> 'editing' if editing())
+  li(content)
+    .bindClass(bind(todo.completed), -> 'completed' if todo.completed)
+    .bindClass(content, -> 'editing' if isEdit)
 
 todosFooter = ->
   footer(id: "footer",

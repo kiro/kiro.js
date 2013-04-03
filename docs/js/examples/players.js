@@ -64,6 +64,10 @@
         "class": 'inc'
       }, "Give 5 points", function() {
         return selected().score += 5;
+      }), '&nbsp;', button({
+        "class": 'inc'
+      }, "Take 5 points", function() {
+        return selected().score -= 5;
       })).bindVisible(selected), div({
         "class": 'none'
       }, 'Click a player to select').bindVisible(negate(selected)));

@@ -123,32 +123,41 @@
   };
 
   renderTodo = function(todo) {
-    var editing;
-    editing = model(false);
-    return li(div({
-      "class": "view"
-    }, input.checkbox({
-      "class": "toggle"
-    }, bind(todo.completed)).on('click', function() {
-      return checkAll(allDone());
-    }), label(todo.title), button({
-      "class": "destroy"
-    }, function() {
-      return todos.remove(todo);
-    })).bindVisible(negate(editing)).on('dblclick', function() {
-      return editing(true);
-    }), textInput({
-      "class": "edit"
-    }, bind(todo.title), function() {
-      return editing(false);
-    }).bindVisible(editing).on('blur', function() {
-      return editing(false);
-    })).bindClass(bind(todo.completed), function() {
+    var content, edit, isEdit, view;
+    edit = function() {
+      return textInput({
+        "class": "edit",
+        autofocus: true
+      }, bind(todo.title), function() {
+        return content(view());
+      });
+    };
+    view = function() {
+      return div({
+        "class": "view"
+      }, input.checkbox({
+        "class": "toggle"
+      }, bind(todo.completed)).on('click', function() {
+        return checkAll(allDone());
+      }), label(bind(todo.title)), button({
+        "class": "destroy"
+      }, function() {
+        return todos.remove(todo);
+      })).on('dblclick', function() {
+        return content(edit());
+      });
+    };
+    content = model(view());
+    isEdit = false;
+    content.subscribe(function() {
+      return isEdit = !isEdit;
+    });
+    return li(content).bindClass(bind(todo.completed), function() {
       if (todo.completed) {
         return 'completed';
       }
-    }).bindClass(editing, function() {
-      if (editing()) {
+    }).bindClass(content, function() {
+      if (isEdit) {
         return 'editing';
       }
     });

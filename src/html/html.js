@@ -16,17 +16,18 @@
   for (_i = 0, _len = composite.length; _i < _len; _i++) {
     tagname = composite[_i];
     html[tagname] = tag(tagname);
-    getModel = function(items) {
-      var model;
-      model = _.last(items);
-      if (_.isUndefined(model) || !common.isModel(model)) {
-        model = models.model("");
-      } else {
-        items.pop();
-      }
-      return model;
-    };
   }
+
+  getModel = function(items) {
+    var model;
+    model = _.last(items);
+    if (_.isUndefined(model) || !common.isModel(model)) {
+      model = models.model("");
+    } else {
+      items.pop();
+    }
+    return model;
+  };
 
   input = function() {
     var changeEvents, getValue, init, items;

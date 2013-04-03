@@ -17,18 +17,17 @@ composite = [
 for tagname in composite
   html[tagname] = tag(tagname)
 
-  getModel = (items) ->
-    model = _.last(items)
-    if _.isUndefined(model) or !common.isModel(model)
-      model = models.model("")
-    else
-      items.pop()
-    model
+getModel = (items) ->
+  model = _.last(items)
+  if _.isUndefined(model) or !common.isModel(model)
+    model = models.model("")
+  else
+    items.pop()
+  model
 
-# Input
 input = (init, changeEvents, getValue, items...) ->
   tag('input', init)(items...)
-    .on(changeEvents, (e) -> e.data.setValue(getValue(this)))
+  .on(changeEvents, (e) -> e.data.setValue(getValue(this)))
 
 # Input
 html.input =
@@ -53,6 +52,7 @@ html.input =
 
   checkbox : (items...) ->
     model = getModel(items)
+
     input({type: 'checkbox'}, 'click', ((el) -> $(el).is(':checked')), items...)
       .bindValue(model)
       .bindAttr(model, -> checked: model.get())
@@ -60,6 +60,7 @@ html.input =
   radio: (items...) ->
     model = getModel(items)
     value = items[0].value
+
     input({type: 'radio'}, 'click', (-> value), items...)
       .bindValue(model)
       .bindAttr(model, -> checked: model.get() == value)
