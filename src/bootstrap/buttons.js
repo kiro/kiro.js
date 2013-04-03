@@ -87,7 +87,9 @@
         };
         args = args.slice(0, args.length - 1);
       }
-      return tag('a').apply(null, args).on('click', click);
+      return tag('a', {
+        href: '#'
+      }).apply(null, args).on('click', click);
     };
     dropdown = function() {
       var button, item, items, toLi;

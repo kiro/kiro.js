@@ -46,7 +46,7 @@ window.BC.define('bootstrap', (bootstrap) ->
         last(args...)
         return false
       args = args.slice(0, args.length - 1)
-    tag('a')(args...).on('click', click)
+    tag('a', {href: '#'})(args...).on('click', click)
 
   # Dropdown
   dropdown = (button, items...) ->

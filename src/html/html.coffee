@@ -26,45 +26,53 @@ for tagname in composite
     model
 
 # Input
+input = (init, changeEvents, getValue, items...) ->
+  tag('input', init)(items...)
+    .on(changeEvents, (e) -> e.data.setValue(getValue(this)))
+
+# Input
 html.input =
   text: (items...) ->
     model = getModel(items)
-
     $.extend(
-      tag('input', {type: 'text'})(items...)
-        .observable()
-        .on('keyup change', (e) -> e.data.publish($(this).val()))
-        .bindValue(model),
-      placeholder: (value) -> this.addAttr('placeholder' : value),
-    )
+      input({type: 'text'}, 'keyup change', ((el) -> $(el).val()), items...)
+      placeholder: (value) -> this.addAttr('placeholder' : value)
+    ).bindValue(model)
 
-  password: (model) -> this.text({type: 'password'}, model)
-  search: (model) -> this.text({class: "search-query", type: 'text'}, model)
+  password: (items...) ->
+    model = getModel(items)
+    this.text(items...)
+      .addAttr(type: 'password')
+      .bindValue(model)
+
+  search: (items...) ->
+    model = getModel(items)
+    this.text(items...)
+      .addClass("search-query")
+      .bindValue(model)
 
   checkbox : (items...) ->
     model = getModel(items)
-
-    $.extend(
-      tag('input')(items...)
-        .addAttr({type: 'checkbox', checked: 'checked'})
-        .observable()
-        .on('click', (e) -> e.data.publish($(this).is(':checked'))),
-      bindValue: (observable) ->
-        this.bindAttr(observable, -> checked: observable.get())
-        this.subscribe((value) -> observable.set(value))
-    ).bindValue(model)
+    input({type: 'checkbox'}, 'click', ((el) -> $(el).is(':checked')), items...)
+      .bindValue(model)
+      .bindAttr(model, -> checked: model.get())
 
   radio: (items...) ->
     model = getModel(items)
     value = items[0].value
-
-    $.extend(
-      tag('input', type: 'radio')(items...)
-        .observable()
-        .on('click', (e) -> model.set(value))
-    ).bindAttr(model, -> checked:(model.get() == value))
+    input({type: 'radio'}, 'click', (-> value), items...)
+      .bindValue(model)
+      .bindAttr(model, -> checked: model.get() == value)
 
   submit: (name, click) -> tag('input')(name).addAttr(type: 'submit').on('click', click)
+
+# Select
+html.select = (items...) ->
+  model = getModel(items)
+
+  tag('select')(items...)
+  .on('change', (e) -> e.data.setValue($(this).val()) )
+  .bindValue(model)
 
 html.div = tag("div")
 html.span = tag("span")
