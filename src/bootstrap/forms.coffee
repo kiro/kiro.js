@@ -93,8 +93,10 @@ window.BC.define('bootstrap', (bootstrap) ->
     for key, value of items
       if key == 'legend'
         content.push(legend(value))
+      else if key == 'actions'
+        actions = div(class: "form-actions", value)
       else if value.isCheckbox
-        content.push(label(class: 'checkbox', value, key))
+        content.push(value.label(key))
       else if key == ""
         content.push(value)
       else
@@ -104,14 +106,13 @@ window.BC.define('bootstrap', (bootstrap) ->
     form(
       fieldset(
         content,
-        actions...
+        actions
       )
     )
 
-  bootstrap.form.actions = (actions...) -> div(class: "form-actions", actions)
   bootstrap.form.search = (items...) -> form(class: "form-search", items)
   bootstrap.form.inline = (items...) -> form(class: "form-inline", items)
-  bootstrap.form.horizontal = (items, actions...) ->
+  bootstrap.form.horizontal = (items) ->
     group = (items...) -> div(class: 'control-group', items)
     control = (items...) -> div(class: 'controls', items)
 
@@ -120,8 +121,10 @@ window.BC.define('bootstrap', (bootstrap) ->
     for key, value of items
       if key == 'legend'
         content.push(legend(value))
+      else if key == 'actions'
+        actions = div(class: "form-actions", value)
       else if value.isCheckbox
-        content.push(group(control(label(class: 'checkbox', value, key))))
+        content.push(group(control(value.label(key))))
       else if key == ""
         content.push(group(control(value)))
       else

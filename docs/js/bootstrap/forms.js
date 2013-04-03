@@ -16,14 +16,12 @@
     return section(h1("Forms"), docs.code.forms(), example("Default styles", "Default from style", function() {
       return body(form({
         legend: "Legend",
-        'Label name': [input.text().placeholder("Type something..."), help.block("Example block-level help text here.")],
+        'Label name': div(input.text().placeholder("Type something..."), help.block("Example block-level help text here.")),
         'Check me out': input.checkbox(),
         '': button.submit("Submit me")
       }));
     }), example("Search form", "form has fields for different styles", function() {
-      return body(form.search(input.text({
-        "class": "search-query"
-      }).medium(), button.submit('Search')));
+      return body(form.search(input.search().medium(), button.submit('Search')));
     }), example("Inline form", "Usage of form.inline", function() {
       return body(form.inline(input.text().small().placeholder("Email"), input.password().small().placeholder("Password"), input.checkbox().label("Remember me"), button.submit("Sign in")));
     }), example("Horizontal form", "Creating horizontal form, it can have field without label", function() {
@@ -89,8 +87,9 @@
     }), example("Form actions in action", "If values are passed after the form fields object, they are appended as form action", function() {
       return body(form.horizontal({
         "First Name": input.text(),
-        "Last Name": input.text()
-      }, form.actions(button("Submit"), button("Remove"))));
+        "Last Name": input.text(),
+        actions: [button("Submit"), button("Remove")]
+      }));
     }), example("Different image styles", "predefined image styles, it accepts config object with src and class proeprties", function() {
       return body(img({
         "class": 'image',

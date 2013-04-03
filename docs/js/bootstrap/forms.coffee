@@ -12,10 +12,10 @@ docs.bootstrap.forms = -> section(h1("Forms"),
     body(
       form(
         legend : "Legend"
-        'Label name' : [
+        'Label name' : div(
           input.text().placeholder("Type something...")
           help.block("Example block-level help text here.")
-        ]
+        )
         'Check me out' : input.checkbox()
         '' : button.submit("Submit me")
       )
@@ -25,7 +25,7 @@ docs.bootstrap.forms = -> section(h1("Forms"),
   example("Search form", "form has fields for different styles", ->
     body(
       form.search(
-        input.text(class: "search-query").medium()
+        input.search().medium()
         button.submit('Search')
       )
     )
@@ -142,9 +142,9 @@ docs.bootstrap.forms = -> section(h1("Forms"),
   example("Form actions in action", "If values are passed after the form fields object, they are appended as form action", ->
     body(
       form.horizontal(
-        {"First Name" : input.text()
-        "Last Name" : input.text()}
-        form.actions(button("Submit"), button("Remove"))
+        "First Name" : input.text()
+        "Last Name" : input.text()
+        actions : [button("Submit"), button("Remove")]
       )
     )
   )

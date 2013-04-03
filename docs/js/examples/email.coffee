@@ -60,17 +60,17 @@ docs.examples.email = -> section(h1("Email"),
         .foreach(data.contacts, (contact) -> option(contact.email, contact.id))
 
       form.horizontal(
-        {From: span(currentUser)
+        From: span(currentUser)
         To: toSelector
         Subject: input.text(bind(email.subject))
-        Email: textarea(bind(email.message))},
-        form.actions(
+        Email: textarea(bind(email.message)),
+        actions: [
           button("Send", ->
             data.mail.add(email)
             rightContent(emailList())
           ),
           button("Cancel", -> rightContent(emailList()))
-        )
+        ]
       )
 
     leftPanel = () ->

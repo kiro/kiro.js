@@ -154,10 +154,12 @@
         value = items[key];
         if (key === 'legend') {
           content.push(legend(value));
+        } else if (key === 'actions') {
+          actions = div({
+            "class": "form-actions"
+          }, value);
         } else if (value.isCheckbox) {
-          content.push(label({
-            "class": 'checkbox'
-          }, value, key));
+          content.push(value.label(key));
         } else if (key === "") {
           content.push(value);
         } else {
@@ -165,14 +167,7 @@
           content.push(value);
         }
       }
-      return form(fieldset.apply(null, [content].concat(__slice.call(actions))));
-    };
-    bootstrap.form.actions = function() {
-      var actions;
-      actions = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return div({
-        "class": "form-actions"
-      }, actions);
+      return form(fieldset(content, actions));
     };
     bootstrap.form.search = function() {
       var items;
@@ -188,9 +183,8 @@
         "class": "form-inline"
       }, items);
     };
-    bootstrap.form.horizontal = function() {
-      var actions, content, control, group, items, key, value;
-      items = arguments[0], actions = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    bootstrap.form.horizontal = function(items) {
+      var actions, content, control, group, key, value;
       group = function() {
         var items;
         items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -210,10 +204,12 @@
         value = items[key];
         if (key === 'legend') {
           content.push(legend(value));
+        } else if (key === 'actions') {
+          actions = div({
+            "class": "form-actions"
+          }, value);
         } else if (value.isCheckbox) {
-          content.push(group(control(label({
-            "class": 'checkbox'
-          }, value, key))));
+          content.push(group(control(value.label(key))));
         } else if (key === "") {
           content.push(group(control(value)));
         } else {

@@ -77,13 +77,16 @@
           From: span(currentUser),
           To: toSelector,
           Subject: input.text(bind(email.subject)),
-          Email: textarea(bind(email.message))
-        }, form.actions(button("Send", function() {
-          data.mail.add(email);
-          return rightContent(emailList());
-        }), button("Cancel", function() {
-          return rightContent(emailList());
-        })));
+          Email: textarea(bind(email.message)),
+          actions: [
+            button("Send", function() {
+              data.mail.add(email);
+              return rightContent(emailList());
+            }), button("Cancel", function() {
+              return rightContent(emailList());
+            })
+          ]
+        });
       };
       leftPanel = function() {
         return div().span2(button("New", function() {
