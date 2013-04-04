@@ -39,7 +39,7 @@ window.BC.define('store', (store) ->
       filter: () ->
       add: (item) -> request('POST', item)
       remove: (items) -> request('PUT', [], getIds(items))
-      update: (item) -> request('PUT', item, getIds([item]))
+      update: (item) -> request('PUT', [item], getIds([item]))
     )
 
   store.rateLimit = (f) ->

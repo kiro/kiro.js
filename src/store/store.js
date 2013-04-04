@@ -71,7 +71,7 @@
           return request('PUT', [], getIds(items));
         },
         update: function(item) {
-          return request('PUT', item, getIds([item]));
+          return request('PUT', [item], getIds([item]));
         }
       });
     };
