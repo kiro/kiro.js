@@ -110,7 +110,10 @@ window.BC.define('models', (models) ->
       latestObservable = null
       left[key]
       if latestObservable
-        left[key] = right[key]
+        if _.isObject(right[key])
+          merge(left[key], right[key])
+        else
+          left[key] = right[key]
 
     left.enableNotifications()
     left.publish(left)
