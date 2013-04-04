@@ -105,6 +105,11 @@ window.BC.define('common', (common) ->
 
     # Binds the content of an element to collection
     foreach: (collection, render) ->
+      # HACK: needed because when there is a table tag, the content is automatically wrapped in tbody
+      getElOrTbody = () ->
+        tbody = el().children('tbody')
+        if tbody then tbody else el()
+
       tag = this
       this.addAttr(id: common.nextId()) if !this.id()
 
@@ -117,12 +122,13 @@ window.BC.define('common', (common) ->
       this.addItems((render(item, index++) for item in collectionItems)...)
 
       add = (value, index) ->
-        if el().children().length == 0 or index == 0
-          el().prepend(common.element(render(value, index, tag)))
+        if index == -1 then return
+        if getElOrTbody().children().length == 0 or index == 0
+          getElOrTbody().prepend(common.element(render(value, index, tag)))
         else
-          el().children().eq(index - 1).after(common.element(render(value, index, tag)))
+          getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)))
 
-      remove = (index) -> el().children().eq(index).remove()
+      remove = (index) -> getElOrTbody().children().eq(index).remove()
 
       addAll = (items) ->
         index = 0
@@ -139,7 +145,7 @@ window.BC.define('common', (common) ->
           update: (value, index, oldIndex) ->
             if index < oldIndex
               add(value, index)
-              remove(oldIndex + 1)
+              remove(oldIndex + if index == -1 then 0 else 1)
             else if index > oldIndex
               remove(oldIndex)
               add(value, index)

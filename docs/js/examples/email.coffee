@@ -40,9 +40,7 @@ docs.examples.email = -> section(h1("Email"),
       )
 
     emailList = () ->
-      table(
-
-      ).foreach(data.mail, (email) ->
+      table().foreach(data.mail, (email) ->
         contact = data.contacts.get(byId(email.contact_id))
 
         tr(
@@ -90,24 +88,24 @@ docs.examples.email = -> section(h1("Email"),
       div().span10(
         button.group(
           button(icon.trash, "Delete", ->
-            selectedEmail().folders(['trash'])
+            selectedEmail(null).folders(['trash'])
           ).bindDisabled(negate(selectedEmail))
 
           dropdown(
             button("Move").bindDisabled(negate(selectedEmail))
-            (a(folder, -> selectedEmail().folders([folder])) for folder in data.folders)
+            (a(folder, -> selectedEmail(null).folders([folder])) for folder in data.folders)
           )
 
           button(icon.forward, "Forward", ->
             rightContent(sendEmail(email(
-              subject: "FW: " + selectedEmail().subject
+              subject: "FW: " + selectedEmail(null).subject
             )))
           ).bindDisabled(negate(selectedEmail))
 
           button(icon.pencil, "Reply", ->
             rightContent(sendEmail(email(
               contact_id: selectedEmail().contact_id,
-              subject: "RE: " + selectedEmail().subject
+              subject: "RE: " + selectedEmail(null).subject
             )))
           ).bindDisabled(negate(selectedEmail))
         )

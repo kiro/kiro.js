@@ -154,7 +154,16 @@
           return this;
         },
         foreach: function(collection, render) {
-          var add, addAll, collectionItems, index, item, remove, tag;
+          var add, addAll, collectionItems, getElOrTbody, index, item, remove, tag;
+          getElOrTbody = function() {
+            var tbody;
+            tbody = el().children('tbody');
+            if (tbody) {
+              return tbody;
+            } else {
+              return el();
+            }
+          };
           tag = this;
           if (!this.id()) {
             this.addAttr({
@@ -181,14 +190,17 @@
             return _results;
           })());
           add = function(value, index) {
-            if (el().children().length === 0 || index === 0) {
-              return el().prepend(common.element(render(value, index, tag)));
+            if (index === -1) {
+              return;
+            }
+            if (getElOrTbody().children().length === 0 || index === 0) {
+              return getElOrTbody().prepend(common.element(render(value, index, tag)));
             } else {
-              return el().children().eq(index - 1).after(common.element(render(value, index, tag)));
+              return getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)));
             }
           };
           remove = function(index) {
-            return el().children().eq(index).remove();
+            return getElOrTbody().children().eq(index).remove();
           };
           addAll = function(items) {
             var elements;
@@ -222,7 +234,7 @@
               update: function(value, index, oldIndex) {
                 if (index < oldIndex) {
                   add(value, index);
-                  return remove(oldIndex + 1);
+                  return remove(oldIndex + (index === -1 ? 0 : 1));
                 } else if (index > oldIndex) {
                   remove(oldIndex);
                   return add(value, index);

@@ -106,7 +106,7 @@
       rightPanel = function() {
         var folder;
         return div().span10(button.group(button(icon.trash, "Delete", function() {
-          return selectedEmail().folders(['trash']);
+          return selectedEmail(null).folders(['trash']);
         }).bindDisabled(negate(selectedEmail)), dropdown(button("Move").bindDisabled(negate(selectedEmail)), (function() {
           var _i, _len, _ref, _results;
           _ref = data.folders;
@@ -114,18 +114,18 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             folder = _ref[_i];
             _results.push(a(folder, function() {
-              return selectedEmail().folders([folder]);
+              return selectedEmail(null).folders([folder]);
             }));
           }
           return _results;
         })()), button(icon.forward, "Forward", function() {
           return rightContent(sendEmail(email({
-            subject: "FW: " + selectedEmail().subject
+            subject: "FW: " + selectedEmail(null).subject
           })));
         }).bindDisabled(negate(selectedEmail)), button(icon.pencil, "Reply", function() {
           return rightContent(sendEmail(email({
             contact_id: selectedEmail().contact_id,
-            subject: "RE: " + selectedEmail().subject
+            subject: "RE: " + selectedEmail(null).subject
           })));
         }).bindDisabled(negate(selectedEmail))), div(rightContent));
       };
