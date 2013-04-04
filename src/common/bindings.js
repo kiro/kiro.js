@@ -3,11 +3,31 @@
 
   window.BC.define('common', function(common) {
     return common.bindings = function(initialItems) {
-      var addInitializer, binder, el, identity, initializers;
-      el = null;
+      var addInitializer, binder, el, identity, initializers, updateHandlers, updating, _el;
+      _el = null;
       initializers = [];
+      updateHandlers = [];
       identity = function(x) {
         return x;
+      };
+      updating = false;
+      el = function(value) {
+        if (!updating && updateHandlers) {
+          updating = true;
+          setTimeout((function() {
+            var handler, _i, _len;
+            for (_i = 0, _len = updateHandlers.length; _i < _len; _i++) {
+              handler = updateHandlers[_i];
+              handler(_el);
+            }
+            return updating = false;
+          }), 100);
+        }
+        if (!_.isUndefined(value)) {
+          return _el = value;
+        } else {
+          return _el;
+        }
       };
       addInitializer = function(initializer) {
         if (!this.id()) {
@@ -27,11 +47,11 @@
             map = defaultMap;
           }
           addInitializer.call(this, function() {
-            return el[f](map(observable.get()));
+            return el()[f](map(observable.get()));
           });
           addInitializer.call(this, function() {
             return observable.subscribe(function(newValue) {
-              return el[f](map(newValue));
+              return el()[f](map(newValue));
             });
           });
           return this;
@@ -40,7 +60,7 @@
       return {
         initBindings: function(element) {
           var initializer, _i, _len, _results;
-          el = element;
+          el(element);
           _results = [];
           for (_i = 0, _len = initializers.length; _i < _len; _i++) {
             initializer = initializers[_i];
@@ -52,7 +72,7 @@
         bindValue: function(observable) {
           var valueHandler;
           valueHandler = function(newValue) {
-            return el.val(newValue);
+            return el().val(newValue);
           };
           this.setValue = function(newValue) {
             observable.unsubscribe(valueHandler);
@@ -60,7 +80,7 @@
             return observable.subscribe(valueHandler);
           };
           addInitializer.call(this, function() {
-            return el.val(observable.get());
+            return el().val(observable.get());
           });
           addInitializer.call(this, function() {
             return observable.subscribe(valueHandler);
@@ -89,9 +109,9 @@
             "class": prevClass
           });
           observable.subscribe(function(value) {
-            el.removeClass(prevClass);
+            el().removeClass(prevClass);
             prevClass = map(value);
-            return el.addClass(prevClass);
+            return el().addClass(prevClass);
           });
           return this;
         },
@@ -125,12 +145,16 @@
             selector = "";
           }
           addInitializer.call(this, function() {
-            return el.on(events, selector, _this, handler);
+            return el().on(events, selector, _this, handler);
           });
           return this;
         },
+        onUpdate: function(handler) {
+          return updateHandlers.push(handler);
+        },
         foreach: function(collection, render) {
-          var add, addAll, collectionItems, index, item, remove;
+          var add, addAll, collectionItems, index, item, remove, tag;
+          tag = this;
           if (!this.id()) {
             this.addAttr({
               id: common.nextId()
@@ -156,14 +180,14 @@
             return _results;
           })());
           add = function(value, index) {
-            if (el.children().length === 0 || index === 0) {
-              return el.prepend(common.element(render(value, index)));
+            if (el().children().length === 0 || index === 0) {
+              return el().prepend(common.element(render(value, index, tag)));
             } else {
-              return el.children().eq(index - 1).after(common.element(render(value, index)));
+              return el().children().eq(index - 1).after(common.element(render(value, index, tag)));
             }
           };
           remove = function(index) {
-            return el.children().eq(index).remove();
+            return el().children().eq(index).remove();
           };
           addAll = function(items) {
             var elements;
@@ -177,7 +201,7 @@
               }
               return _results;
             })();
-            return el.html(elements);
+            return el().html(elements);
           };
           if (_.isFunction(collection.subscribe)) {
             collection.subscribe(collection.actionHandler({
@@ -198,9 +222,7 @@
           }
           return this;
         },
-        el: function() {
-          return el;
-        }
+        el: el
       };
     };
   });

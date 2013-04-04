@@ -1,10 +1,25 @@
 window.BC.define('common', (common) ->
 
   common.bindings = (initialItems) ->
-    el = null
+    _el = null
     initializers = []
+    updateHandlers = []
 
     identity = (x) -> x
+
+    updating = false
+    el = (value) ->
+      # HACK: a DOM update has been triggered, after 100 ms call the update handlers
+      if !updating and updateHandlers
+        updating = true
+        setTimeout((->
+          for handler in updateHandlers
+            handler(_el)
+          updating = false)
+          100
+        )
+
+      if !_.isUndefined(value) then _el = value else _el
 
     # Adds a initializer, which is a jquery call.
     addInitializer = (initializer) ->
@@ -14,12 +29,12 @@ window.BC.define('common', (common) ->
 
     binder = (f, defaultMap = identity) ->
       (observable, map = defaultMap) ->
-        addInitializer.call(this, ->  el[f](map(observable.get())))
-        addInitializer.call(this, -> observable.subscribe( (newValue) -> el[f](map(newValue))) )
+        addInitializer.call(this, ->  el()[f](map(observable.get())))
+        addInitializer.call(this, -> observable.subscribe( (newValue) -> el()[f](map(newValue))) )
         this
 
     initBindings: (element) ->
-      el = element
+      el(element)
 
       for initializer in initializers
         initializer()
@@ -28,14 +43,14 @@ window.BC.define('common', (common) ->
 
     # Binds the value of an element to an observable
     bindValue: (observable) ->
-      valueHandler = (newValue) -> el.val(newValue)
+      valueHandler = (newValue) -> el().val(newValue)
 
       this.setValue = (newValue) ->
         observable.unsubscribe(valueHandler)
         observable.set(newValue)
         observable.subscribe(valueHandler)
 
-      addInitializer.call(this, ->  el.val(observable.get()))
+      addInitializer.call(this, ->  el().val(observable.get()))
       addInitializer.call(this, -> observable.subscribe(valueHandler))
       this
 
@@ -55,9 +70,9 @@ window.BC.define('common', (common) ->
       this.addAttr(class: prevClass)
 
       observable.subscribe((value) ->
-        el.removeClass(prevClass)
+        el().removeClass(prevClass)
         prevClass = map(value)
-        el.addClass(prevClass)
+        el().addClass(prevClass)
       )
       this
 
@@ -80,11 +95,16 @@ window.BC.define('common', (common) ->
         handler = selector
         selector = ""
 
-      addInitializer.call(this, => el.on(events, selector, this, handler))
+      addInitializer.call(this, => el().on(events, selector, this, handler))
       this
+
+    # Calls the handler when the dom is updated from a binding
+    onUpdate: (handler) ->
+      updateHandlers.push(handler)
 
     # Binds the content of an element to collection
     foreach: (collection, render) ->
+      tag = this
       this.addAttr(id: common.nextId()) if !this.id()
 
       collectionItems =
@@ -96,17 +116,17 @@ window.BC.define('common', (common) ->
       this.addItems((render(item, index++) for item in collectionItems)...)
 
       add = (value, index) ->
-        if el.children().length == 0 or index == 0
-          el.prepend(common.element(render(value, index)))
+        if el().children().length == 0 or index == 0
+          el().prepend(common.element(render(value, index, tag)))
         else
-          el.children().eq(index - 1).after(common.element(render(value, index)))
+          el().children().eq(index - 1).after(common.element(render(value, index, tag)))
 
-      remove = (index) -> el.children().eq(index).remove()
+      remove = (index) -> el().children().eq(index).remove()
 
       addAll = (items) ->
         index = 0
         elements = (common.element(render(item, index++)) for item in items)
-        el.html(elements)
+        el().html(elements)
 
       if _.isFunction(collection.subscribe)
         collection.subscribe( collection.actionHandler(
@@ -126,5 +146,5 @@ window.BC.define('common', (common) ->
 
     # Gets the jquery dom element of the html element, sued mostly for testing, in practice
     # it shouldn't be needed
-    el: () -> el
+    el: el
 )
