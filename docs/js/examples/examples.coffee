@@ -13,6 +13,7 @@ docs.examples.index = () ->
       nav(
         a("Players", -> content(docs.examples.players()))
         a("Email", -> content(docs.examples.email()))
+        a("Chat", -> content(docs.examples.chat()))
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
     div().span9().bindHtml(content)

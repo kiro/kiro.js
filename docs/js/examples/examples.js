@@ -19,6 +19,8 @@
       return content(docs.examples.players());
     }), a("Email", function() {
       return content(docs.examples.email());
+    }), a("Chat", function() {
+      return content(docs.examples.chat());
     })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
 

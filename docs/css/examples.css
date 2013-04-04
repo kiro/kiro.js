@@ -67,3 +67,14 @@
 .scaffolding {
     width: 940px;
 }
+
+.messages {
+    height: 300px;
+    overflow: scroll;
+    background-color: white;
+    border: 1px;
+    border-color: lightgray;
+    border-style: solid;
+    padding: 8px;
+    margin-bottom: 10px;
+}
