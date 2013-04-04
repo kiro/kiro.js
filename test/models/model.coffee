@@ -143,15 +143,15 @@ describe("Model tests", ->
     obj.checked = false
     expect(calls).toBe(2)
 
-    expectedPath = "numbers.change.add"
+    expectedPath = "numbers.add"
     obj.numbers.add(4)
     expect(calls).toBe(3)
 
-    expectedPath = "sub.key"
+    expectedPath = "sub.update"
     obj.sub.get(0).key = "kkk"
     expect(calls).toBe(4)
 
-    expectedPath = "sub.value"
+    expectedPath = "sub.update"
     obj.sub.get(0).value = "vvv"
     expect(calls).toBe(5)
 

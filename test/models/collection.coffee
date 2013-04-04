@@ -52,7 +52,10 @@ describe("Collection tests", ->
   )
 
   it("Tests clear", ->
+    numbers = collection([1, 2, 3])
+    numbers.clear()
 
+    expect(numbers().length).toBe(0)
   )
 
   it("Tests get", ->
@@ -70,24 +73,6 @@ describe("Collection tests", ->
 
     expect(numbers.count()).toEqual(4)
     expect(numbers.count((number) -> 1 < number < 4)).toEqual(2)
-  )
-
-  it("Tests replace", ->
-    subscriptionCalls = 0
-    numbers = collection([1, 2, 2, 3])
-
-    expectedValues = [1, 4, 4, 3]
-    numbers.subscribe((values) ->
-      subscriptionCalls++
-      expect(values).toEqual(expectedValues))
-    numbers.replace(2, 4)
-    expect(numbers()).toEqual([1, 4, 4, 3])
-    expect(subscriptionCalls).toEqual(1)
-
-    expectedValues = [1, 2, 2, 3]
-    numbers.replace(((number) -> number == 4), 2)
-    expect(numbers()).toEqual([1, 2, 2, 3])
-    expect(subscriptionCalls).toEqual(2)
   )
 
   it("Tests filter", ->
@@ -134,16 +119,6 @@ describe("Collection tests", ->
     expect(numbers()).toEqual([3..5])
     numbers.add(3)
     expect(numbers()).toEqual([3, 4, 5, 3])
-  )
-
-  it("Tests filter with replace and replaceAll", ->
-    numbers = collection([1..6])
-    numbers.filter(betweenThreeAndFive)
-
-    numbers.replace(3, 7)
-    expect(numbers()).toEqual([4, 5])
-    numbers.replace(7, 3)
-    expect(numbers()).toEqual([3, 4, 5])
   )
 
   it("Tests filter with remove and removeAll", ->

@@ -73,7 +73,7 @@ describe("Bindings test", ->
     isOrange = model(false)
 
     div1 = div(class: 'box')
-      .bindClass(isOrange, -> 'orange' if isOrange)
+      .bindClass(isOrange, -> 'orange' if isOrange())
 
     count = model(5)
     div2 = div(class: 'box')

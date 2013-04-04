@@ -196,12 +196,21 @@
             elements = (function() {
               var _i, _len, _results;
               _results = [];
+              for (_i = 0, _len = initialItems.length; _i < _len; _i++) {
+                item = initialItems[_i];
+                _results.push(common.element(item));
+              }
+              return _results;
+            })();
+            elements = elements.concat((function() {
+              var _i, _len, _results;
+              _results = [];
               for (_i = 0, _len = items.length; _i < _len; _i++) {
                 item = items[_i];
                 _results.push(common.element(render(item, index++)));
               }
               return _results;
-            })();
+            })());
             return el().html(elements);
           };
           if (_.isFunction(collection.subscribe)) {

@@ -75,6 +75,9 @@
         value = makeObservable(value, observables[key]);
         listener = function(key) {
           return function(newValue, valuePath) {
+            if (valuePath.name) {
+              valuePath = valuePath.name;
+            }
             return o.publish(result, key + (valuePath ? "." + valuePath : ""));
           };
         };

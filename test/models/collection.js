@@ -61,7 +61,12 @@
       numbers.remove(2);
       return expect(subscriptionCalls).toEqual(1);
     });
-    it("Tests clear", function() {});
+    it("Tests clear", function() {
+      var numbers;
+      numbers = collection([1, 2, 3]);
+      numbers.clear();
+      return expect(numbers().length).toBe(0);
+    });
     it("Tests get", function() {
       var numbers;
       numbers = collection([1, 2, 3]);
@@ -84,25 +89,6 @@
       return expect(numbers.count(function(number) {
         return (1 < number && number < 4);
       })).toEqual(2);
-    });
-    it("Tests replace", function() {
-      var expectedValues, numbers, subscriptionCalls;
-      subscriptionCalls = 0;
-      numbers = collection([1, 2, 2, 3]);
-      expectedValues = [1, 4, 4, 3];
-      numbers.subscribe(function(values) {
-        subscriptionCalls++;
-        return expect(values).toEqual(expectedValues);
-      });
-      numbers.replace(2, 4);
-      expect(numbers()).toEqual([1, 4, 4, 3]);
-      expect(subscriptionCalls).toEqual(1);
-      expectedValues = [1, 2, 2, 3];
-      numbers.replace((function(number) {
-        return number === 4;
-      }), 2);
-      expect(numbers()).toEqual([1, 2, 2, 3]);
-      return expect(subscriptionCalls).toEqual(2);
     });
     it("Tests filter", function() {
       var expectedValues, numbers, subscriptionCalls;
@@ -151,15 +137,6 @@
       expect(numbers()).toEqual([3, 4, 5]);
       numbers.add(3);
       return expect(numbers()).toEqual([3, 4, 5, 3]);
-    });
-    it("Tests filter with replace and replaceAll", function() {
-      var numbers;
-      numbers = collection([1, 2, 3, 4, 5, 6]);
-      numbers.filter(betweenThreeAndFive);
-      numbers.replace(3, 7);
-      expect(numbers()).toEqual([4, 5]);
-      numbers.replace(7, 3);
-      return expect(numbers()).toEqual([3, 4, 5]);
     });
     it("Tests filter with remove and removeAll", function() {
       var numbers;

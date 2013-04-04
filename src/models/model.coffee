@@ -50,7 +50,9 @@ window.BC.define('models', (models) ->
       value = makeObservable(value, observables[key])
 
       listener = (key) ->
-        (newValue, valuePath) -> o.publish(result, key + (if valuePath then "." + valuePath else ""))
+        (newValue, valuePath) ->
+          if valuePath.name then valuePath = valuePath.name
+          o.publish(result, key + (if valuePath then "." + valuePath else ""))
       observables[key].subscribe(listener(key))
 
       prop = (key, value) ->

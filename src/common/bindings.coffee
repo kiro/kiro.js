@@ -126,7 +126,8 @@ window.BC.define('common', (common) ->
 
       addAll = (items) ->
         index = 0
-        elements = (common.element(render(item, index++)) for item in items)
+        elements = (common.element(item) for item in initialItems)
+        elements = elements.concat( (common.element(render(item, index++)) for item in items) )
         el().html(elements)
 
       if _.isFunction(collection.subscribe)

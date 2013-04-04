@@ -73,7 +73,7 @@
       div1 = div({
         "class": 'box'
       }).bindClass(isOrange, function() {
-        if (isOrange) {
+        if (isOrange()) {
           return 'orange';
         }
       });
