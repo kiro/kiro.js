@@ -1,8 +1,8 @@
 window.BC.define('store', (store) ->
-
   models = window.BC.namespace("models")
+  rates = window.BC.namespace("rates")
 
-  store.mongoLab = (collection, mongoDatabase, mongoCollection) ->
+  store.mongoLab = (collection, mongoDatabase, mongoCollection, timeout = 0) =>
     apiKey = "xR9PQZeYGV7K40N8rXp_RpdJMjQXAgiD"
     baseUrl = "https://api.mongolab.com/api/1/databases/#{mongoDatabase}/collections/#{mongoCollection}?apiKey=#{apiKey}"
 
@@ -30,20 +30,24 @@ window.BC.define('store', (store) ->
       collection.subscribe(handler)
     )
 
+    id = (item) -> item._id
+
     getIds = (items) ->
       ids = (item._id for item in items).join(",")
       "{_id:{$in:[#{ids}]}}"
 
-    handler = collection.actionHandler(
-      change: (items) -> request('PUT', items)
-      filter: () ->
-      add: (item) -> request('POST', item)
-      remove: (items) -> request('PUT', [], getIds(items))
-      update: (item) -> request('PUT', [item], getIds([item]))
-    )
+    updateCollection = (items) -> request('PUT', items)
+    add = (items) -> request('POST', items)
+    remove = (items) -> request('PUT', [], getIds(items))
+    updateItems = (items) -> request('PUT', items, getIds(items))
 
-  store.rateLimit = (f) ->
-    latestArgs
-    (args...) ->
-      latestArgs = args
+    $.extend(this, rates)
+
+    handler = collection.actionHandler(
+      change: rate(updateCollection, timeout, idempotent())
+      filter: (->)
+      add: rate(add, timeout, aggregate())
+      remove: rate(remove, timeout, aggregate())
+      update: rate(updateItems, timeout, idempotent(id))
+    )
 )

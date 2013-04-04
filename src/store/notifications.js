@@ -5,7 +5,7 @@
   window.BC.define('store', function(store) {
     var models;
     models = window.BC.namespace("models");
-    return store.pusherNotifications = function(collection, channel, comparator) {
+    return store.pusher = function(collection, channel, comparator) {
       var eventHandler, handler, pusher;
       pusher = new Pusher('9e1249843e69a619bc84');
       channel = pusher.subscribe('private-' + channel);

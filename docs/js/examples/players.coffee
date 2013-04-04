@@ -6,6 +6,8 @@ store = window.BC.namespace("store")
 
 $.extend(this, bootstrap, models, docs)
 
+TIMEOUT = 1000
+
 docs.examples.players = -> section(h1("Players"),
   docs.code.players()
 
@@ -21,8 +23,8 @@ docs.examples.players = -> section(h1("Players"),
       player("Python", 20)
     ])
 
-    store.mongoLab(players, 'examples', 'players')
-    store.pusherNotifications(players, 'players', (item) -> ((otherItem) -> item._id == otherItem._id))
+    store.mongoLab(players, 'examples', 'players', TIMEOUT)
+    store.pusher(players, 'players', (item) -> ((otherItem) -> item._id == otherItem._id))
 
     players.sort((player1, player2) ->
       if player1.score < player2.score then 1

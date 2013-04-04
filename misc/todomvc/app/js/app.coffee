@@ -4,12 +4,10 @@ models = window.BC.namespace("models")
 $.extend(this, html, models)
 
 ENTER_KEY = 13
-nextId = (() ->
-  value = 0
-  () -> value++)()
+id = 0
 
 # models
-todoModel = (title) -> object(id: nextId(), title: title, completed: false)
+todoModel = (title) -> object(id: id++, title: title, completed: false)
 todos = collection()
 checkAll = model(false)
 selectedFilter = model("")
@@ -22,6 +20,7 @@ allDone = () -> _.all((todo.completed for todo in todos()))
 
 # controls
 textInput = (config, model, handler) ->
+  config['autofocus'] = true
   input.text(config, model)
     .on('keydown', (e) -> if e.keyCode == 13 then handler())
     .on('blur', -> handler())
@@ -37,18 +36,17 @@ todosHeader = ->
 
   header(id:"header",
     h1("todos")
-    textInput({id:"new-todo", placeholder:"What needs to be done?", autofocus: true}, todoText,
+    textInput(id:"new-todo", placeholder:"What needs to be done?", todoText,
       -> todos.add(todoModel(todoText(""))) if todoText().trim()
     )
   )
 
 main = ->
   section(id: "main",
-    input.checkbox(id:"toggle-all",
-      checkAll
-    ).on('click', -> (todo.completed = checkAll() for todo in todos()))
+    input.checkbox(id:"toggle-all", checkAll)
+      .on('click', -> (todo.completed = checkAll() for todo in todos()))
 
-    label({for: "toggle-all"}, "Mark all as complete")
+    label(for: "toggle-all", "Mark all as complete")
 
     ul(id: "todo-list").foreach(todos, renderTodo)
   ).bindVisible(todos, -> todos.count() > 0)
@@ -58,9 +56,8 @@ renderTodo = (todo) ->
     bind(todo.title), -> content(view())
   )
   view = () -> div(class: "view",
-    input.checkbox(class:"toggle",
-      bind(todo.completed)
-    ).on('click', -> checkAll(allDone()))
+    input.checkbox(class:"toggle", bind(todo.completed))
+      .on('click', -> checkAll(allDone()))
 
     label(bind(todo.title))
     button(class: "destroy", -> todos.remove(todo))

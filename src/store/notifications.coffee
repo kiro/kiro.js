@@ -2,7 +2,7 @@ window.BC.define('store', (store) ->
 
   models = window.BC.namespace("models")
 
-  store.pusherNotifications = (collection, channel, comparator) ->
+  store.pusher = (collection, channel, comparator) ->
     pusher = new Pusher('9e1249843e69a619bc84')
 
     channel = pusher.subscribe('private-' + channel)
