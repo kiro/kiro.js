@@ -97,6 +97,5 @@ window.BC.define('models', (models) ->
         .toString(16)
         .substring(1);
 
-    s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-
+    s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 )

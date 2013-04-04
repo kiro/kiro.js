@@ -37,7 +37,7 @@ window.BC.define('store', (store) ->
     channel.bind('client-update', eventHandler(
       (items) ->
         for item in items
-          collection.get(comparator(item)).score = item.score
+          collection.get(comparator(item)).set(item)
     ))
 )
 

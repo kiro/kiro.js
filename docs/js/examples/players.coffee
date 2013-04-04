@@ -11,7 +11,7 @@ REQUEST_RATE = 1 # one request per second
 docs.examples.players = -> section(h1("Players"),
   docs.code.players()
 
-  example("Players app", "", ->
+  example("Players app", "The players state is persisted in mongolab and is updated in all tabs through push notifications.", ->
     id = 1
     player = (name, score) -> object(_id: id++, name: name, score: score)
 

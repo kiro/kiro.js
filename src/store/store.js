@@ -60,7 +60,7 @@
           _results = [];
           for (_i = 0, _len = items.length; _i < _len; _i++) {
             item = items[_i];
-            _results.push(item._id);
+            _results.push(JSON.stringify(item._id));
           }
           return _results;
         })()).join(",");

@@ -1,6 +1,7 @@
 window.BC.define('common', (common) ->
   isComposite = (item) -> item and _.isFunction(item.html) and _.isFunction(item.init)
   isModel = (item) -> item and !isComposite(item) and _.isFunction(item.subscribe) and _.isFunction(item.get) and _.isFunction(item.set) and _.isFunction(item.publish)
+  isCollection = (item) -> item and _.isFunction(item.add) and _.isFunction(item.remove) and _.isFunction(item.filter) and _.isFunction(item.count) and _.isFunction(item.total)
 
   common.isValid = (item) ->
     _.isUndefined(item) or _.isString(item) or _.isNumber(item) or _.isArray(item) or _.isFunction(item.html) or common.isModel(item)
@@ -86,4 +87,5 @@ window.BC.define('common', (common) ->
 
   common.isComposite = isComposite
   common.isModel = isModel
+  common.isCollection = isCollection
 )

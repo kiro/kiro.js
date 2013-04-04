@@ -3,12 +3,15 @@
   var __slice = [].slice;
 
   window.BC.define('common', function(common) {
-    var isComposite, isModel;
+    var isCollection, isComposite, isModel;
     isComposite = function(item) {
       return item && _.isFunction(item.html) && _.isFunction(item.init);
     };
     isModel = function(item) {
       return item && !isComposite(item) && _.isFunction(item.subscribe) && _.isFunction(item.get) && _.isFunction(item.set) && _.isFunction(item.publish);
+    };
+    isCollection = function(item) {
+      return item && _.isFunction(item.add) && _.isFunction(item.remove) && _.isFunction(item.filter) && _.isFunction(item.count) && _.isFunction(item.total);
     };
     common.isValid = function(item) {
       return _.isUndefined(item) || _.isString(item) || _.isNumber(item) || _.isArray(item) || _.isFunction(item.html) || common.isModel(item);
@@ -149,7 +152,8 @@
       };
     };
     common.isComposite = isComposite;
-    return common.isModel = isModel;
+    common.isModel = isModel;
+    return common.isCollection = isCollection;
   });
 
 }).call(this);

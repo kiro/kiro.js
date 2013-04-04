@@ -6,12 +6,12 @@ store = window.BC.namespace("store")
 
 $.extend(this, bootstrap, models, docs, store)
 
-body = (items...) -> div(items)
+body = (items...) -> div(class: 'padded', items)
 
 docs.examples.chat = -> section(h1("Chat"),
-  docs.code.email()
+  docs.code.chat()
 
-  example("Chat", "", ->
+  example("Chat app", "You can open chat examples in different ", ->
     message = (user, content) -> object(user: user, content: content)
     messages = collection([message(name: 'Chat example', "Welcome!")])
     pusher(messages, 'messages')

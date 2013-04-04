@@ -33,7 +33,7 @@ window.BC.define('store', (store) ->
     id = (item) -> item._id
 
     getIds = (items) ->
-      ids = (item._id for item in items).join(",")
+      ids = (JSON.stringify(item._id) for item in items).join(",")
       "{_id:{$in:[#{ids}]}}"
 
     updateCollection = (items) -> request('PUT', items)

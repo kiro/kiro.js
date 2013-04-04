@@ -150,7 +150,8 @@
           return this;
         },
         onUpdate: function(handler) {
-          return updateHandlers.push(handler);
+          updateHandlers.push(handler);
+          return this;
         },
         foreach: function(collection, render) {
           var add, addAll, collectionItems, index, item, remove, tag;

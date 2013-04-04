@@ -17,7 +17,7 @@
   REQUEST_RATE = 1;
 
   docs.examples.players = function() {
-    return section(h1("Players"), docs.code.players(), example("Players app", "", function() {
+    return section(h1("Players"), docs.code.players(), example("Players app", "The players state is persisted in mongolab and is updated in all tabs through push notifications.", function() {
       var id, player, players, selected;
       id = 1;
       player = function(name, score) {

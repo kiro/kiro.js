@@ -101,6 +101,7 @@ window.BC.define('common', (common) ->
     # Calls the handler when the dom is updated from a binding
     onUpdate: (handler) ->
       updateHandlers.push(handler)
+      this
 
     # Binds the content of an element to collection
     foreach: (collection, render) ->

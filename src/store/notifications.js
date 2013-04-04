@@ -71,7 +71,7 @@
         _results = [];
         for (_i = 0, _len = items.length; _i < _len; _i++) {
           item = items[_i];
-          _results.push(collection.get(comparator(item)).score = item.score);
+          _results.push(collection.get(comparator(item)).set(item));
         }
         return _results;
       }));

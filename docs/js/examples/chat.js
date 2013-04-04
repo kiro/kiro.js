@@ -18,11 +18,13 @@
   body = function() {
     var items;
     items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return div(items);
+    return div({
+      "class": 'padded'
+    }, items);
   };
 
   docs.examples.chat = function() {
-    return section(h1("Chat"), docs.code.email(), example("Chat", "", function() {
+    return section(h1("Chat"), docs.code.chat(), example("Chat app", "You can open chat examples in different ", function() {
       var leftPanel, message, messageText, messages, rightPanel, user, users;
       message = function(user, content) {
         return object({
