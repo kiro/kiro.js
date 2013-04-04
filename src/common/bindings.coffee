@@ -7,19 +7,9 @@ window.BC.define('common', (common) ->
 
     identity = (x) -> x
 
-    updating = false
-    el = (value) ->
-      # HACK: a DOM update has been triggered, after 100 ms call the update handlers
-      if !updating and updateHandlers
-        updating = true
-        setTimeout((->
-          for handler in updateHandlers
-            handler(_el)
-          updating = false)
-          50
-        )
+    el = (value) -> if !_.isUndefined(value) then _el = value else _el
 
-      if !_.isUndefined(value) then _el = value else _el
+    updated = () -> handler(_el) for handler in updateHandlers
 
     # Adds a initializer, which is a jquery call.
     addInitializer = (initializer) ->
@@ -29,8 +19,14 @@ window.BC.define('common', (common) ->
 
     binder = (f, defaultMap = identity) ->
       (observable, map = defaultMap) ->
-        addInitializer.call(this, ->  el()[f](map(observable.get())))
-        addInitializer.call(this, -> observable.subscribe( (newValue) -> el()[f](map(newValue))) )
+        addInitializer.call(this, ->
+          el()[f](map(observable.get()))
+          updated()
+        )
+        addInitializer.call(this, -> observable.subscribe( (newValue) ->
+          el()[f](map(newValue))
+          updated()
+        ))
         this
 
     initBindings: (element) ->
@@ -43,14 +39,19 @@ window.BC.define('common', (common) ->
 
     # Binds the value of an element to an observable
     bindValue: (observable) ->
-      valueHandler = (newValue) -> el().val(newValue)
+      valueHandler = (newValue) ->
+        el().val(newValue)
+        updated()
 
       this.setValue = (newValue) ->
         observable.unsubscribe(valueHandler)
         observable.set(newValue)
         observable.subscribe(valueHandler)
 
-      addInitializer.call(this, ->  el().val(observable.get()))
+      addInitializer.call(this, ->
+        el().val(observable.get())
+        updated()
+      )
       addInitializer.call(this, -> observable.subscribe(valueHandler))
       this
 
@@ -73,6 +74,7 @@ window.BC.define('common', (common) ->
         el().removeClass(prevClass)
         prevClass = map(value)
         el().addClass(prevClass)
+        updated()
       )
       this
 
@@ -127,14 +129,18 @@ window.BC.define('common', (common) ->
           getElOrTbody().prepend(common.element(render(value, index, tag)))
         else
           getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)))
+        updated()
 
-      remove = (index) -> getElOrTbody().children().eq(index).remove()
+      remove = (index) ->
+        getElOrTbody().children().eq(index).remove()
+        updated()
 
       addAll = (items) ->
         index = 0
         elements = (common.element(item) for item in initialItems)
         elements = elements.concat( (common.element(render(item, index++)) for item in items) )
         el().html(elements)
+        updated()
 
       removeAll = (items, indexes) ->
         indexes = indexes.sort().reverse()

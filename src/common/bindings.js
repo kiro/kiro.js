@@ -3,31 +3,28 @@
 
   window.BC.define('common', function(common) {
     return common.bindings = function(initialItems) {
-      var addInitializer, binder, el, identity, initializers, updateHandlers, updating, _el;
+      var addInitializer, binder, el, identity, initializers, updateHandlers, updated, _el;
       _el = null;
       initializers = [];
       updateHandlers = [];
       identity = function(x) {
         return x;
       };
-      updating = false;
       el = function(value) {
-        if (!updating && updateHandlers) {
-          updating = true;
-          setTimeout((function() {
-            var handler, _i, _len;
-            for (_i = 0, _len = updateHandlers.length; _i < _len; _i++) {
-              handler = updateHandlers[_i];
-              handler(_el);
-            }
-            return updating = false;
-          }), 50);
-        }
         if (!_.isUndefined(value)) {
           return _el = value;
         } else {
           return _el;
         }
+      };
+      updated = function() {
+        var handler, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = updateHandlers.length; _i < _len; _i++) {
+          handler = updateHandlers[_i];
+          _results.push(handler(_el));
+        }
+        return _results;
       };
       addInitializer = function(initializer) {
         if (!this.id()) {
@@ -47,11 +44,13 @@
             map = defaultMap;
           }
           addInitializer.call(this, function() {
-            return el()[f](map(observable.get()));
+            el()[f](map(observable.get()));
+            return updated();
           });
           addInitializer.call(this, function() {
             return observable.subscribe(function(newValue) {
-              return el()[f](map(newValue));
+              el()[f](map(newValue));
+              return updated();
             });
           });
           return this;
@@ -72,7 +71,8 @@
         bindValue: function(observable) {
           var valueHandler;
           valueHandler = function(newValue) {
-            return el().val(newValue);
+            el().val(newValue);
+            return updated();
           };
           this.setValue = function(newValue) {
             observable.unsubscribe(valueHandler);
@@ -80,7 +80,8 @@
             return observable.subscribe(valueHandler);
           };
           addInitializer.call(this, function() {
-            return el().val(observable.get());
+            el().val(observable.get());
+            return updated();
           });
           addInitializer.call(this, function() {
             return observable.subscribe(valueHandler);
@@ -111,7 +112,8 @@
           observable.subscribe(function(value) {
             el().removeClass(prevClass);
             prevClass = map(value);
-            return el().addClass(prevClass);
+            el().addClass(prevClass);
+            return updated();
           });
           return this;
         },
@@ -194,13 +196,15 @@
               return;
             }
             if (getElOrTbody().children().length === 0 || index === 0) {
-              return getElOrTbody().prepend(common.element(render(value, index, tag)));
+              getElOrTbody().prepend(common.element(render(value, index, tag)));
             } else {
-              return getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)));
+              getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)));
             }
+            return updated();
           };
           remove = function(index) {
-            return getElOrTbody().children().eq(index).remove();
+            getElOrTbody().children().eq(index).remove();
+            return updated();
           };
           addAll = function(items) {
             var elements;
@@ -223,7 +227,8 @@
               }
               return _results;
             })());
-            return el().html(elements);
+            el().html(elements);
+            return updated();
           };
           removeAll = function(items, indexes) {
             var _i, _len, _results;
