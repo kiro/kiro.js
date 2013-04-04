@@ -39,9 +39,9 @@ docs.examples.chat = -> section(h1("Chat"),
 
     rightPanel = ->
       div().span9(
-        div(class: 'messages').foreach(messages, (message, index) ->
+        div(class: 'messages').foreach(messages, (message) ->
           p(strong(message.user.name + ": "), message.content)
-        )
+        ).onUpdate((el) -> el.scrollTop(el[0].scrollHeight))
         form.inline(
           append(
             input.text(placeholder: 'Enter message...', messageText).span9()

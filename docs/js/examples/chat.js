@@ -63,8 +63,10 @@
       rightPanel = function() {
         return div().span9(div({
           "class": 'messages'
-        }).foreach(messages, function(message, index) {
+        }).foreach(messages, function(message) {
           return p(strong(message.user.name + ": "), message.content);
+        }).onUpdate(function(el) {
+          return el.scrollTop(el[0].scrollHeight);
         }), form.inline(append(input.text({
           placeholder: 'Enter message...'
         }, messageText).span9(), button.primary('Send', function() {
