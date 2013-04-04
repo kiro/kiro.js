@@ -126,6 +126,14 @@
       return body(div("Click me").on('click', function() {
         return clicks(clicks() + 1);
       }), "clicks : ", span(clicks));
+    }), example(".onUpdate", " Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.", function() {
+      var clicks;
+      clicks = model(0);
+      return body(button("Click me", function() {
+        return clicks(clicks() + 1);
+      }), span(clicks).onUpdate(function(el) {
+        return el.append(' clicks');
+      }));
     }));
   };
 

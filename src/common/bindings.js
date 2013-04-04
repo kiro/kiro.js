@@ -21,7 +21,7 @@
               handler(_el);
             }
             return updating = false;
-          }), 100);
+          }), 50);
         }
         if (!_.isUndefined(value)) {
           return _el = value;

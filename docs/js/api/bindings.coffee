@@ -146,4 +146,13 @@ docs.bindingsApi = -> section(h1("Bindings"),
       "clicks : ", span(clicks)
     )
   )
+
+  example(".onUpdate", """ Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.""", ->
+    clicks = model(0)
+
+    body(
+      button("Click me", -> clicks(clicks() + 1))
+      span(clicks).onUpdate((el) -> el.append(' clicks'))
+    )
+  )
 )

@@ -16,7 +16,7 @@ window.BC.define('common', (common) ->
           for handler in updateHandlers
             handler(_el)
           updating = false)
-          100
+          50
         )
 
       if !_.isUndefined(value) then _el = value else _el
