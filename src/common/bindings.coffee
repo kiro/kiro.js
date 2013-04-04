@@ -108,7 +108,7 @@ window.BC.define('common', (common) ->
       # HACK: needed because when there is a table tag, the content is automatically wrapped in tbody
       getElOrTbody = () ->
         tbody = el().children('tbody')
-        if tbody then tbody else el()
+        if tbody.length != 0 then tbody else el()
 
       tag = this
       this.addAttr(id: common.nextId()) if !this.id()
@@ -136,12 +136,16 @@ window.BC.define('common', (common) ->
         elements = elements.concat( (common.element(render(item, index++)) for item in items) )
         el().html(elements)
 
+      removeAll = (items, indexes) ->
+        indexes = indexes.sort().reverse()
+        remove(index) for index in indexes
+
       if _.isFunction(collection.subscribe)
         collection.subscribe( collection.actionHandler(
           change: addAll
           filter: addAll
           add: add
-          remove: remove
+          remove: removeAll
           update: (value, index, oldIndex) ->
             if index < oldIndex
               add(value, index)

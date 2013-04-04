@@ -154,11 +154,11 @@
           return this;
         },
         foreach: function(collection, render) {
-          var add, addAll, collectionItems, getElOrTbody, index, item, remove, tag;
+          var add, addAll, collectionItems, getElOrTbody, index, item, remove, removeAll, tag;
           getElOrTbody = function() {
             var tbody;
             tbody = el().children('tbody');
-            if (tbody) {
+            if (tbody.length !== 0) {
               return tbody;
             } else {
               return el();
@@ -225,12 +225,22 @@
             })());
             return el().html(elements);
           };
+          removeAll = function(items, indexes) {
+            var _i, _len, _results;
+            indexes = indexes.sort().reverse();
+            _results = [];
+            for (_i = 0, _len = indexes.length; _i < _len; _i++) {
+              index = indexes[_i];
+              _results.push(remove(index));
+            }
+            return _results;
+          };
           if (_.isFunction(collection.subscribe)) {
             collection.subscribe(collection.actionHandler({
               change: addAll,
               filter: addAll,
               add: add,
-              remove: remove,
+              remove: removeAll,
               update: function(value, index, oldIndex) {
                 if (index < oldIndex) {
                   add(value, index);
