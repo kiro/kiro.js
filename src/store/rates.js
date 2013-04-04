@@ -2,6 +2,7 @@
 (function() {
 
   window.BC.define('rates', function(rates) {
+    rates.NO_LIMIT = -1;
     rates.idempotent = function(id) {
       var value;
       if (id == null) {
@@ -40,13 +41,13 @@
         }
       };
     };
-    return rates.rate = function(action, timeout, aggregator) {
+    return rates.rate = function(action, request_rate, aggregator) {
       var hasTimeout;
       hasTimeout = false;
       return function(item) {
         var handler;
         aggregator.set(item);
-        if (timeout === 0) {
+        if (request_rate === rates.NO_LIMIT) {
           return action(aggregator.get());
         } else if (!hasTimeout) {
           hasTimeout = true;
@@ -54,7 +55,7 @@
             action(aggregator.get());
             return hasTimeout = false;
           };
-          return window.setTimeout(handler, timeout);
+          return window.setTimeout(handler, 1000 / request_rate);
         }
       };
     };

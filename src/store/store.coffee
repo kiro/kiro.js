@@ -2,7 +2,7 @@ window.BC.define('store', (store) ->
   models = window.BC.namespace("models")
   rates = window.BC.namespace("rates")
 
-  store.mongoLab = (collection, mongoDatabase, mongoCollection, timeout = 0) =>
+  store.mongoLab = (collection, mongoDatabase, mongoCollection, request_rate = rates.NO_LIMIT) =>
     apiKey = "xR9PQZeYGV7K40N8rXp_RpdJMjQXAgiD"
     baseUrl = "https://api.mongolab.com/api/1/databases/#{mongoDatabase}/collections/#{mongoCollection}?apiKey=#{apiKey}"
 
@@ -44,10 +44,10 @@ window.BC.define('store', (store) ->
     $.extend(this, rates)
 
     handler = collection.actionHandler(
-      change: rate(updateCollection, timeout, idempotent())
+      change: rate(updateCollection, request_rate, idempotent())
       filter: (->)
-      add: rate(add, timeout, aggregate())
-      remove: rate(remove, timeout, aggregate())
-      update: rate(updateItems, timeout, idempotent(id))
+      add: rate(add, request_rate, aggregate())
+      remove: rate(remove, request_rate, aggregate())
+      update: rate(updateItems, request_rate, idempotent(id))
     )
 )

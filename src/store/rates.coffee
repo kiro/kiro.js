@@ -1,5 +1,7 @@
 window.BC.define('rates', (rates) ->
 
+  rates.NO_LIMIT = -1
+
   # the actions is idempotent by id, so if a value with the
   # same id gets added it keeps only the last one
   rates.idempotent = (id = (-> 1)) ->
@@ -25,18 +27,18 @@ window.BC.define('rates', (rates) ->
 
   # returns a function that when called aggregates the value
   # according to the aggregator and calls action on timeout
-  rates.rate = (action, timeout, aggregator) ->
+  rates.rate = (action, request_rate, aggregator) ->
     hasTimeout = false
     (item) ->
       aggregator.set(item)
-      if timeout == 0
+      if request_rate == rates.NO_LIMIT
         action(aggregator.get())
       else if !hasTimeout
         hasTimeout = true
         handler = ->
           action(aggregator.get())
           hasTimeout = false
-        window.setTimeout(handler, timeout)
+        window.setTimeout(handler, 1000 / request_rate)
 )
 
 

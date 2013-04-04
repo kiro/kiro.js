@@ -6,10 +6,10 @@
       _this = this;
     models = window.BC.namespace("models");
     rates = window.BC.namespace("rates");
-    return store.mongoLab = function(collection, mongoDatabase, mongoCollection, timeout) {
+    return store.mongoLab = function(collection, mongoDatabase, mongoCollection, request_rate) {
       var add, apiKey, baseUrl, getIds, handler, id, initialItems, remove, request, updateCollection, updateItems, url;
-      if (timeout == null) {
-        timeout = 0;
+      if (request_rate == null) {
+        request_rate = rates.NO_LIMIT;
       }
       apiKey = "xR9PQZeYGV7K40N8rXp_RpdJMjQXAgiD";
       baseUrl = "https://api.mongolab.com/api/1/databases/" + mongoDatabase + "/collections/" + mongoCollection + "?apiKey=" + apiKey;
@@ -80,11 +80,11 @@
       };
       $.extend(_this, rates);
       return handler = collection.actionHandler({
-        change: rate(updateCollection, timeout, idempotent()),
+        change: rate(updateCollection, request_rate, idempotent()),
         filter: (function() {}),
-        add: rate(add, timeout, aggregate()),
-        remove: rate(remove, timeout, aggregate()),
-        update: rate(updateItems, timeout, idempotent(id))
+        add: rate(add, request_rate, aggregate()),
+        remove: rate(remove, request_rate, aggregate()),
+        update: rate(updateItems, request_rate, idempotent(id))
       });
     };
   });
