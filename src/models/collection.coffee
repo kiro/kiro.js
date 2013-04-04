@@ -168,7 +168,18 @@ window.BC.define('models', (models) ->
     # converts the collection to JSON
     collection.toJSON = () -> items
 
-    collection.actions = actions
+    collection.actionHandler = (handler) ->
+      (items, action) ->
+        if action.name == actions.CHANGE
+          handler.change(action.value)
+        else if action.name == actions.FILTER
+          handler.filter(action.value)
+        else if action.name == actions.ADD
+          handler.add(action.value, action.index)
+        else if action.name == actions.REMOVE
+          handler.remove(action.value, action.index)
+        else if action.name == actions.UPDATE
+          handler.update(action.value, action.index, action.oldIndex)
 
     $.extend(collection, o, get: _get)
 )

@@ -130,8 +130,7 @@
           return this;
         },
         foreach: function(collection, render) {
-          var add, collectionItems, index, item, remove,
-            _this = this;
+          var add, addAll, collectionItems, index, item, remove;
           if (!this.id()) {
             this.addAttr({
               id: common.nextId()
@@ -156,51 +155,46 @@
             }
             return _results;
           })());
-          add = function(action) {
-            if (el.children().length === 0 || action.index === 0) {
-              return el.prepend(common.element(render(action.value)));
+          add = function(value, index) {
+            if (el.children().length === 0 || index === 0) {
+              return el.prepend(common.element(render(value, index)));
             } else {
-              return el.children().eq(action.index - 1).after(common.element(render(action.value)));
+              return el.children().eq(index - 1).after(common.element(render(value, index)));
             }
           };
           remove = function(index) {
             return el.children().eq(index).remove();
           };
+          addAll = function(items) {
+            var elements;
+            index = 0;
+            elements = (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = items.length; _i < _len; _i++) {
+                item = items[_i];
+                _results.push(common.element(render(item, index++)));
+              }
+              return _results;
+            })();
+            return el.html(elements);
+          };
           if (_.isFunction(collection.subscribe)) {
-            collection.subscribe(function(newItems, action) {
-              var elements, reversedIndexes, _i, _len, _results;
-              if (action.name === collection.actions.CHANGE || action.name === collection.actions.FILTER) {
-                elements = (function() {
-                  var _i, _len, _ref, _results;
-                  _ref = action.value;
-                  _results = [];
-                  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                    item = _ref[_i];
-                    _results.push(common.element(render(item, index++)));
-                  }
-                  return _results;
-                })();
-                return el.html(elements);
-              } else if (action.name === collection.actions.ADD) {
-                return add(action);
-              } else if (action.name === collection.actions.REMOVE) {
-                reversedIndexes = action.index.slice(0).reverse();
-                _results = [];
-                for (_i = 0, _len = reversedIndexes.length; _i < _len; _i++) {
-                  index = reversedIndexes[_i];
-                  _results.push(remove(index));
-                }
-                return _results;
-              } else if (action.name === collection.actions.UPDATE) {
-                if (action.index < action.oldIndex) {
-                  add(action);
-                  return remove(action.oldIndex + 1);
-                } else if (action.index > action.oldIndex) {
-                  remove(action.oldIndex);
-                  return add(action);
+            collection.subscribe(collection.actionHandler({
+              change: addAll,
+              filter: addAll,
+              add: add,
+              remove: remove,
+              update: function(value, index, oldIndex) {
+                if (index < oldIndex) {
+                  add(value, index);
+                  return remove(oldIndex + 1);
+                } else if (index > oldIndex) {
+                  remove(oldIndex);
+                  return add(value, index);
                 }
               }
-            });
+            }));
           }
           return this;
         },

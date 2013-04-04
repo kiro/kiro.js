@@ -95,33 +95,33 @@ window.BC.define('common', (common) ->
       index = 0
       this.addItems((render(item, index++) for item in collectionItems)...)
 
-      add = (action) ->
-        if el.children().length == 0 or action.index == 0
-          el.prepend(common.element(render(action.value)))
+      add = (value, index) ->
+        if el.children().length == 0 or index == 0
+          el.prepend(common.element(render(value, index)))
         else
-          el.children().eq(action.index - 1).after(common.element(render(action.value)))
+          el.children().eq(index - 1).after(common.element(render(value, index)))
 
       remove = (index) -> el.children().eq(index).remove()
 
+      addAll = (items) ->
+        index = 0
+        elements = (common.element(render(item, index++)) for item in items)
+        el.html(elements)
+
       if _.isFunction(collection.subscribe)
-        collection.subscribe( (newItems, action) =>
-          if action.name == collection.actions.CHANGE or action.name == collection.actions.FILTER
-            elements = (common.element(render(item, index++)) for item in action.value)
-            el.html(elements)
-          else if action.name == collection.actions.ADD
-            add(action)
-          else if action.name == collection.actions.REMOVE
-            reversedIndexes = action.index.slice(0).reverse()
-            for index in reversedIndexes
-              remove(index)
-          else if action.name == collection.actions.UPDATE
-            if action.index < action.oldIndex
-              add(action)
-              remove(action.oldIndex + 1)
-            else if action.index > action.oldIndex
-              remove(action.oldIndex)
-              add(action)
-        )
+        collection.subscribe( collection.actionHandler(
+          change: addAll
+          filter: addAll
+          add: add
+          remove: remove
+          update: (value, index, oldIndex) ->
+            if index < oldIndex
+              add(value, index)
+              remove(oldIndex + 1)
+            else if index > oldIndex
+              remove(oldIndex)
+              add(value, index)
+        ))
       this
 
     # Gets the jquery dom element of the html element, sued mostly for testing, in practice

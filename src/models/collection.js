@@ -210,7 +210,21 @@
       collection.toJSON = function() {
         return items;
       };
-      collection.actions = actions;
+      collection.actionHandler = function(handler) {
+        return function(items, action) {
+          if (action.name === actions.CHANGE) {
+            return handler.change(action.value);
+          } else if (action.name === actions.FILTER) {
+            return handler.filter(action.value);
+          } else if (action.name === actions.ADD) {
+            return handler.add(action.value, action.index);
+          } else if (action.name === actions.REMOVE) {
+            return handler.remove(action.value, action.index);
+          } else if (action.name === actions.UPDATE) {
+            return handler.update(action.value, action.index, action.oldIndex);
+          }
+        };
+      };
       return $.extend(collection, o, {
         get: _get
       });

@@ -2,6 +2,7 @@ docs = window.BC.namespace("docs")
 docs.examples = window.BC.namespace("docs.examples")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
+store = window.BC.namespace("store")
 
 $.extend(this, bootstrap, models, docs)
 
@@ -9,7 +10,8 @@ docs.examples.players = -> section(h1("Players"),
   docs.code.players()
 
   example("Players app", "", ->
-    player = (name, score) -> object(name: name, score: score)
+    id = 1
+    player = (name, score) -> object(_id: id++, name: name, score: score)
 
     players = collection([
       player("C++", 5)
@@ -18,6 +20,9 @@ docs.examples.players = -> section(h1("Players"),
       player("Go", 25)
       player("Python", 20)
     ])
+
+    store.mongoLab(players, 'examples', 'players')
+    store.pusherNotifications(players, 'players', (item) -> ((otherItem) -> item._id == otherItem._id))
 
     players.sort((player1, player2) ->
       if player1.score < player2.score then 1
