@@ -39,7 +39,7 @@ window.BC.define('models', (models) ->
     observables = {}
 
     if !o
-      o = common.observable((-> result), (newValue) -> throw Error('set is not supported for root objects'))
+      o = common.observable((-> result), (newValue) -> merge(result, newValue))
 
     for key, value of obj
       keyObservable = (key) ->
@@ -100,4 +100,18 @@ window.BC.define('models', (models) ->
         .substring(1);
 
     s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
+
+  merge = (left, right) ->
+    if common.isModel(right)
+      throw Error("merge is expected to work only with basic json objects.")
+
+    left.disableNotifications()
+    for key, value of left
+      latestObservable = null
+      left[key]
+      if latestObservable
+        left[key] = right[key]
+
+    left.enableNotifications()
+    left.publish(left)
 )

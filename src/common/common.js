@@ -80,8 +80,9 @@
       };
     })();
     common.observable = function(_get, _set) {
-      var listeners;
+      var enabled, listeners;
       listeners = [];
+      enabled = true;
       return {
         subscribe: function(listener) {
           if (!_.contains(listeners, listener)) {
@@ -91,9 +92,11 @@
         },
         publish: function(newValue, path) {
           var listener, _i, _len;
-          for (_i = 0, _len = listeners.length; _i < _len; _i++) {
-            listener = listeners[_i];
-            listener(newValue, path);
+          if (enabled) {
+            for (_i = 0, _len = listeners.length; _i < _len; _i++) {
+              listener = listeners[_i];
+              listener(newValue, path);
+            }
           }
           return this;
         },
@@ -107,6 +110,12 @@
         },
         set: function(newValue) {
           return _set(newValue);
+        },
+        enableNotifications: function() {
+          return enabled = true;
+        },
+        disableNotifications: function() {
+          return enabled = false;
         }
       };
     };

@@ -2,7 +2,7 @@
 (function() {
 
   window.BC.define('models', function(models) {
-    var common, latestObservable, makeObservable;
+    var common, latestObservable, makeObservable, merge;
     common = window.BC.namespace("common");
     models.model = function(arg, o) {
       var model, value;
@@ -59,7 +59,7 @@
         o = common.observable((function() {
           return result;
         }), function(newValue) {
-          throw Error('set is not supported for root objects');
+          return merge(result, newValue);
         });
       }
       for (key in obj) {
@@ -140,12 +140,29 @@
       latestObservable = null;
       return result;
     };
-    return models.guid = function() {
+    models.guid = function() {
       var s4;
       s4 = function() {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
       };
       return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    };
+    return merge = function(left, right) {
+      var key, value;
+      if (common.isModel(right)) {
+        throw Error("merge is expected to work only with basic json objects.");
+      }
+      left.disableNotifications();
+      for (key in left) {
+        value = left[key];
+        latestObservable = null;
+        left[key];
+        if (latestObservable) {
+          left[key] = right[key];
+        }
+      }
+      left.enableNotifications();
+      return left.publish(left);
     };
   });
 

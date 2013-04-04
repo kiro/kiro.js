@@ -36,17 +36,21 @@ window.BC.define('common', (common) ->
   # Observable
   common.observable = (_get, _set) ->
     listeners = []
+    enabled = true
     subscribe: (listener) ->
       if !_.contains(listeners, listener)
         listeners.push(listener)
       this
     publish: (newValue, path) ->
-      listener(newValue, path) for listener in listeners
+      if enabled
+        listener(newValue, path) for listener in listeners
       this
     unsubscribe: (listener) ->
       listeners = _.filter(listeners, (item) -> item != listener)
     get: () -> _get()
     set: (newValue) -> _set(newValue)
+    enableNotifications: -> enabled = true
+    disableNotifications: -> enabled = false
 
   # Constructs a DOM element from composite, string, number, array.
   common.element = (composite) ->
