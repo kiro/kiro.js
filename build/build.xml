@@ -16,15 +16,63 @@
         </sequential>
     </macrodef>
 
-    <target name="buildall">
+    <macrodef name="copylibs">
+        <attribute name="todir"/>
 
+        <sequential>
+            <copy file="release/kiro.js" todir="@{todir}"/>
+            <copy file="${lib.dir}/jquery.js" todir="@{todir}"/>
+            <copy file="${lib.dir}/underscore.js" todir="@{todir}"/>
+            <copy todir="@{todir}/bootstrap">
+                <fileset dir="${lib.dir}/bootstrap"/>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <target name="minify">
+       <apply executable="java" failonerror="true">
+          <fileset dir="${build.dir}" includes="*.js"/>
+          <mapper type="glob" from="*.js" to="${build.dir}/*-min.js"/>
+          <arg line="-jar"/>
+          <arg path="${closure}"/>
+          <arg line="${closure.options}"/>
+          <arg line="--js"/> <srcfile/>
+          <arg line="--js_output_file"/>
+          <targetfile/>
+       </apply>
     </target>
 
     <target name="src">
-        <concatenate destfile="src.js" srcdir="${src.dir}" list="global.js" exclude="global.js"></concatenate>
+        <concatenate destfile="kiro.js" srcdir="${src.dir}" list="global.js" exclude="global.js"></concatenate>
     </target>
-    <target name="docs">
-        <concatenate destfile="docs.js" srcdir="${docs.dir}" exclude="code.js"></concatenate>
-        <concatenate destfile="docs.css" srcdir="${docs.dir}" files="**/*.css"></concatenate>
+
+    <target name="bundle">
+        <copy todir="release/bundle">
+            <fileset dir="${misc.dir}/bundle"/>
+        </copy>
+        <copylibs todir="release/bundle/lib"/>
+        <zip destfile="release/docs/bundle.zip" basedir="release/bundle"/>
+    </target>
+
+    <target name="gencode">
+        <mkdir dir="release/docs"/>
+        <exec dir="${docs.dir}" executable="python" output="release/docs/code.js">
+            <arg line="codegen.py"/>
+        </exec>
+    </target>
+
+    <target name="docs" depends="src,gencode,bundle">
+        <concatenate destfile="docs/docs.js" srcdir="${docs.dir}" exclude="code.js"></concatenate>
+        <concatenate destfile="docs/docs.css" srcdir="${docs.dir}" files="**/*.css"></concatenate>
+        <copy file="${docs.dir}/docs-build.html" tofile="release/docs/docs.html"/>
+        <copy file="${lib.dir}/sammy-latest.min.js" todir="release/docs/lib"/>
+        <copylibs todir="release/docs/lib"/>
+    </target>
+
+    <target name="buildall" depends="docs,src">
+    </target>
+
+    <target name="pushdocs" depends="docs">
+
     </target>
 </project>

@@ -5,8 +5,14 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-docs.home.index = () -> section(h1("Enter Kiro.js"),
+docs.home.index = () -> section(
   docs.code.home()
+
+  div(class: 'hero-unit',
+    h1("Enter kiro.js")
+    br()
+    a(href: 'bundle.zip', "Download developer bundle")
+  )
 
   example("Declarative bindings", """Allows to bind the values of html properties to models.""", ->
     text = model("World")

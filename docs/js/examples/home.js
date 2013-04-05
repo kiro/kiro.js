@@ -13,7 +13,11 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.home.index = function() {
-    return section(h1("Enter Kiro.js"), docs.code.home(), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
+    return section(docs.code.home(), div({
+      "class": 'hero-unit'
+    }, h1("Enter kiro.js"), br(), a({
+      href: 'bundle.zip'
+    }, "Download developer bundle")), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
       var text;
       text = model("World");
       return body(input.text(text), h3(map(text, function() {
