@@ -16,22 +16,21 @@ docs.examples.chat = -> section(h1("Chat"),
     messages = collection([message(name: 'Chat example', "Welcome!")])
     pusher(messages, 'messages')
 
-    user = object(
+    currentUser = object(
       _id: Math.floor(Math.random()*1000000),
       name: "User" + Math.floor(Math.random()*1000),
       lastSeen: Date.now()
     )
-    window.setInterval((-> user.lastSeen = Date.now()), 5 * 1000)
+    window.setInterval((-> currentUser.lastSeen = Date.now()), 5 * 1000)
 
-    users = collection()
+    users = collection([currentUser])
     pusher(users, 'users', (item) -> ((otherItem) -> item._id == otherItem._id))
-    users.add(user)
     users.filter((user) -> (Date.now() - user.lastSeen) < 10 * 1000)
 
     messageText = model()
     leftPanel = ->
       div().span3(
-        input.text(bind(user.name)).span12()
+        input.text(bind(currentUser.name)).span12()
         ul.unstyled().foreach(users, (user) ->
           li(bind(user.name))
         )
@@ -46,7 +45,7 @@ docs.examples.chat = -> section(h1("Chat"),
           append(
             input.text(placeholder: 'Enter message...', messageText).span9()
             button.primary('Send', -> messages.add(
-              message(user, messageText(""))
+              message(currentUser, messageText(""))
             ))
           ).span12()
         )
