@@ -37,6 +37,11 @@
       if (isActive(link)) {
         return 'active';
       }
+    }).onUpdate(function(el) {
+      if (el.hasClass('active')) {
+        el.parent().parent().find('li').removeClass('active');
+        return el.addClass('active');
+      }
     });
   };
 

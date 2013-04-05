@@ -23,3 +23,8 @@ isActive = (link) ->
 
 docs.toLi = (link) -> li(link)
   .bindClass(docs.currentLocation, -> 'active' if isActive(link))
+  .onUpdate((el) ->
+    if el.hasClass('active')
+      el.parent().parent().find('li').removeClass('active')
+      el.addClass('active')
+  )
