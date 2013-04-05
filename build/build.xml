@@ -64,7 +64,7 @@
     <target name="docs" depends="src,gencode,bundle">
         <concatenate destfile="docs/docs.js" srcdir="${docs.dir}" exclude="code.js"></concatenate>
         <concatenate destfile="docs/docs.css" srcdir="${docs.dir}" files="**/*.css"></concatenate>
-        <copy file="${docs.dir}/docs-build.html" tofile="release/docs/docs.html"/>
+        <copy file="${docs.dir}/docs-build.html" tofile="release/docs/index.html"/>
         <copy file="${lib.dir}/sammy-latest.min.js" todir="release/docs/lib"/>
         <copylibs todir="release/docs/lib"/>
     </target>
