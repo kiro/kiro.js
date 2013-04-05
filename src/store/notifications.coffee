@@ -8,8 +8,8 @@ window.BC.define('store', (store) ->
     channel = pusher.subscribe('private-' + channel)
 
     handler = collection.actionHandler(
-      change: (items) -> channel.trigger('client-change', items)
-      filter: () ->
+      replaceAll: (items) -> channel.trigger('client-replaceAll', items)
+      updateView: () ->
       add: (item) -> channel.trigger('client-add', [item])
       remove: (items) -> channel.trigger('client-remove', items)
       update: (item) -> channel.trigger('client-update', [item])
@@ -25,7 +25,7 @@ window.BC.define('store', (store) ->
         f(args...)
         collection.subscribe(handler)
 
-    channel.bind('client-change', eventHandler(
+    channel.bind('client-replaceAll', eventHandler(
       (items) -> collection((models.object(item) for item in items))
     ))
     channel.bind('client-add', eventHandler(

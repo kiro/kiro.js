@@ -27,8 +27,8 @@
       return indexes;
     };
     actions = {
-      CHANGE: 'change',
-      FILTER: 'filter',
+      REPLACE_ALL: 'replace_all',
+      UPDATE_VIEW: 'update_view',
       ADD: 'add',
       REMOVE: 'remove',
       UPDATE: 'update'
@@ -76,7 +76,7 @@
           assertArray(arg);
           allItems = arg;
           return update(function() {
-            return action(actions.CHANGE, items);
+            return action(actions.REPLACE_ALL, items);
           });
         }
       };
@@ -102,7 +102,7 @@
         return o.publish(items, action());
       };
       update(function() {
-        return action(actions.CHANGE, items);
+        return action(actions.REPLACE_ALL, items);
       });
       toPredicate = function(arg) {
         if (_.isFunction(arg)) {
@@ -134,13 +134,13 @@
       collection.clear = function() {
         allItems = [];
         return update(function() {
-          return action(actions.CHANGE, items);
+          return action(actions.REPLACE_ALL, items);
         });
       };
       collection.filter = function(arg) {
         filter = toPredicate(arg);
         return update(function() {
-          return action(actions.FILTER, items);
+          return action(actions.UPDATE_VIEW, items);
         });
       };
       collection.count = function(arg) {
@@ -202,7 +202,7 @@
         }
         compareFunction = f;
         return update(function() {
-          return action(actions.CHANGE, items);
+          return action(actions.UPDATE_VIEW, items);
         });
       };
       collection.contains = function(item) {
@@ -213,10 +213,10 @@
       };
       collection.actionHandler = function(handler) {
         return function(items, action) {
-          if (action.name === actions.CHANGE) {
-            return handler.change(action.value);
-          } else if (action.name === actions.FILTER) {
-            return handler.filter(action.value);
+          if (action.name === actions.REPLACE_ALL) {
+            return handler.replaceAll(action.value);
+          } else if (action.name === actions.UPDATE_VIEW) {
+            return handler.updateView(action.value);
           } else if (action.name === actions.ADD) {
             return handler.add(action.value, action.index);
           } else if (action.name === actions.REMOVE) {

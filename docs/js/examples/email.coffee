@@ -44,9 +44,9 @@ docs.examples.email = -> section(h1("Email"),
         contact = data.contacts.find(byId(email.contact_id))
 
         tr(
-          td().span2(type.label().important('important') if email.important)
-          td().span3(strong(contact.firstName + " " + contact.lastName))
-          td().span7(strong(email.subject))
+          td().span3(type.label().important('important') if email.important)
+          td().span4(strong(contact.firstName + " " + contact.lastName))
+          td().span5(strong(email.subject))
         ).on('click', -> selectedEmail(email))
          .bindClass(selectedEmail, -> 'info' if selectedEmail() == email)
       )
@@ -90,6 +90,7 @@ docs.examples.email = -> section(h1("Email"),
           button(icon.trash, "Delete", ->
             selectedEmail(null).folders(['trash'])
           ).bindDisabled(negate(selectedEmail))
+           .bindDisabled(selectedEmail, -> selectedEmail().folders.contains('trash') if selectedEmail())
 
           dropdown(
             button("Move").bindDisabled(negate(selectedEmail))

@@ -20,11 +20,11 @@ window.BC.define('models', (models) ->
     return indexes
 
   actions =
-    CHANGE: 'change' # all items in the collection are changed
-    FILTER: 'filter' # items in the collection are filtered
+    REPLACE_ALL: 'replace_all' # all items in the collection are replaced
+    UPDATE_VIEW: 'update_view' # the view of items in the collection is updated, they are sorted or filtered
     ADD: 'add' # an item gets added in the collection
     REMOVE: 'remove' # items are removed from the collection
-    UPDATE: 'update' # an item is updated
+    UPDATE: 'update' # items are updated
 
   models.collection = (initial = [], o = null) ->
     assertArray(initial)
@@ -50,15 +50,12 @@ window.BC.define('models', (models) ->
       else
         assertArray(arg)
         allItems = arg
-        update(-> action(actions.CHANGE, items))
+        update(-> action(actions.REPLACE_ALL, items))
 
     callUpdate = (item, path) ->
       oldIndex = items.indexOf(item)
       update(-> action(actions.UPDATE, item, items.indexOf(item), oldIndex))
 
-    # TODO(kiro) : Make it to do colleciton_change when the collection has actually changed
-    # and make it to pass the changes to the subscribers, so foreach binding can update the
-    # DOM more efficiently
     update = (action) ->
       if compareFunction
         allItems.sort(compareFunction)
@@ -73,7 +70,7 @@ window.BC.define('models', (models) ->
 
       o.publish(items, action())
 
-    update(-> action(actions.CHANGE, items))
+    update(-> action(actions.REPLACE_ALL, items))
 
     toPredicate = (arg) ->
       if _.isFunction(arg)
@@ -104,7 +101,7 @@ window.BC.define('models', (models) ->
     # Removes all elements from the collection
     collection.clear = () ->
       allItems = []
-      update(-> action(actions.CHANGE, items))
+      update(-> action(actions.REPLACE_ALL, items))
 
     # It filters the elements in the collection. The operation does not remove
     # the filtered elements, so if a new filter is set the collection will be
@@ -113,7 +110,7 @@ window.BC.define('models', (models) ->
     # arg can be a function or a value
     collection.filter = (arg) ->
       filter = toPredicate(arg)
-      update(-> action(actions.FILTER, items))
+      update(-> action(actions.UPDATE_VIEW, items))
 
     # Counts the elements in the collection
     #
@@ -163,7 +160,7 @@ window.BC.define('models', (models) ->
     # Sorts the items in the collection and maintains them in sorted order
     collection.sort = (f = defaultCompare) ->
       compareFunction = f
-      update(-> action(actions.CHANGE, items))
+      update(-> action(actions.UPDATE_VIEW, items))
 
     collection.contains = (item) -> _.contains(items, item)
 
@@ -172,10 +169,10 @@ window.BC.define('models', (models) ->
 
     collection.actionHandler = (handler) ->
       (items, action) ->
-        if action.name == actions.CHANGE
-          handler.change(action.value)
-        else if action.name == actions.FILTER
-          handler.filter(action.value)
+        if action.name == actions.REPLACE_ALL
+          handler.replaceAll(action.value)
+        else if action.name == actions.UPDATE_VIEW
+          handler.updateView(action.value)
         else if action.name == actions.ADD
           handler.add(action.value, action.index)
         else if action.name == actions.REMOVE

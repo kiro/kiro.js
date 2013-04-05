@@ -10,10 +10,10 @@
       pusher = new Pusher('9e1249843e69a619bc84');
       channel = pusher.subscribe('private-' + channel);
       handler = collection.actionHandler({
-        change: function(items) {
-          return channel.trigger('client-change', items);
+        replaceAll: function(items) {
+          return channel.trigger('client-replaceAll', items);
         },
-        filter: function() {},
+        updateView: function() {},
         add: function(item) {
           return channel.trigger('client-add', [item]);
         },
@@ -36,7 +36,7 @@
           return collection.subscribe(handler);
         };
       };
-      channel.bind('client-change', eventHandler(function(items) {
+      channel.bind('client-replaceAll', eventHandler(function(items) {
         var item;
         return collection((function() {
           var _i, _len, _results;

@@ -80,8 +80,8 @@
       };
       $.extend(_this, rates);
       return handler = collection.actionHandler({
-        change: rate(updateCollection, request_rate, idempotent()),
-        filter: (function() {}),
+        replaceAll: rate(updateCollection, request_rate, idempotent()),
+        updateView: (function() {}),
         add: rate(add, request_rate, aggregate()),
         remove: rate(remove, request_rate, aggregate()),
         update: rate(updateItems, request_rate, idempotent(id))

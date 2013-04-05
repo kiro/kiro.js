@@ -135,23 +135,23 @@ window.BC.define('common', (common) ->
         getElOrTbody().children().eq(index).remove()
         domUpdated()
 
-      addAll = (items) ->
+      renderAll = (items) ->
         index = 0
         elements = (common.element(item) for item in initialItems)
         elements = elements.concat( (common.element(render(item, index++)) for item in items) )
         el().html(elements)
         domUpdated()
 
-      removeAll = (items, indexes) ->
+      removeItems = (items, indexes) ->
         indexes = indexes.sort().reverse()
         remove(index) for index in indexes
 
       if _.isFunction(collection.subscribe)
         collection.subscribe( collection.actionHandler(
-          change: addAll
-          filter: addAll
+          replaceAll: renderAll
+          updateView: renderAll
           add: add
-          remove: removeAll
+          remove: removeItems
           update: (value, index, oldIndex) ->
             if index < oldIndex
               add(value, index)

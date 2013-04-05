@@ -58,7 +58,7 @@
         return table().foreach(data.mail, function(email) {
           var contact;
           contact = data.contacts.find(byId(email.contact_id));
-          return tr(td().span2(email.important ? type.label().important('important') : void 0), td().span3(strong(contact.firstName + " " + contact.lastName)), td().span7(strong(email.subject))).on('click', function() {
+          return tr(td().span3(email.important ? type.label().important('important') : void 0), td().span4(strong(contact.firstName + " " + contact.lastName)), td().span5(strong(email.subject))).on('click', function() {
             return selectedEmail(email);
           }).bindClass(selectedEmail, function() {
             if (selectedEmail() === email) {
@@ -107,7 +107,11 @@
         var folder;
         return div().span10(button.group(button(icon.trash, "Delete", function() {
           return selectedEmail(null).folders(['trash']);
-        }).bindDisabled(negate(selectedEmail)), dropdown(button("Move").bindDisabled(negate(selectedEmail)), (function() {
+        }).bindDisabled(negate(selectedEmail)).bindDisabled(selectedEmail, function() {
+          if (selectedEmail()) {
+            return selectedEmail().folders.contains('trash');
+          }
+        }), dropdown(button("Move").bindDisabled(negate(selectedEmail)), (function() {
           var _i, _len, _ref, _results;
           _ref = data.folders;
           _results = [];
