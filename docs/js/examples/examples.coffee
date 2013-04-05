@@ -5,16 +5,14 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-docs.examples.index = () ->
-  content = model(docs.examples.players())
-
+docs.examples.index = (content = docs.examples.players()) ->
   div(
     div().span3(
       nav(
-        a("Players", -> content(docs.examples.players()))
-        a("Email", -> content(docs.examples.email()))
-        a("Chat", -> content(docs.examples.chat()))
+        a("Players", -> navigateTo('#/examples/players/'))
+        a("Email", -> navigateTo('#/examples/email/'))
+        a("Chat", -> navigateTo('#/examples/chat/'))
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
-    div().span9().bindHtml(content)
+    div().span9(content)
   )

@@ -12,22 +12,23 @@
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.bootstrap.index = function() {
-    var content;
-    content = model(docs.bootstrap.scaffolding());
+  docs.bootstrap.index = function(content) {
+    if (content == null) {
+      content = docs.bootstrap.scaffolding();
+    }
     return div(div().span3(nav(a("Scaffolding", function() {
-      return content(docs.bootstrap.scaffolding());
+      return navigateTo('#/bootstrap/scaffolding/');
     }), a("Tables", function() {
-      return content(docs.bootstrap.table());
+      return navigateTo('#/bootstrap/table/');
     }), a("Typography", function() {
-      return content(docs.bootstrap.type());
+      return navigateTo('#/bootstrap/type/');
     }), a("Buttons", function() {
-      return content(docs.bootstrap.buttons());
+      return navigateTo('#/bootstrap/buttons/');
     }), a("Forms", function() {
-      return content(docs.bootstrap.forms());
+      return navigateTo('#/bootstrap/forms/');
     }), a("Navigation", function() {
-      return content(docs.bootstrap.nav());
-    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
+      return navigateTo('#/bootstrap/nav/');
+    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

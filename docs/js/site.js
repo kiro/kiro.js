@@ -10,25 +10,41 @@
 
   $.extend(this, bootstrap, models);
 
-  content = model(docs.home());
+  content = model(docs.home.index());
 
   site = div.container(navbar(div.container(navbar.brand("kiro.js"), nav(a("Home", function() {
-    return content(docs.home());
+    return navigateTo('#/');
   }), a("Api", function() {
-    return content(docs.api.index());
+    return navigateTo('#/api/');
   }), a("Bootstrap", function() {
-    return content(docs.bootstrap.index());
+    return navigateTo('#/bootstrap/');
   }), a("Examples", function() {
-    return content(docs.examples.index());
+    return navigateTo('#/examples/');
   })))).inverse().fixedTop(), div.row().bindHtml(content));
 
-  $('body').append(element(site));
-
   app = Sammy('body', function() {
-    this.get('#/:first', function() {});
-    return this.get('#/:first/:second', function() {});
+    this.get('#/', function() {
+      return content(docs.home.index());
+    });
+    this.get('#/:first/', function() {
+      var first;
+      first = this.params['first'];
+      return content(docs[first]['index']());
+    });
+    return this.get('#/:first/:second/', function() {
+      var first, second;
+      first = this.params['first'];
+      second = this.params['second'];
+      return content(docs[first].index(docs[first][second]()));
+    });
   });
 
-  app.run('/#');
+  app.raise_errors = true;
+
+  $(function() {
+    return app.run('#/');
+  });
+
+  $('body').append(element(site));
 
 }).call(this);

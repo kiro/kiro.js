@@ -4,13 +4,15 @@
 
   docs = window.BC.namespace("docs");
 
+  docs.home = window.BC.namespace("docs.home");
+
   bootstrap = window.BC.namespace("bootstrap");
 
   models = window.BC.namespace("models");
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.home = function() {
+  docs.home.index = function() {
     return section(h1("Enter Kiro.js"), docs.code.home(), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
       var text;
       text = model("World");

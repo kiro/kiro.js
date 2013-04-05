@@ -12,16 +12,17 @@
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.examples.index = function() {
-    var content;
-    content = model(docs.examples.players());
+  docs.examples.index = function(content) {
+    if (content == null) {
+      content = docs.examples.players();
+    }
     return div(div().span3(nav(a("Players", function() {
-      return content(docs.examples.players());
+      return navigateTo('#/examples/players/');
     }), a("Email", function() {
-      return content(docs.examples.email());
+      return navigateTo('#/examples/email/');
     }), a("Chat", function() {
-      return content(docs.examples.chat());
-    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
+      return navigateTo('#/examples/chat/');
+    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

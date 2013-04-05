@@ -22,4 +22,8 @@
     return div(items).addClass('bs-docs-example');
   };
 
+  docs.navigateTo = function(path) {
+    return location.hash = path;
+  };
+
 }).call(this);
