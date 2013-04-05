@@ -10,8 +10,11 @@ window.BC.define('bootstrap', (bootstrap) ->
     $(el).parent().addClass('active')
 
   bootstrap.nav = (items...) ->
+    toLi = if _.isFunction(_.last(items)) then items.pop() else (item) -> li(item)
+
     item.on('click', -> activate(this)) for item in items
-    items = (li(item) for item in items)
+
+    items = (toLi(item) for item in items)
 
     if items.length
       items[0].addClass('active')

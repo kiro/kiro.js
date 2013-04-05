@@ -62,6 +62,8 @@ window.BC.define('common', (common) ->
           this
 
         classes: () -> attr.get('class')
+
+        getAttr: (name) -> attr.get(name)
       )
 
       if o then result.bindHtml(o)

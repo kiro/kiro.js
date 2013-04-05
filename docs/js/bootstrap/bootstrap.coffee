@@ -15,6 +15,7 @@ docs.bootstrap.index = (content = docs.bootstrap.scaffolding()) ->
         a(href: '#/bootstrap/buttons/', "Buttons")
         a(href: '#/bootstrap/forms/', "Forms")
         a(href: '#/bootstrap/nav/', "Navigation")
+        docs.toLi
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
     div().span9(content)

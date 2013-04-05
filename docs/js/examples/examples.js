@@ -22,7 +22,7 @@
       href: '#/examples/email/'
     }, "Email"), a({
       href: '#/examples/chat/'
-    }, "Chat")).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    }, "Chat"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

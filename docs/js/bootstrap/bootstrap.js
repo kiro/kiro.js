@@ -28,7 +28,7 @@
       href: '#/bootstrap/forms/'
     }, "Forms"), a({
       href: '#/bootstrap/nav/'
-    }, "Navigation")).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    }, "Navigation"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

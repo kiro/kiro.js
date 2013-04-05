@@ -85,6 +85,9 @@
           },
           classes: function() {
             return attr.get('class');
+          },
+          getAttr: function(name) {
+            return attr.get(name);
           }
         });
         if (o) {

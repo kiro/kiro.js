@@ -12,8 +12,11 @@
       return $(el).parent().addClass('active');
     };
     bootstrap.nav = function() {
-      var item, items, _i, _len;
+      var item, items, toLi, _i, _len;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      toLi = _.isFunction(_.last(items)) ? items.pop() : function(item) {
+        return li(item);
+      };
       for (_i = 0, _len = items.length; _i < _len; _i++) {
         item = items[_i];
         item.on('click', function() {
@@ -25,7 +28,7 @@
         _results = [];
         for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
           item = items[_j];
-          _results.push(li(item));
+          _results.push(toLi(item));
         }
         return _results;
       })();

@@ -1,5 +1,6 @@
 bootstrap = window.BC.namespace("bootstrap")
 docs = window.BC.namespace("docs")
+models = window.BC.namespace("models")
 
 $.extend(this, bootstrap)
 
@@ -14,4 +15,11 @@ docs.example = (title, description, content) ->
 docs.body = (items...) ->
   div(items).addClass('bs-docs-example')
 
-docs.navigateTo = (path) -> location.hash = path
+docs.currentLocation = models.model(location.hash)
+
+isActive = (link) ->
+  if docs.currentLocation()
+    return docs.currentLocation().indexOf(link.getAttr('href')) == 0
+
+docs.toLi = (link) -> li(link)
+  .bindClass(docs.currentLocation, -> 'active' if isActive(link))

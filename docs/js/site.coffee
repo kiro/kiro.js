@@ -15,6 +15,7 @@ site = div.container(
         a(href: '#/api/', "Api")
         a(href: '#/bootstrap/', "Bootstrap")
         a(href: '#/examples/', "Examples")
+        docs.toLi
       )
     )
   ).inverse().fixedTop()
@@ -22,14 +23,20 @@ site = div.container(
 )
 
 app = Sammy('body', ->
-  this.get('#/', -> content(docs.home.index()))
+  this.get('#/', ->
+    content(docs.home.index())
+    docs.currentLocation(location.hash)
+  )
   this.get('#/:first/', ->
     first = this.params['first']
-    content(docs[first]['index']()))
+    content(docs[first]['index']())
+    docs.currentLocation(location.hash)
+  )
   this.get('#/:first/:second/', ->
     first = this.params['first']
     second = this.params['second']
     content(docs[first].index(docs[first][second]()))
+    docs.currentLocation(location.hash)
   )
 )
 

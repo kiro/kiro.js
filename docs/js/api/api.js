@@ -22,7 +22,7 @@
       href: '#/api/bindings/'
     }, "Bindings"), a({
       href: '#/api/collection/'
-    }, "Collection")).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    }, "Collection"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);
