@@ -125,8 +125,8 @@ docs.collectionApi = -> section(h1("Collection"),
     byId = (id) -> ((user) -> user.id.toString() == id.toString())
 
     body(
-      p("User 1 : ", users.find(byId(1)).name)
-      p("User 2 : ", users.find((item) -> item.id > 1))
+      p(JSON.stringify(users.find(byId(1))))
+      p(JSON.stringify(users.find((item) -> item.id > 1)))
     )
   )
 
@@ -136,11 +136,10 @@ docs.collectionApi = -> section(h1("Collection"),
       name: name
 
     users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")])
-    byId = (id) -> ((user) -> user.id.toString() == id.toString())
 
     body(
-      p("User 1 : ", users.at(1).name)
-      p("User 2 : ", users.at(2).name)
+      p(JSON.stringify(users.at(1)))
+      p(JSON.stringify(users.at(2)))
     )
   )
 

@@ -4,10 +4,9 @@ models = window.BC.namespace("models")
 $.extend(this, html, models)
 
 ENTER_KEY = 13
-id = 0
 
 # models
-todoModel = (title) -> object(id: id++, title: title, completed: false)
+todoModel = (title) -> object(title: title, completed: false)
 todos = collection()
 checkAll = model(false)
 selectedFilter = model("")
@@ -47,7 +46,6 @@ main = ->
       .on('click', -> (todo.completed = checkAll() for todo in todos()))
 
     label(for: "toggle-all", "Mark all as complete")
-
     ul(id: "todo-list").foreach(todos, renderTodo)
   ).bindVisible(todos, -> todos.count() > 0)
 
