@@ -1,10 +1,11 @@
 docs = window.BC.namespace("docs")
+docs.api = window.BC.namespace("docs.api")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-docs.modelApi = -> section(h1("Model"),
+docs.api.model = -> section(h1("Model"),
   docs.code.model()
 
   p("""Models constructs observables from values or objects.""")

@@ -4,21 +4,23 @@
 
   docs = window.BC.namespace("docs");
 
+  docs.api = window.BC.namespace("docs.api");
+
   bootstrap = window.BC.namespace("bootstrap");
 
   models = window.BC.namespace("models");
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.api = function() {
+  docs.api.index = function() {
     var content;
-    content = model(docs.modelApi());
+    content = model(docs.api.model());
     return div(div().span3(nav(a("Model", function() {
-      return content(docs.modelApi());
+      return content(docs.api.model());
     }), a("Bindings", function() {
-      return content(docs.bindingsApi());
+      return content(docs.api.bindings());
     }), a("Collection", function() {
-      return content(docs.collectionApi());
+      return content(docs.api.collection());
     })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9().bindHtml(content));
   };
 

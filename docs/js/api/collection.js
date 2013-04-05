@@ -4,6 +4,8 @@
 
   docs = window.BC.namespace("docs");
 
+  docs.api = window.BC.namespace("docs.api");
+
   bootstrap = window.BC.namespace("bootstrap");
 
   models = window.BC.namespace("models");
@@ -12,7 +14,7 @@
 
   showCollection = function() {};
 
-  docs.collectionApi = function() {
+  docs.api.collection = function() {
     return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> Appends an item to the collection. </p>", function() {
       var numbers, value;
       numbers = collection([1, 2, 3]);

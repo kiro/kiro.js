@@ -4,13 +4,15 @@
 
   docs = window.BC.namespace("docs");
 
+  docs.api = window.BC.namespace("docs.api");
+
   bootstrap = window.BC.namespace("bootstrap");
 
   models = window.BC.namespace("models");
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.bindingsApi = function() {
+  docs.api.bindings = function() {
     return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
       var married, sex, text;
       text = model("initial");

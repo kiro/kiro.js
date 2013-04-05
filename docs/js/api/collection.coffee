@@ -1,4 +1,5 @@
 docs = window.BC.namespace("docs")
+docs.api = window.BC.namespace("docs.api")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
 
@@ -6,7 +7,7 @@ $.extend(this, bootstrap, models, docs)
 
 showCollection = ->
 
-docs.collectionApi = -> section(h1("Collection"),
+docs.api.collection = -> section(h1("Collection"),
   docs.code.collection()
   p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> ")
 

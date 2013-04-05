@@ -1,10 +1,11 @@
 docs = window.BC.namespace("docs")
+docs.api = window.BC.namespace("docs.api")
 bootstrap = window.BC.namespace("bootstrap")
 models = window.BC.namespace("models")
 
 $.extend(this, bootstrap, models, docs)
 
-docs.bindingsApi = -> section(h1("Bindings"),
+docs.api.bindings = -> section(h1("Bindings"),
   docs.code.bindings()
 
   p("""Each html element offers number of bindings, which allow to bind the value of a certain

@@ -4,13 +4,15 @@
 
   docs = window.BC.namespace("docs");
 
+  docs.api = window.BC.namespace("docs.api");
+
   bootstrap = window.BC.namespace("bootstrap");
 
   models = window.BC.namespace("models");
 
   $.extend(this, bootstrap, models, docs);
 
-  docs.modelApi = function() {
+  docs.api.model = function() {
     return section(h1("Model"), docs.code.model(), p("Models constructs observables from values or objects."), example("Model", "Creates an observable value. <code>x = model(value)</code> creates a new observable.\nCalling <code>x()</code> gets the value of the observable. <code>x(newValue)</code> sets\nthe value of the observable. Observable values can be bound to properties of the dom elements\nand they will be automatically updated when the value changes.", function() {
       var count, text;
       count = model(0);

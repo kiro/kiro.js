@@ -12,7 +12,7 @@ site = div.container(
       navbar.brand("kiro.js")
       nav(
         a("Home", -> content(docs.home()))
-        a("Api", -> content(docs.api()))
+        a("Api", -> content(docs.api.index()))
         a("Bootstrap", -> content(docs.bootstrap.index()))
         a("Examples", -> content(docs.examples.index()))
       )
@@ -27,3 +27,11 @@ $('body').append(
   )
 )
 
+app = Sammy('body', ->
+  this.get('#/:first', ->
+  )
+  this.get('#/:first/:second', ->
+  )
+)
+
+app.run('/#')
