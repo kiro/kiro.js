@@ -9,7 +9,7 @@ window.BC.define('common', (common) ->
 
     el = (value) -> if !_.isUndefined(value) then _el = value else _el
 
-    updated = () -> handler(_el) for handler in updateHandlers
+    domUpdated = () -> handler(_el) for handler in updateHandlers
 
     # Adds a initializer, which is a jquery call.
     addInitializer = (initializer) ->
@@ -21,11 +21,11 @@ window.BC.define('common', (common) ->
       (observable, map = defaultMap) ->
         addInitializer.call(this, ->
           el()[f](map(observable.get()))
-          updated()
+          domUpdated()
         )
         addInitializer.call(this, -> observable.subscribe( (newValue) ->
           el()[f](map(newValue))
-          updated()
+          domUpdated()
         ))
         this
 
@@ -41,7 +41,7 @@ window.BC.define('common', (common) ->
     bindValue: (observable) ->
       valueHandler = (newValue) ->
         el().val(newValue)
-        updated()
+        domUpdated()
 
       this.setValue = (newValue) ->
         observable.unsubscribe(valueHandler)
@@ -50,7 +50,7 @@ window.BC.define('common', (common) ->
 
       addInitializer.call(this, ->
         el().val(observable.get())
-        updated()
+        domUpdated()
       )
       addInitializer.call(this, -> observable.subscribe(valueHandler))
       this
@@ -74,7 +74,7 @@ window.BC.define('common', (common) ->
         el().removeClass(prevClass)
         prevClass = map(value)
         el().addClass(prevClass)
-        updated()
+        domUpdated()
       )
       this
 
@@ -129,18 +129,18 @@ window.BC.define('common', (common) ->
           getElOrTbody().prepend(common.element(render(value, index, tag)))
         else
           getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)))
-        updated()
+        domUpdated()
 
       remove = (index) ->
         getElOrTbody().children().eq(index).remove()
-        updated()
+        domUpdated()
 
       addAll = (items) ->
         index = 0
         elements = (common.element(item) for item in initialItems)
         elements = elements.concat( (common.element(render(item, index++)) for item in items) )
         el().html(elements)
-        updated()
+        domUpdated()
 
       removeAll = (items, indexes) ->
         indexes = indexes.sort().reverse()

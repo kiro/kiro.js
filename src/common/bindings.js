@@ -3,7 +3,7 @@
 
   window.BC.define('common', function(common) {
     return common.bindings = function(initialItems) {
-      var addInitializer, binder, el, identity, initializers, updateHandlers, updated, _el;
+      var addInitializer, binder, domUpdated, el, identity, initializers, updateHandlers, _el;
       _el = null;
       initializers = [];
       updateHandlers = [];
@@ -17,7 +17,7 @@
           return _el;
         }
       };
-      updated = function() {
+      domUpdated = function() {
         var handler, _i, _len, _results;
         _results = [];
         for (_i = 0, _len = updateHandlers.length; _i < _len; _i++) {
@@ -45,12 +45,12 @@
           }
           addInitializer.call(this, function() {
             el()[f](map(observable.get()));
-            return updated();
+            return domUpdated();
           });
           addInitializer.call(this, function() {
             return observable.subscribe(function(newValue) {
               el()[f](map(newValue));
-              return updated();
+              return domUpdated();
             });
           });
           return this;
@@ -72,7 +72,7 @@
           var valueHandler;
           valueHandler = function(newValue) {
             el().val(newValue);
-            return updated();
+            return domUpdated();
           };
           this.setValue = function(newValue) {
             observable.unsubscribe(valueHandler);
@@ -81,7 +81,7 @@
           };
           addInitializer.call(this, function() {
             el().val(observable.get());
-            return updated();
+            return domUpdated();
           });
           addInitializer.call(this, function() {
             return observable.subscribe(valueHandler);
@@ -113,7 +113,7 @@
             el().removeClass(prevClass);
             prevClass = map(value);
             el().addClass(prevClass);
-            return updated();
+            return domUpdated();
           });
           return this;
         },
@@ -200,11 +200,11 @@
             } else {
               getElOrTbody().children().eq(index - 1).after(common.element(render(value, index, tag)));
             }
-            return updated();
+            return domUpdated();
           };
           remove = function(index) {
             getElOrTbody().children().eq(index).remove();
-            return updated();
+            return domUpdated();
           };
           addAll = function(items) {
             var elements;
@@ -228,7 +228,7 @@
               return _results;
             })());
             el().html(elements);
-            return updated();
+            return domUpdated();
           };
           removeAll = function(items, indexes) {
             var _i, _len, _results;
