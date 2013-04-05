@@ -16,14 +16,14 @@ window.BC.define('store', (store) ->
     )
 
     channel.bind('pusher:subscription_succeeded', ->
-      collection.subscribe(handler)
+      collection.subscribeStore(handler)
     )
 
     eventHandler = (f) ->
       (args...) ->
-        collection.unsubscribe(handler)
+        collection.disableStoreNotifications()
         f(args...)
-        collection.subscribe(handler)
+        collection.enableStoreNotifications()
 
     channel.bind('client-replaceAll', eventHandler(
       (items) -> collection((models.object(item) for item in items))

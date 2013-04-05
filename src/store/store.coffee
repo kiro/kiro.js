@@ -27,7 +27,7 @@ window.BC.define('store', (store) ->
       else
         collection(models.object(item) for item in result)
 
-      collection.subscribe(handler)
+      collection.subscribeStore(handler)
     )
 
     id = (item) -> item._id

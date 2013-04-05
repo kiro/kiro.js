@@ -34,7 +34,7 @@
       UPDATE: 'update'
     };
     return models.collection = function(initial, o) {
-      var action, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, toPredicate, update;
+      var action, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, storeHandlers, toPredicate, update;
       if (initial == null) {
         initial = [];
       }
@@ -225,6 +225,29 @@
             return handler.update(action.value, action.index, action.oldIndex);
           }
         };
+      };
+      storeHandlers = [];
+      collection.subscribeStore = function(handler) {
+        storeHandlers.push(handler);
+        return this.subscribe(handler);
+      };
+      collection.disableStoreNotifications = function() {
+        var handler, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = storeHandlers.length; _i < _len; _i++) {
+          handler = storeHandlers[_i];
+          _results.push(this.unsubscribe(handler));
+        }
+        return _results;
+      };
+      collection.enableStoreNotifications = function() {
+        var handler, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = storeHandlers.length; _i < _len; _i++) {
+          handler = storeHandlers[_i];
+          _results.push(this.subscribe(handler));
+        }
+        return _results;
       };
       return $.extend(collection, o);
     };

@@ -25,15 +25,15 @@
         }
       });
       channel.bind('pusher:subscription_succeeded', function() {
-        return collection.subscribe(handler);
+        return collection.subscribeStore(handler);
       });
       eventHandler = function(f) {
         return function() {
           var args;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          collection.unsubscribe(handler);
+          collection.disableStoreNotifications();
           f.apply(null, args);
-          return collection.subscribe(handler);
+          return collection.enableStoreNotifications();
         };
       };
       channel.bind('client-replaceAll', eventHandler(function(items) {

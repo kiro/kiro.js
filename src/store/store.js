@@ -48,7 +48,7 @@
             return _results;
           })());
         }
-        return collection.subscribe(handler);
+        return collection.subscribeStore(handler);
       });
       id = function(item) {
         return item._id;

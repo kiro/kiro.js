@@ -180,5 +180,16 @@ window.BC.define('models', (models) ->
         else if action.name == actions.UPDATE
           handler.update(action.value, action.index, action.oldIndex)
 
+    storeHandlers = []
+    collection.subscribeStore = (handler) ->
+      storeHandlers.push(handler)
+      this.subscribe(handler)
+
+    collection.disableStoreNotifications = () ->
+      this.unsubscribe(handler) for handler in storeHandlers
+
+    collection.enableStoreNotifications = () ->
+      this.subscribe(handler) for handler in storeHandlers
+
     $.extend(collection, o)
 )
