@@ -9,9 +9,9 @@ docs.api.index = (content = docs.api.model()) ->
   div(
     div().span3(
       nav(
-        a("Model", -> navigateTo('#/api/model/'))
-        a("Bindings", -> navigateTo('#/api/bindings/'))
-        a("Collection", -> navigateTo('#/api/collection/'))
+        a(href: '#/api/model/', "Model")
+        a(href: '#/api/bindings/', "Bindings")
+        a(href: '#/api/collection/', "Collection")
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
     div().span9(content)

@@ -16,19 +16,19 @@
     if (content == null) {
       content = docs.bootstrap.scaffolding();
     }
-    return div(div().span3(nav(a("Scaffolding", function() {
-      return navigateTo('#/bootstrap/scaffolding/');
-    }), a("Tables", function() {
-      return navigateTo('#/bootstrap/table/');
-    }), a("Typography", function() {
-      return navigateTo('#/bootstrap/type/');
-    }), a("Buttons", function() {
-      return navigateTo('#/bootstrap/buttons/');
-    }), a("Forms", function() {
-      return navigateTo('#/bootstrap/forms/');
-    }), a("Navigation", function() {
-      return navigateTo('#/bootstrap/nav/');
-    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    return div(div().span3(nav(a({
+      href: '#/bootstrap/scaffolding/'
+    }, "Scaffolding"), a({
+      href: '#/bootstrap/table/'
+    }, "Tables"), a({
+      href: '#/bootstrap/type/'
+    }, "Typography"), a({
+      href: '#/bootstrap/buttons/'
+    }, "Buttons"), a({
+      href: '#/bootstrap/forms/'
+    }, "Forms"), a({
+      href: '#/bootstrap/nav/'
+    }, "Navigation")).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

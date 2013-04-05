@@ -16,13 +16,13 @@
     if (content == null) {
       content = docs.examples.players();
     }
-    return div(div().span3(nav(a("Players", function() {
-      return navigateTo('#/examples/players/');
-    }), a("Email", function() {
-      return navigateTo('#/examples/email/');
-    }), a("Chat", function() {
-      return navigateTo('#/examples/chat/');
-    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    return div(div().span3(nav(a({
+      href: '#/examples/players/'
+    }, "Players"), a({
+      href: '#/examples/email/'
+    }, "Email"), a({
+      href: '#/examples/chat/'
+    }, "Chat")).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

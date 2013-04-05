@@ -16,13 +16,13 @@
     if (content == null) {
       content = docs.api.model();
     }
-    return div(div().span3(nav(a("Model", function() {
-      return navigateTo('#/api/model/');
-    }), a("Bindings", function() {
-      return navigateTo('#/api/bindings/');
-    }), a("Collection", function() {
-      return navigateTo('#/api/collection/');
-    })).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    return div(div().span3(nav(a({
+      href: '#/api/model/'
+    }, "Model"), a({
+      href: '#/api/bindings/'
+    }, "Bindings"), a({
+      href: '#/api/collection/'
+    }, "Collection")).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

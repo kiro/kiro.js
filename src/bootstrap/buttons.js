@@ -76,7 +76,7 @@
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       last = _.last(args);
       click = function() {
-        return false;
+        return true;
       };
       if (_.isFunction(last)) {
         click = function() {

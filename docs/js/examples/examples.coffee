@@ -9,9 +9,9 @@ docs.examples.index = (content = docs.examples.players()) ->
   div(
     div().span3(
       nav(
-        a("Players", -> navigateTo('#/examples/players/'))
-        a("Email", -> navigateTo('#/examples/email/'))
-        a("Chat", -> navigateTo('#/examples/chat/'))
+        a(href: '#/examples/players/', "Players")
+        a(href: '#/examples/email/', "Email")
+        a(href: '#/examples/chat/', "Chat")
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
     div().span9(content)

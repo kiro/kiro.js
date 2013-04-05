@@ -9,12 +9,12 @@ docs.bootstrap.index = (content = docs.bootstrap.scaffolding()) ->
   div(
     div().span3(
       nav(
-        a("Scaffolding", -> navigateTo('#/bootstrap/scaffolding/'))
-        a("Tables", -> navigateTo('#/bootstrap/table/'))
-        a("Typography", -> navigateTo('#/bootstrap/type/'))
-        a("Buttons", -> navigateTo('#/bootstrap/buttons/'))
-        a("Forms", -> navigateTo('#/bootstrap/forms/'))
-        a("Navigation", -> navigateTo('#/bootstrap/nav/'))
+        a(href: '#/bootstrap/scaffolding/', "Scaffolding")
+        a(href: '#/bootstrap/table/', "Tables")
+        a(href: '#/bootstrap/type/', "Typography")
+        a(href: '#/bootstrap/buttons/', "Buttons")
+        a(href: '#/bootstrap/forms/', "Forms")
+        a(href: '#/bootstrap/nav/', "Navigation")
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )
     div().span9(content)

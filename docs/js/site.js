@@ -12,15 +12,15 @@
 
   content = model(docs.home.index());
 
-  site = div.container(navbar(div.container(navbar.brand("kiro.js"), nav(a("Home", function() {
-    return navigateTo('#/');
-  }), a("Api", function() {
-    return navigateTo('#/api/');
-  }), a("Bootstrap", function() {
-    return navigateTo('#/bootstrap/');
-  }), a("Examples", function() {
-    return navigateTo('#/examples/');
-  })))).inverse().fixedTop(), div.row().bindHtml(content));
+  site = div.container(navbar(div.container(navbar.brand("kiro.js"), nav(a({
+    href: '#/'
+  }, "Home"), a({
+    href: '#/api/'
+  }, "Api"), a({
+    href: '#/bootstrap/'
+  }, "Bootstrap"), a({
+    href: '#/examples/'
+  }, "Examples")))).inverse().fixedTop(), div.row().bindHtml(content));
 
   app = Sammy('body', function() {
     this.get('#/', function() {

@@ -40,7 +40,7 @@ window.BC.define('bootstrap', (bootstrap) ->
   # Link
   bootstrap.a = (args...) ->
     last = _.last(args)
-    click = -> return false
+    click = -> return true
     if _.isFunction(last)
       click = (args...) ->
         last(args...)

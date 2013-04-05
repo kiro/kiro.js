@@ -11,10 +11,10 @@ site = div.container(
     div.container(
       navbar.brand("kiro.js")
       nav(
-        a("Home", -> navigateTo('#/'))
-        a("Api", -> navigateTo('#/api/'))
-        a("Bootstrap", -> navigateTo('#/bootstrap/'))
-        a("Examples", -> navigateTo('#/examples/'))
+        a(href: '#/', "Home")
+        a(href: '#/api/', "Api")
+        a(href: '#/bootstrap/', "Bootstrap")
+        a(href: '#/examples/', "Examples")
       )
     )
   ).inverse().fixedTop()
