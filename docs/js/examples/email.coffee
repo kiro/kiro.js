@@ -30,7 +30,7 @@ docs.examples.email = -> section(h1("Email"),
       object(
         $.extend(
           {"id": "mail_" + nextId(),
-          "contact_id": data.contacts.get(0).id,
+          "contact_id": data.contacts.at(0).id,
           "folders": ['sent'],
           "time": new Date().getTime(),
           "subject": ""
@@ -41,7 +41,7 @@ docs.examples.email = -> section(h1("Email"),
 
     emailList = () ->
       table().foreach(data.mail, (email) ->
-        contact = data.contacts.get(byId(email.contact_id))
+        contact = data.contacts.find(byId(email.contact_id))
 
         tr(
           td().span2(type.label().important('important') if email.important)

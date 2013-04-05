@@ -47,7 +47,7 @@
       email = function(init) {
         return object($.extend({
           "id": "mail_" + nextId(),
-          "contact_id": data.contacts.get(0).id,
+          "contact_id": data.contacts.at(0).id,
           "folders": ['sent'],
           "time": new Date().getTime(),
           "subject": "",
@@ -57,7 +57,7 @@
       emailList = function() {
         return table().foreach(data.mail, function(email) {
           var contact;
-          contact = data.contacts.get(byId(email.contact_id));
+          contact = data.contacts.find(byId(email.contact_id));
           return tr(td().span2(email.important ? type.label().important('important') : void 0), td().span3(strong(contact.firstName + " " + contact.lastName)), td().span7(strong(email.subject))).on('click', function() {
             return selectedEmail(email);
           }).bindClass(selectedEmail, function() {

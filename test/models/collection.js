@@ -67,17 +67,27 @@
       numbers.clear();
       return expect(numbers().length).toBe(0);
     });
-    it("Tests get", function() {
+    it("Tests at", function() {
       var numbers;
       numbers = collection([1, 2, 3]);
       numbers.subscribe(function() {
         throw Error("Get shouldn't trigger an update.");
       });
-      expect(numbers.get(1)).toEqual(2);
-      expect(numbers.get(0)).toEqual(1);
-      return expect(numbers.get(function(number) {
-        return number > 0 && number < 3;
-      })).toEqual([1, 2]);
+      expect(numbers.at(1)).toEqual(2);
+      return expect(numbers.at(0)).toEqual(1);
+    });
+    it("Tests find", function() {
+      var numbers;
+      numbers = collection([1, 2, 3]);
+      expect(numbers.find(function(number) {
+        return number === 2;
+      })).toBe(2);
+      expect(numbers.find(function() {
+        return false;
+      })).toBeUndefined();
+      return expect(numbers.find(function(number) {
+        return number > 1;
+      })).toEqual([2, 3]);
     });
     it("Tests count", function() {
       var numbers;
@@ -254,16 +264,16 @@
       c.subscribe(function() {
         return calls++;
       });
-      c.get(0).value = 3;
+      c.at(0).value = 3;
       expect(calls).toBe(1);
-      c.get(1).value = 5;
+      c.at(1).value = 5;
       expect(calls).toBe(2);
       map(c, function() {
         return c.total();
       }).subscribe(function() {
         return calls++;
       });
-      c.get(0).value = 5;
+      c.at(0).value = 5;
       return expect(calls).toBe(3);
     });
   });

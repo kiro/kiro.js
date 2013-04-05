@@ -143,15 +143,17 @@ window.BC.define('models', (models) ->
 
     # Returns a value with index arg, or if arg is function all values that
     # match the predicate
-    _get = (arg) ->
-      if _.isFunction(arg)
-        result = _.filter(items, arg)
-        if result.length == 1
-          result[0]
-        else
-          result
+    collection.find = (predicate) ->
+      result = _.filter(items, predicate)
+      if result.length == 0
+        undefined
+      else if result.length == 1
+        result[0]
       else
-        items[arg]
+        result
+
+    # Returns the item at index
+    collection.at = (index) -> items[index]
 
     defaultCompare = (a, b) ->
       if a > b then 1
@@ -181,5 +183,5 @@ window.BC.define('models', (models) ->
         else if action.name == actions.UPDATE
           handler.update(action.value, action.index, action.oldIndex)
 
-    $.extend(collection, o, get: _get)
+    $.extend(collection, o)
 )

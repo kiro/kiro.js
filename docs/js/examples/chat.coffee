@@ -11,7 +11,7 @@ body = (items...) -> div(class: 'padded', items)
 docs.examples.chat = -> section(h1("Chat"),
   docs.code.chat()
 
-  example("Chat app", "You can open chat examples in different ", ->
+  example("Chat app", "You can open the chat example in different tabs.", ->
     message = (user, content) -> object(user: user, content: content)
     messages = collection([message(name: 'Chat example', "Welcome!")])
     pusher(messages, 'messages')
@@ -21,12 +21,12 @@ docs.examples.chat = -> section(h1("Chat"),
       name: "User" + Math.floor(Math.random()*1000),
       lastSeen: Date.now()
     )
-    window.setInterval((-> user.lastSeen = Date.now()), 10 * 1000)
+    window.setInterval((-> user.lastSeen = Date.now()), 5 * 1000)
 
     users = collection()
     pusher(users, 'users', (item) -> ((otherItem) -> item._id == otherItem._id))
     users.add(user)
-    users.filter((user) -> (Date.now() - user.lastSeen) > 20 * 1000)
+    users.filter((user) -> (Date.now() - user.lastSeen) < 10 * 1000)
 
     messageText = model()
     leftPanel = ->

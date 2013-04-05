@@ -113,9 +113,10 @@ docs.collectionApi = -> section(h1("Collection"),
     )
   )
 
-  example(".get", """<p><code>get(index)</code> gets the item at index.</p>
-                     <p><code>get(predicate)</code> gets the items matching the predicate.</p>
-                  """, ->
+  example(".find", """<p><code>.find(predicate)</code> gets the items matching the predicate.</p>
+                      If there is only one match it returns it.
+                      If there are multiple matches it returns an array.
+                   """, ->
     user = (id, name) ->
       id: id
       name: name
@@ -124,9 +125,22 @@ docs.collectionApi = -> section(h1("Collection"),
     byId = (id) -> ((user) -> user.id.toString() == id.toString())
 
     body(
-      # TODO(kiro): make get to return the value directly if it's only one
-      p("User 1 : ", users.get(byId(1)).name)
-      p("User 2 : ", users.get(byId(2)).name)
+      p("User 1 : ", users.find(byId(1)).name)
+      p("User 2 : ", users.find((item) -> item.id > 1))
+    )
+  )
+
+  example(".at", """<p><code>.at(index)</code> gets the element at position index.</p>""", ->
+    user = (id, name) ->
+      id: id
+      name: name
+
+    users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")])
+    byId = (id) -> ((user) -> user.id.toString() == id.toString())
+
+    body(
+      p("User 1 : ", users.at(1).name)
+      p("User 2 : ", users.at(2).name)
     )
   )
 

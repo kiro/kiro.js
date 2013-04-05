@@ -67,11 +67,16 @@
         return _results;
       }));
       return channel.bind('client-update', eventHandler(function(items) {
-        var item, _i, _len, _results;
+        var collectionItem, item, _i, _len, _results;
         _results = [];
         for (_i = 0, _len = items.length; _i < _len; _i++) {
           item = items[_i];
-          _results.push(collection.get(comparator(item)).set(item));
+          collectionItem = collection.find(comparator(item));
+          if (collectionItem) {
+            _results.push(collectionItem.set(item));
+          } else {
+            _results.push(collection.add(models.object(item)));
+          }
         }
         return _results;
       }));

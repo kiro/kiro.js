@@ -58,13 +58,20 @@ describe("Collection tests", ->
     expect(numbers().length).toBe(0)
   )
 
-  it("Tests get", ->
+  it("Tests at", ->
     numbers = collection([1, 2, 3])
     numbers.subscribe( -> throw Error("Get shouldn't trigger an update."))
 
-    expect(numbers.get(1)).toEqual(2)
-    expect(numbers.get(0)).toEqual(1)
-    expect(numbers.get((number) -> number > 0 and number < 3)).toEqual([1, 2])
+    expect(numbers.at(1)).toEqual(2)
+    expect(numbers.at(0)).toEqual(1)
+  )
+
+  it("Tests find", ->
+    numbers = collection([1, 2, 3])
+
+    expect(numbers.find((number) -> number == 2)).toBe(2)
+    expect(numbers.find(-> false)).toBeUndefined()
+    expect(numbers.find((number) -> number > 1)).toEqual([2, 3])
   )
 
   it("Tests count", ->
@@ -210,14 +217,14 @@ describe("Collection tests", ->
     c = collection([object(value: 1), object(value: 2), object(value: 3)])
     calls = 0
     c.subscribe(-> calls++)
-    c.get(0).value = 3
+    c.at(0).value = 3
     expect(calls).toBe(1)
 
-    c.get(1).value = 5
+    c.at(1).value = 5
     expect(calls).toBe(2)
 
     map(c, -> c.total()).subscribe(-> calls++)
-    c.get(0).value = 5
+    c.at(0).value = 5
     expect(calls).toBe(3)
   )
 )

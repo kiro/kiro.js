@@ -34,7 +34,7 @@
       UPDATE: 'update'
     };
     return models.collection = function(initial, o) {
-      var action, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, toPredicate, update, _get;
+      var action, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, toPredicate, update;
       if (initial == null) {
         initial = [];
       }
@@ -173,18 +173,19 @@
           throw Error(arg + " is expected to be function or undefined");
         }
       };
-      _get = function(arg) {
+      collection.find = function(predicate) {
         var result;
-        if (_.isFunction(arg)) {
-          result = _.filter(items, arg);
-          if (result.length === 1) {
-            return result[0];
-          } else {
-            return result;
-          }
+        result = _.filter(items, predicate);
+        if (result.length === 0) {
+          return void 0;
+        } else if (result.length === 1) {
+          return result[0];
         } else {
-          return items[arg];
+          return result;
         }
+      };
+      collection.at = function(index) {
+        return items[index];
       };
       defaultCompare = function(a, b) {
         if (a > b) {
@@ -225,9 +226,7 @@
           }
         };
       };
-      return $.extend(collection, o, {
-        get: _get
-      });
+      return $.extend(collection, o);
     };
   });
 

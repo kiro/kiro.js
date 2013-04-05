@@ -84,7 +84,7 @@
       })), p(map(numbers, function() {
         return 'Even ' + numbers.total(even);
       })));
-    }), example(".get", "<p><code>get(index)</code> gets the item at index.</p>\n<p><code>get(predicate)</code> gets the items matching the predicate.</p>", function() {
+    }), example(".find", "<p><code>.find(predicate)</code> gets the items matching the predicate.</p>\nIf there is only one match it returns it.\nIf there are multiple matches it returns an array.", function() {
       var byId, user, users;
       user = function(id, name) {
         return {
@@ -98,7 +98,24 @@
           return user.id.toString() === id.toString();
         };
       };
-      return body(p("User 1 : ", users.get(byId(1)).name), p("User 2 : ", users.get(byId(2)).name));
+      return body(p("User 1 : ", users.find(byId(1)).name), p("User 2 : ", users.find(function(item) {
+        return item.id > 1;
+      })));
+    }), example(".at", "<p><code>.at(index)</code> gets the element at position index.</p>", function() {
+      var byId, user, users;
+      user = function(id, name) {
+        return {
+          id: id,
+          name: name
+        };
+      };
+      users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")]);
+      byId = function(id) {
+        return function(user) {
+          return user.id.toString() === id.toString();
+        };
+      };
+      return body(p("User 1 : ", users.at(1).name), p("User 2 : ", users.at(2).name));
     }), example(".sort", "<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order ", function() {
       var numbers, text;
       numbers = collection([2, 6, 3]);

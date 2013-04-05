@@ -163,10 +163,10 @@
       obj.numbers.add(4);
       expect(calls).toBe(3);
       expectedPath = "sub.update";
-      obj.sub.get(0).key = "kkk";
+      obj.sub.at(0).key = "kkk";
       expect(calls).toBe(4);
       expectedPath = "sub.update";
-      obj.sub.get(0).value = "vvv";
+      obj.sub.at(0).value = "vvv";
       expect(calls).toBe(5);
       expectedPath = "subsub.name.first";
       obj.subsub.name.first = "first";

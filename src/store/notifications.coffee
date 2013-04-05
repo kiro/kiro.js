@@ -37,7 +37,11 @@ window.BC.define('store', (store) ->
     channel.bind('client-update', eventHandler(
       (items) ->
         for item in items
-          collection.get(comparator(item)).set(item)
+          collectionItem = collection.find(comparator(item))
+          if collectionItem
+            collectionItem.set(item)
+          else
+            collection.add(models.object(item))
     ))
 )
 

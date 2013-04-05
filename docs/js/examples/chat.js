@@ -24,7 +24,7 @@
   };
 
   docs.examples.chat = function() {
-    return section(h1("Chat"), docs.code.chat(), example("Chat app", "You can open chat examples in different ", function() {
+    return section(h1("Chat"), docs.code.chat(), example("Chat app", "You can open the chat example in different tabs.", function() {
       var leftPanel, message, messageText, messages, rightPanel, user, users;
       message = function(user, content) {
         return object({
@@ -45,7 +45,7 @@
       });
       window.setInterval((function() {
         return user.lastSeen = Date.now();
-      }), 10 * 1000);
+      }), 5 * 1000);
       users = collection();
       pusher(users, 'users', function(item) {
         return function(otherItem) {
@@ -54,7 +54,7 @@
       });
       users.add(user);
       users.filter(function(user) {
-        return (Date.now() - user.lastSeen) > 20 * 1000;
+        return (Date.now() - user.lastSeen) < 10 * 1000;
       });
       messageText = model();
       leftPanel = function() {
