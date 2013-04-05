@@ -156,7 +156,7 @@
           return this;
         },
         foreach: function(collection, render) {
-          var add, collectionItems, getElOrTbody, index, item, remove, removeItems, renderAll, tag;
+          var add, collectionItems, getElOrTbody, index, item, remove, removeItems, renderAll, tag, updateItem;
           getElOrTbody = function() {
             var tbody;
             tbody = el().children('tbody');
@@ -240,21 +240,22 @@
             }
             return _results;
           };
+          updateItem = function(value, index, oldIndex) {
+            if (index < oldIndex) {
+              add(value, index);
+              return remove(oldIndex + (index === -1 ? 0 : 1));
+            } else if (index > oldIndex) {
+              remove(oldIndex);
+              return add(value, index);
+            }
+          };
           if (_.isFunction(collection.subscribe)) {
             collection.subscribe(collection.actionHandler({
               replaceAll: renderAll,
               updateView: renderAll,
               add: add,
               remove: removeItems,
-              update: function(value, index, oldIndex) {
-                if (index < oldIndex) {
-                  add(value, index);
-                  return remove(oldIndex + (index === -1 ? 0 : 1));
-                } else if (index > oldIndex) {
-                  remove(oldIndex);
-                  return add(value, index);
-                }
-              }
+              update: updateItem
             }));
           }
           return this;

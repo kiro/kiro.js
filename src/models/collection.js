@@ -80,18 +80,19 @@
           });
         }
       };
-      callUpdate = function(item, path) {
+      callUpdate = function(item) {
         var oldIndex;
         oldIndex = items.indexOf(item);
         return update(function() {
           return action(actions.UPDATE, item, items.indexOf(item), oldIndex);
         });
       };
-      update = function(action) {
-        var item, _i, _len;
+      update = function(actionCallback) {
+        var actionObject, item, oldItems, _i, _len;
         if (compareFunction) {
           allItems.sort(compareFunction);
         }
+        oldItems = items;
         items = _.filter(allItems, filter);
         for (_i = 0, _len = allItems.length; _i < _len; _i++) {
           item = allItems[_i];
@@ -99,7 +100,13 @@
             item.subscribe(callUpdate);
           }
         }
-        return o.publish(items, action());
+        actionObject = actionCallback();
+        o.publish(items, actionObject);
+        if (actionObject.name === actions.UPDATE) {
+          if (!common.sameValues(_.without(oldItems, actionObject.item), _.without(items, actionObject.item))) {
+            return o.publish(items, action(actions.UPDATE_VIEW, items));
+          }
+        }
       };
       update(function() {
         return action(actions.REPLACE_ALL, items);
@@ -215,7 +222,7 @@
         return function(items, action) {
           if (action.name === actions.REPLACE_ALL) {
             return handler.replaceAll(action.value);
-          } else if (action.name === actions.UPDATE_VIEW) {
+          } else if (action.name === actions.UPDATE_VIEW && handler.updateView) {
             return handler.updateView(action.value);
           } else if (action.name === actions.ADD) {
             return handler.add(action.value, action.index);

@@ -21,7 +21,7 @@ window.BC.define('models', (models) ->
 
   actions =
     REPLACE_ALL: 'replace_all' # all items in the collection are replaced
-    UPDATE_VIEW: 'update_view' # the view of items in the collection is updated, they are sorted or filtered
+    UPDATE_VIEW: 'update_view' # the view of all items in the collection is updated, they are sorted or filtered
     ADD: 'add' # an item gets added in the collection
     REMOVE: 'remove' # items are removed from the collection
     UPDATE: 'update' # items are updated
@@ -52,14 +52,15 @@ window.BC.define('models', (models) ->
         allItems = arg
         update(-> action(actions.REPLACE_ALL, items))
 
-    callUpdate = (item, path) ->
+    callUpdate = (item) ->
       oldIndex = items.indexOf(item)
       update(-> action(actions.UPDATE, item, items.indexOf(item), oldIndex))
 
-    update = (action) ->
+    update = (actionCallback) ->
       if compareFunction
         allItems.sort(compareFunction)
 
+      oldItems = items
       items = _.filter(allItems, filter)
 
       for item in allItems
@@ -68,7 +69,15 @@ window.BC.define('models', (models) ->
           # won't be added again
           item.subscribe(callUpdate)
 
-      o.publish(items, action())
+      actionObject = actionCallback()
+      o.publish(items, actionObject)
+
+      # if something has changed in items besides the object being updated update the view
+      if actionObject.name == actions.UPDATE
+        if !common.sameValues(
+            _.without(oldItems, actionObject.item)
+            _.without(items, actionObject.item))
+          o.publish(items, action(actions.UPDATE_VIEW, items))
 
     update(-> action(actions.REPLACE_ALL, items))
 
@@ -171,7 +180,7 @@ window.BC.define('models', (models) ->
       (items, action) ->
         if action.name == actions.REPLACE_ALL
           handler.replaceAll(action.value)
-        else if action.name == actions.UPDATE_VIEW
+        else if action.name == actions.UPDATE_VIEW and handler.updateView
           handler.updateView(action.value)
         else if action.name == actions.ADD
           handler.add(action.value, action.index)

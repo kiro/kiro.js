@@ -75,7 +75,7 @@ window.BC.define('common', (common) ->
   # For example
   #
   # add = (a, b) -> a + b
-  # plus3 = curry(add, 3)
+  # plus3 = partial(add, 3)
   # plus3(4) == 7
   common.partial = (fn, fixedArgs...) ->
     (args...) -> fn(fixedArgs.concat(args)...)
@@ -92,4 +92,13 @@ window.BC.define('common', (common) ->
   common.isComposite = isComposite
   common.isModel = isModel
   common.isCollection = isCollection
+
+  common.sameValues = (arr1, arr2) ->
+    result = arr1.length == arr2.length
+    if result
+      for i in [0...arr1.length]
+        if arr1[i] != arr2[i]
+          result = false
+
+    return result
 )

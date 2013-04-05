@@ -162,7 +162,19 @@
     };
     common.isComposite = isComposite;
     common.isModel = isModel;
-    return common.isCollection = isCollection;
+    common.isCollection = isCollection;
+    return common.sameValues = function(arr1, arr2) {
+      var i, result, _i, _ref;
+      result = arr1.length === arr2.length;
+      if (result) {
+        for (i = _i = 0, _ref = arr1.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          if (arr1[i] !== arr2[i]) {
+            result = false;
+          }
+        }
+      }
+      return result;
+    };
   });
 
 }).call(this);

@@ -146,19 +146,21 @@ window.BC.define('common', (common) ->
         indexes = indexes.sort().reverse()
         remove(index) for index in indexes
 
+      updateItem = (value, index, oldIndex) ->
+        if index < oldIndex
+          add(value, index)
+          remove(oldIndex + if index == -1 then 0 else 1)
+        else if index > oldIndex
+          remove(oldIndex)
+          add(value, index)
+
       if _.isFunction(collection.subscribe)
         collection.subscribe( collection.actionHandler(
           replaceAll: renderAll
           updateView: renderAll
           add: add
           remove: removeItems
-          update: (value, index, oldIndex) ->
-            if index < oldIndex
-              add(value, index)
-              remove(oldIndex + if index == -1 then 0 else 1)
-            else if index > oldIndex
-              remove(oldIndex)
-              add(value, index)
+          update: updateItem
         ))
       this
 
