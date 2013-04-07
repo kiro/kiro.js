@@ -23,7 +23,8 @@ window.BC.define('models', (models) ->
   latestObservable = null
 
   makeObservable = (value, observable) ->
-    if _.isArray(value)
+    if common.isModel(value)
+    else if _.isArray(value)
       value = models.collection((makeObservable(item) for item in value), observable)
     else if _.isObject(value)
       value = models.object(value, observable)
@@ -51,8 +52,7 @@ window.BC.define('models', (models) ->
 
       listener = (key) ->
         (newValue, valuePath) ->
-          if valuePath.name then valuePath = valuePath.name
-          o.publish(result, key + (if valuePath then "." + valuePath else ""))
+          o.publish(result, valuePath)
       observables[key].subscribe(listener(key))
 
       prop = (key, value) ->
@@ -110,7 +110,7 @@ window.BC.define('models', (models) ->
       latestObservable = null
       left[key]
       if latestObservable
-        if _.isObject(right[key])
+        if !_.isArray(right[key]) and _.isObject(right[key])
           merge(left[key], right[key])
         else
           left[key] = right[key]

@@ -33,7 +33,9 @@
     latestObservable = null;
     makeObservable = function(value, observable) {
       var item;
-      if (_.isArray(value)) {
+      if (common.isModel(value)) {
+
+      } else if (_.isArray(value)) {
         value = models.collection((function() {
           var _i, _len, _results;
           _results = [];
@@ -75,10 +77,7 @@
         value = makeObservable(value, observables[key]);
         listener = function(key) {
           return function(newValue, valuePath) {
-            if (valuePath.name) {
-              valuePath = valuePath.name;
-            }
-            return o.publish(result, key + (valuePath ? "." + valuePath : ""));
+            return o.publish(result, valuePath);
           };
         };
         observables[key].subscribe(listener(key));
@@ -158,7 +157,7 @@
         latestObservable = null;
         left[key];
         if (latestObservable) {
-          if (_.isObject(right[key])) {
+          if (!_.isArray(right[key]) && _.isObject(right[key])) {
             merge(left[key], right[key]);
           } else {
             left[key] = right[key];
