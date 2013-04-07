@@ -4,30 +4,38 @@
   window.BC.define('rates', function(rates) {
     rates.NO_LIMIT = -1;
     rates.idempotent = function(id) {
-      var value;
+      var isSet, value;
       if (id == null) {
         id = (function() {
           return 1;
         });
       }
       value = {};
+      isSet = false;
       return {
         set: function(newValue) {
+          isSet = true;
           return value[id(newValue)] = newValue;
         },
         get: function() {
           var result;
+          isSet = false;
           result = _.values(value);
           value = {};
           return result;
+        },
+        isSet: function() {
+          return isSet;
         }
       };
     };
     rates.aggregate = function() {
-      var value;
+      var isSet, value;
       value = [];
+      isSet = false;
       return {
         set: function(newValue) {
+          isSet = true;
           if (!_.isArray(newValue)) {
             newValue = [newValue];
           }
@@ -35,9 +43,13 @@
         },
         get: function() {
           var result;
+          isSet = false;
           result = value;
           value = [];
           return result;
+        },
+        isSet: function() {
+          return isSet;
         }
       };
     };
@@ -50,9 +62,12 @@
         if (request_rate === rates.NO_LIMIT) {
           return action(aggregator.get());
         } else if (!hasTimeout) {
+          action(aggregator.get());
           hasTimeout = true;
           handler = function() {
-            action(aggregator.get());
+            if (aggregator.isSet()) {
+              action(aggregator.get());
+            }
             return hasTimeout = false;
           };
           return window.setTimeout(handler, 1000 / request_rate);

@@ -20,19 +20,23 @@ docs.examples.chat = -> section(h1("Chat"),
       _id: Math.floor(Math.random()*1000000),
       name: "User" + Math.floor(Math.random()*1000),
       lastSeen: Date.now()
+      lastTyped: 0
     )
     window.setInterval((-> currentUser.lastSeen = Date.now()), 5 * 1000)
 
     users = collection([currentUser])
-    pusher(users, 'users', (item) -> ((otherItem) -> item._id == otherItem._id))
-    users.filter((user) -> (Date.now() - user.lastSeen) < 10 * 1000)
+    pusher(users, 'users', ((item) -> item._id), 2)
+    users.filter((user) -> user._id != currentUser._id and (Date.now() - user.lastSeen) < 10 * 1000)
 
     messageText = model()
     leftPanel = ->
       div().span3(
         input.text(bind(currentUser.name)).span12()
         ul.unstyled().foreach(users, (user) ->
-          li(bind(user.name))
+          console.log(user.lastTyped)
+          li(span(bind(user.name)),
+             right(span().muted('Typing...'))
+               .bindVisible(bind(user.lastTyped), -> Date.now() - user.lastTyped < 100))
         )
       )
 
@@ -44,6 +48,7 @@ docs.examples.chat = -> section(h1("Chat"),
         form.inline(
           append(
             input.text(placeholder: 'Enter message...', messageText).span9()
+              .on('keydown', -> currentUser.lastTyped = Date.now())
             button.primary('Send', -> messages.add(
               message(currentUser, messageText(""))
             ))

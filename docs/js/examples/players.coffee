@@ -24,7 +24,7 @@ docs.examples.players = -> section(h1("Players"),
     ])
 
     store.mongoLab(players, 'examples', 'players', REQUEST_RATE)
-    store.pusher(players, 'players', (item) -> ((otherItem) -> item._id == otherItem._id))
+    store.pusher(players, 'players', (item) -> item._id)
 
     players.sort((player1, player2) ->
       if player1.score < player2.score then 1

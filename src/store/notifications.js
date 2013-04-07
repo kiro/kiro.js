@@ -3,26 +3,51 @@
   var __slice = [].slice;
 
   window.BC.define('store', function(store) {
-    var models;
+    var bindings, channels, models, pusher, rates;
+    rates = window.BC.namespace("rates");
+    $.extend(this, rates);
+    bindings = {
+      REPLACE: 'client-replaceAll',
+      ADD: 'client-add',
+      REMOVE: 'client-remove',
+      UPDATE: 'client-update'
+    };
     models = window.BC.namespace("models");
-    return store.pusher = function(collection, channel, comparator) {
-      var eventHandler, handler, pusher;
-      pusher = new Pusher('9e1249843e69a619bc84');
-      channel = pusher.subscribe('private-' + channel);
-      handler = collection.actionHandler({
-        replaceAll: function(items) {
-          return channel.trigger('client-replaceAll', items);
-        },
-        updateView: function() {},
-        add: function(item) {
-          return channel.trigger('client-add', [item]);
-        },
-        remove: function(items) {
-          return channel.trigger('client-remove', items);
-        },
-        update: function(item) {
-          return channel.trigger('client-update', [item]);
+    pusher = new Pusher('9e1249843e69a619bc84');
+    channels = {};
+    return store.pusher = function(collection, channelName, id, request_rate) {
+      var add, channel, eventHandler, handler, kay, remove, replaceAll, update, value, _i, _len;
+      if (request_rate == null) {
+        request_rate = NO_LIMIT;
+      }
+      channelName = 'private-' + channelName;
+      if (channels[channelName]) {
+        for (value = _i = 0, _len = bindings.length; _i < _len; value = ++_i) {
+          kay = bindings[value];
+          channels[channelName].unbind(value);
         }
+        pusher.unsubscribe(channelName);
+      }
+      channels[channelName] = pusher.subscribe(channelName);
+      channel = channels[channelName];
+      replaceAll = function(items) {
+        return channel.trigger('client-replaceAll', items);
+      };
+      add = function(items) {
+        return channel.trigger('client-add', items);
+      };
+      remove = function(items) {
+        return channel.trigger('client-remove', items);
+      };
+      update = function(items) {
+        return channel.trigger('client-update', items);
+      };
+      handler = collection.actionHandler({
+        replaceAll: rate(replaceAll, request_rate, idempotent()),
+        updateView: (function() {}),
+        add: rate(add, request_rate, aggregate()),
+        remove: rate(remove, request_rate, aggregate()),
+        update: rate(update, request_rate, idempotent(id))
       });
       channel.bind('pusher:subscription_succeeded', function() {
         return collection.subscribeStore(handler);
@@ -36,42 +61,44 @@
           return collection.enableStoreNotifications();
         };
       };
-      channel.bind('client-replaceAll', eventHandler(function(items) {
+      channel.bind(bindings.REPLACE, eventHandler(function(items) {
         var item;
         return collection((function() {
-          var _i, _len, _results;
+          var _j, _len1, _results;
           _results = [];
-          for (_i = 0, _len = items.length; _i < _len; _i++) {
-            item = items[_i];
+          for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+            item = items[_j];
             _results.push(models.object(item));
           }
           return _results;
         })());
       }));
-      channel.bind('client-add', eventHandler(function(items) {
-        var item, _i, _len, _results;
+      channel.bind(bindings.ADD, eventHandler(function(items) {
+        var item, _j, _len1, _results;
         _results = [];
-        for (_i = 0, _len = items.length; _i < _len; _i++) {
-          item = items[_i];
+        for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+          item = items[_j];
           _results.push(collection.add(models.object(item)));
         }
         return _results;
       }));
-      channel.bind('client-remove', eventHandler(function(items) {
-        var item, _i, _len, _results;
+      channel.bind(bindings.REMOVE, eventHandler(function(items) {
+        var item, _j, _len1, _results;
         _results = [];
-        for (_i = 0, _len = items.length; _i < _len; _i++) {
-          item = items[_i];
+        for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+          item = items[_j];
           _results.push(collection.remove(comparator(item)));
         }
         return _results;
       }));
-      return channel.bind('client-update', eventHandler(function(items) {
-        var collectionItem, item, _i, _len, _results;
+      return channel.bind(bindings.UPDATE, eventHandler(function(items) {
+        var collectionItem, item, _j, _len1, _results;
         _results = [];
-        for (_i = 0, _len = items.length; _i < _len; _i++) {
-          item = items[_i];
-          collectionItem = collection.find(comparator(item));
+        for (_j = 0, _len1 = items.length; _j < _len1; _j++) {
+          item = items[_j];
+          collectionItem = collection.find(function(item2) {
+            return id(item) === id(item2);
+          });
           if (collectionItem) {
             _results.push(collectionItem.set(item));
           } else {

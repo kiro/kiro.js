@@ -30,9 +30,7 @@
       players = collection([player("C++", 5), player("Java", 10), player("Javascript", 15), player("Go", 25), player("Python", 20)]);
       store.mongoLab(players, 'examples', 'players', REQUEST_RATE);
       store.pusher(players, 'players', function(item) {
-        return function(otherItem) {
-          return item._id === otherItem._id;
-        };
+        return item._id;
       });
       players.sort(function(player1, player2) {
         if (player1.score < player2.score) {
