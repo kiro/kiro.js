@@ -20,6 +20,6 @@ window.BC.define('bootstrap', (bootstrap) ->
   bootstrap.td = (args...) -> $.extend(tag('td')(args...), mixins.spannable())
   bootstrap.thead = tag('thead')
   bootstrap.tbody = tag('tbody')
-  bootstrap.th = tag('th')
+  bootstrap.th = (args...) -> $.extend(tag('th')(args...), mixins.spannable())
   bootstrap.caption = tag('caption')
 )

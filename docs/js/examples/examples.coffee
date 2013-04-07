@@ -12,6 +12,8 @@ docs.examples.index = (content = docs.examples.players()) ->
         a(href: '#/examples/players/', "Players")
         a(href: '#/examples/email/', "Email")
         a(href: '#/examples/chat/', "Chat")
+        a(href: '#/examples/game/', "Game")
+        a(href: '#/examples/projects/', "Projects")
         docs.toLi
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )

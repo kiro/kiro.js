@@ -47,7 +47,11 @@
     };
     bootstrap.thead = tag('thead');
     bootstrap.tbody = tag('tbody');
-    bootstrap.th = tag('th');
+    bootstrap.th = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return $.extend(tag('th').apply(null, args), mixins.spannable());
+    };
     return bootstrap.caption = tag('caption');
   });
 

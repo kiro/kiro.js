@@ -11,8 +11,11 @@
 
   $.extend(this, bootstrap);
 
-  docs.example = function(title, description, content) {
-    return div(h2(title), p(description), content(), pre({
+  docs.example = function(title, description, content, attr) {
+    if (attr == null) {
+      attr = {};
+    }
+    return div(attr, h2(title), p(description), content(), pre({
       "class": 'prettyprint linenums',
       id: 'code ' + title
     }));

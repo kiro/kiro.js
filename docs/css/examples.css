@@ -79,6 +79,28 @@
     margin-bottom: 10px;
 }
 
+.short {
+    height: 100px;
+}
+
 .padded {
     padding-bottom: 10px;
+}
+
+.board {
+    overflow: hidden;
+    padding-left: 30px;
+}
+
+.board-row {
+    overflow: hidden;
+}
+
+.field {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d3d3d3;
+    height: 58px;
+    width: 58px;
+    float: left;
 }

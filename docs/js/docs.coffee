@@ -4,8 +4,8 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap)
 
-docs.example = (title, description, content) ->
-  div(
+docs.example = (title, description, content, attr = {}) ->
+  div(attr,
     h2(title),
     p(description),
     content(),

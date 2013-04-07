@@ -22,7 +22,11 @@
       href: '#/examples/email/'
     }, "Email"), a({
       href: '#/examples/chat/'
-    }, "Chat"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    }, "Chat"), a({
+      href: '#/examples/game/'
+    }, "Game"), a({
+      href: '#/examples/projects/'
+    }, "Projects"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

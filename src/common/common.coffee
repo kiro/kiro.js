@@ -93,6 +93,7 @@ window.BC.define('common', (common) ->
   common.isModel = isModel
   common.isCollection = isCollection
 
+  # Checks if two arrays have the same values
   common.sameValues = (arr1, arr2) ->
     result = arr1.length == arr2.length
     if result
