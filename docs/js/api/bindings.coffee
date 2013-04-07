@@ -149,11 +149,20 @@ docs.api.bindings = -> section(h1("Bindings"),
   )
 
   example(".onUpdate", """ Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.""", ->
-    clicks = model(0)
+    text = model("")
+    messages = collection(["123", "123", "123", "123"])
+    body(
+      div(class: 'messages short').foreach(messages, (message) -> p(message))
+        .onUpdate((el) -> el.scrollTop(el[0].scrollHeight))
+      form.inline(input.text(text), button("Add", -> messages.add(text(""))))
+    )
+  )
+
+  example(".onInit", """ Executes a callback when a tag eleemnt is created. Useful for calling jquery plugins.""", ->
+    city = model("")
 
     body(
-      button("Click me", -> clicks(clicks() + 1))
-      span(clicks).onUpdate((el) -> el.append(' clicks'))
+        input.text(city).onInit((el) -> el.typeahead(source: ["Sofia", "London", "San Francisco", "Palo Alto"]))
     )
   )
 )

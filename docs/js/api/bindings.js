@@ -129,12 +129,25 @@
         return clicks(clicks() + 1);
       }), "clicks : ", span(clicks));
     }), example(".onUpdate", " Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.", function() {
-      var clicks;
-      clicks = model(0);
-      return body(button("Click me", function() {
-        return clicks(clicks() + 1);
-      }), span(clicks).onUpdate(function(el) {
-        return el.append(' clicks');
+      var messages, text;
+      text = model("");
+      messages = collection(["123", "123", "123", "123"]);
+      return body(div({
+        "class": 'messages short'
+      }).foreach(messages, function(message) {
+        return p(message);
+      }).onUpdate(function(el) {
+        return el.scrollTop(el[0].scrollHeight);
+      }), form.inline(input.text(text), button("Add", function() {
+        return messages.add(text(""));
+      })));
+    }), example(".onInit", " Executes a callback when a tag eleemnt is created. Useful for calling jquery plugins.", function() {
+      var city;
+      city = model("");
+      return body(input.text(city).onInit(function(el) {
+        return el.typeahead({
+          source: ["Sofia", "London", "San Francisco", "Palo Alto"]
+        });
       }));
     }));
   };

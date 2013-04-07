@@ -105,6 +105,11 @@ window.BC.define('common', (common) ->
       updateHandlers.push(handler)
       this
 
+    onInit: (handler) ->
+      addInitializer.call(this, ->
+        handler(el())
+      )
+
     # Binds the content of an element to collection
     foreach: (collection, render) ->
       # HACK: needed because when there is a table tag, the content is automatically wrapped in tbody

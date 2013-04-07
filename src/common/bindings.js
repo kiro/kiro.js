@@ -155,6 +155,11 @@
           updateHandlers.push(handler);
           return this;
         },
+        onInit: function(handler) {
+          return addInitializer.call(this, function() {
+            return handler(el());
+          });
+        },
         foreach: function(collection, render) {
           var add, collectionItems, getElOrTbody, index, item, remove, removeItems, renderAll, tag, updateItem;
           getElOrTbody = function() {
