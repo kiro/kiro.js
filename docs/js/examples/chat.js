@@ -25,7 +25,8 @@
 
   docs.examples.chat = function() {
     return section(h1("Chat"), docs.code.chat(), example("Chat app", "You can open the chat example in different tabs.", function() {
-      var chatMessages, currentUser, message, messageText, messages, userList, users;
+      var chatMessages, currentUser, lastTyped, message, messageText, messages, userList, users;
+      lastTyped = 0;
       message = function(user, content) {
         return object({
           user: user,
@@ -42,13 +43,14 @@
         _id: Math.floor(Math.random() * 1000000),
         name: "User" + Math.floor(Math.random() * 1000),
         lastSeen: Date.now(),
-        lastTyped: 0
+        typedBefore: 1000
       });
       if (docs.examples.lastUserUpdate) {
         window.clearInterval(docs.examples.lastUserUpdate);
       }
       docs.examples.lastUserUpdate = window.setInterval((function() {
-        return currentUser.lastSeen = Date.now();
+        currentUser.lastSeen = Date.now();
+        return currentUser.typedBefore = Date.now() - lastTyped;
       }), 5 * 1000);
       users = collection([currentUser]);
       pusher(users, 'users', (function(item) {
@@ -60,9 +62,8 @@
       messageText = model();
       userList = function() {
         return div().span3(input.text(bind(currentUser.name)).span12(), ul.unstyled().foreach(users, function(user) {
-          console.log(user.lastTyped);
-          return li(span(bind(user.name)), right(span().muted('Typing...')).bindVisible(bind(user.lastTyped), function() {
-            return Date.now() - user.lastTyped < 400;
+          return li(span(bind(user.name)), right(span().muted('Typing...')).bindVisible(bind(user.typedBefore), function() {
+            return user.typedBefore < 500;
           }));
         }));
       };
@@ -76,9 +77,10 @@
         }), form.inline(append(input.text({
           placeholder: 'Enter message...'
         }, messageText).span9().on('keydown', function() {
-          return currentUser.lastTyped = Date.now();
+          currentUser.typedBefore = 0;
+          return lastTyped = Date.now();
         }), button.primary('Send', function() {
-          currentUser.lastTyped = 0;
+          currentUser.typedBefore = 1000;
           return messages.add(message(currentUser, messageText("")));
         })).span12()));
       };

@@ -12,6 +12,7 @@ docs.examples.chat = -> section(h1("Chat"),
   docs.code.chat()
 
   example("Chat app", "You can open the chat example in different tabs.", ->
+    lastTyped = 0
     message = (user, content) -> object(user: user, content: content)
     messages = collection([message(name: 'Chat example', "Welcome!")])
     pusher(messages, 'messages')
@@ -20,7 +21,7 @@ docs.examples.chat = -> section(h1("Chat"),
       _id: Math.floor(Math.random()*1000000),
       name: "User" + Math.floor(Math.random()*1000),
       lastSeen: Date.now()
-      lastTyped: 0
+      typedBefore: 1000
     )
 
     # This is done so that if the chat app is instantiated multiple times,
@@ -28,8 +29,10 @@ docs.examples.chat = -> section(h1("Chat"),
     if docs.examples.lastUserUpdate
       window.clearInterval(docs.examples.lastUserUpdate)
 
-    docs.examples.lastUserUpdate = window.setInterval((
-      -> currentUser.lastSeen = Date.now()), 5 * 1000)
+    docs.examples.lastUserUpdate = window.setInterval((->
+      currentUser.lastSeen = Date.now()
+      currentUser.typedBefore = Date.now() - lastTyped)
+    , 5 * 1000)
 
     users = collection([currentUser])
     pusher(users, 'users', ((item) -> item._id), 5)
@@ -41,11 +44,10 @@ docs.examples.chat = -> section(h1("Chat"),
       div().span3(
         input.text(bind(currentUser.name)).span12()
         ul.unstyled().foreach(users, (user) ->
-          console.log(user.lastTyped)
           li(span(bind(user.name)),
              right(span().muted('Typing...'))
-               .bindVisible(bind(user.lastTyped),
-                  -> Date.now() - user.lastTyped < 400))
+               .bindVisible(bind(user.typedBefore),
+                  -> user.typedBefore < 500))
         )
       )
 
@@ -57,9 +59,9 @@ docs.examples.chat = -> section(h1("Chat"),
         form.inline(
           append(
             input.text(placeholder: 'Enter message...', messageText).span9()
-              .on('keydown', -> currentUser.lastTyped = Date.now())
+              .on('keydown', -> currentUser.typedBefore = 0; lastTyped = Date.now())
             button.primary('Send', ->
-              currentUser.lastTyped = 0
+              currentUser.typedBefore = 1000
               messages.add(
                 message(currentUser, messageText(""))
               ))
