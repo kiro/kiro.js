@@ -16,7 +16,7 @@
 
   docs.examples.game = function() {
     return section(h1("Game"), docs.code.game(), example("Multiplayer tic tac toe", "Open if different tabs to play the game.", function() {
-      var boardFull, canPlay, checkFinished, content, currentPlayer, enterPlayerName, game, gameList, games, getId, icon, initialState, myturn, otherPlayer, player, showGame, state;
+      var boardFull, canPlay, checkFinished, content, currentPlayer, emptyState, enterPlayerName, game, gameList, games, getId, icon, initialState, myturn, otherPlayer, player, showGame, state;
       state = {
         EMPTY: "empty",
         TIC: "tic",
@@ -24,6 +24,12 @@
       };
       getId = function(item) {
         return item.id;
+      };
+      emptyState = function() {
+        return {
+          value: state.EMPTY,
+          mark: false
+        };
       };
       initialState = function() {
         var i, j, _i, _results;
@@ -33,10 +39,7 @@
             var _j, _results1;
             _results1 = [];
             for (j = _j = 0; _j < 3; j = ++_j) {
-              _results1.push({
-                value: state.EMPTY,
-                mark: false
-              });
+              _results1.push(emptyState());
             }
             return _results1;
           })());

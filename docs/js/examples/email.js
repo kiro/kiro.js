@@ -21,7 +21,7 @@
 
   docs.examples.email = function() {
     return section(h1("Email"), docs.code.email(), example("Email client", "", function() {
-      var byFolder, byId, currentUser, data, email, emailList, leftPanel, nextId, rightContent, rightPanel, selectedEmail, selectedFolder, sendEmail;
+      var byFolder, byId, currentUser, data, email, emailList, leftPanel, moveTo, nextId, rightContent, rightPanel, selectedEmail, selectedFolder, sendEmail;
       byFolder = function(folder) {
         return function(email) {
           return email.folders.contains(folder);
@@ -103,6 +103,11 @@
           });
         }));
       };
+      moveTo = function(folder) {
+        return function() {
+          return selectedEmail(null).folders([folder]);
+        };
+      };
       rightPanel = function() {
         var folder;
         return div().span10(button.group(button(icon.trash, "Delete", function() {
@@ -111,15 +116,15 @@
           if (selectedEmail()) {
             return selectedEmail().folders.contains('trash');
           }
-        }), dropdown(button("Move").bindDisabled(negate(selectedEmail)), (function() {
+        }), dropdown(button({
+          id: 'move-btn'
+        }, "Move").bindDisabled(negate(selectedEmail)), (function() {
           var _i, _len, _ref, _results;
-          _ref = data.folders;
+          _ref = data.folders();
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             folder = _ref[_i];
-            _results.push(a(folder, function() {
-              return selectedEmail(null).folders([folder]);
-            }));
+            _results.push(a(folder, moveTo(folder)));
           }
           return _results;
         })()), button(icon.forward, "Forward", function() {

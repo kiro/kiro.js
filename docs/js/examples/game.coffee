@@ -14,7 +14,8 @@ docs.examples.game = -> section(h1("Game"),
 
     getId = (item) -> item.id
 
-    initialState = -> ((value: state.EMPTY, mark: false for j in [0...3]) for i in [0...3])
+    emptyState = () -> value: state.EMPTY, mark: false
+    initialState = -> ((emptyState() for j in [0...3]) for i in [0...3])
 
     currentPlayer = null
     player = (name) ->
@@ -70,7 +71,8 @@ docs.examples.game = -> section(h1("Game"),
       else if value == state.TAC then '<i class="icon-remove"/>'
       else ""
 
-    myturn = (game) -> game.players.count() > game.turn and game.players.at(game.turn).id == currentPlayer.id
+    myturn = (game) -> game.players.count() > game.turn and
+      game.players.at(game.turn).id == currentPlayer.id
     otherPlayer = (game) -> game.players.at((game.turn + 1) % 2)
     canPlay = (game) ->
       game.players.count() > 1 and (game.players.at(0).id == currentPlayer.id or

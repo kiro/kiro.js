@@ -84,17 +84,20 @@ docs.examples.email = -> section(h1("Email"),
         )
       )
 
+    moveTo = (folder) -> (-> selectedEmail(null).folders([folder]))
+
     rightPanel = () ->
       div().span10(
         button.group(
           button(icon.trash, "Delete", ->
             selectedEmail(null).folders(['trash'])
           ).bindDisabled(negate(selectedEmail))
-           .bindDisabled(selectedEmail, -> selectedEmail().folders.contains('trash') if selectedEmail())
+           .bindDisabled(selectedEmail,
+              -> selectedEmail().folders.contains('trash') if selectedEmail())
 
           dropdown(
-            button("Move").bindDisabled(negate(selectedEmail))
-            (a(folder, -> selectedEmail(null).folders([folder])) for folder in data.folders)
+            button(id: 'move-btn', "Move").bindDisabled(negate(selectedEmail))
+            (a(folder, moveTo(folder)) for folder in data.folders())
           )
 
           button(icon.forward, "Forward", ->

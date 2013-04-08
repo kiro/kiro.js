@@ -44,9 +44,9 @@ window.BC.define('bootstrap', (bootstrap) ->
     if _.isFunction(last)
       click = (args...) ->
         last(args...)
-        return false
+        return true
       args = args.slice(0, args.length - 1)
-    tag('a', {href: '#'})(args...).on('click', click)
+    tag('a', {href: 'javascript:void(0);'})(args...).on('click', click)
 
   # Dropdown
   dropdown = (button, items...) ->
@@ -54,6 +54,7 @@ window.BC.define('bootstrap', (bootstrap) ->
       .addItems(span(class: 'caret'))
       .addClass('dropdown-toggle')
       .addAttr('data-toggle': "dropdown")
+      .onInit((el) -> el.dropdown())
 
     toLi = (item) ->
       if item.isDivider

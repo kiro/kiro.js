@@ -83,12 +83,12 @@
           var args;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           last.apply(null, args);
-          return false;
+          return true;
         };
         args = args.slice(0, args.length - 1);
       }
       return tag('a', {
-        href: '#'
+        href: 'javascript:void(0);'
       }).apply(null, args).on('click', click);
     };
     dropdown = function() {
@@ -98,6 +98,8 @@
         "class": 'caret'
       })).addClass('dropdown-toggle').addAttr({
         'data-toggle': "dropdown"
+      }).onInit(function(el) {
+        return el.dropdown();
       });
       toLi = function(item) {
         if (item.isDivider) {
