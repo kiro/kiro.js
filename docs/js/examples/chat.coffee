@@ -28,25 +28,28 @@ docs.examples.chat = -> section(h1("Chat"),
     if docs.examples.lastUserUpdate
       window.clearInterval(docs.examples.lastUserUpdate)
 
-    docs.examples.lastUserUpdate = window.setInterval((-> currentUser.lastSeen = Date.now()), 5 * 1000)
+    docs.examples.lastUserUpdate = window.setInterval((
+      -> currentUser.lastSeen = Date.now()), 5 * 1000)
 
     users = collection([currentUser])
-    pusher(users, 'users', ((item) -> item._id), 2)
-    users.filter((user) -> user._id != currentUser._id and (Date.now() - user.lastSeen) < 10 * 1000)
+    pusher(users, 'users', ((item) -> item._id), 5)
+    users.filter((user) -> user._id != currentUser._id and
+      (Date.now() - user.lastSeen) < 10 * 1000)
 
     messageText = model()
-    leftPanel = ->
+    userList = ->
       div().span3(
         input.text(bind(currentUser.name)).span12()
         ul.unstyled().foreach(users, (user) ->
           console.log(user.lastTyped)
           li(span(bind(user.name)),
              right(span().muted('Typing...'))
-               .bindVisible(bind(user.lastTyped), -> Date.now() - user.lastTyped < 100))
+               .bindVisible(bind(user.lastTyped),
+                  -> Date.now() - user.lastTyped < 400))
         )
       )
 
-    rightPanel = ->
+    chatMessages = ->
       div().span9(
         div(class: 'messages').foreach(messages, (message) ->
           p(strong(message.user.name + ": "), message.content)
@@ -55,9 +58,11 @@ docs.examples.chat = -> section(h1("Chat"),
           append(
             input.text(placeholder: 'Enter message...', messageText).span9()
               .on('keydown', -> currentUser.lastTyped = Date.now())
-            button.primary('Send', -> messages.add(
-              message(currentUser, messageText(""))
-            ))
+            button.primary('Send', ->
+              currentUser.lastTyped = 0
+              messages.add(
+                message(currentUser, messageText(""))
+              ))
           ).span12()
         )
       )
@@ -65,8 +70,8 @@ docs.examples.chat = -> section(h1("Chat"),
     body(
       div.container.fluid(
         div.row.fluid(
-          leftPanel()
-          rightPanel()
+          userList()
+          chatMessages()
         )
       )
     )

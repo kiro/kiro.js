@@ -25,7 +25,7 @@
 
   docs.examples.chat = function() {
     return section(h1("Chat"), docs.code.chat(), example("Chat app", "You can open the chat example in different tabs.", function() {
-      var currentUser, leftPanel, message, messageText, messages, rightPanel, users;
+      var chatMessages, currentUser, message, messageText, messages, userList, users;
       message = function(user, content) {
         return object({
           user: user,
@@ -53,20 +53,20 @@
       users = collection([currentUser]);
       pusher(users, 'users', (function(item) {
         return item._id;
-      }), 2);
+      }), 5);
       users.filter(function(user) {
         return user._id !== currentUser._id && (Date.now() - user.lastSeen) < 10 * 1000;
       });
       messageText = model();
-      leftPanel = function() {
+      userList = function() {
         return div().span3(input.text(bind(currentUser.name)).span12(), ul.unstyled().foreach(users, function(user) {
           console.log(user.lastTyped);
           return li(span(bind(user.name)), right(span().muted('Typing...')).bindVisible(bind(user.lastTyped), function() {
-            return Date.now() - user.lastTyped < 100;
+            return Date.now() - user.lastTyped < 400;
           }));
         }));
       };
-      rightPanel = function() {
+      chatMessages = function() {
         return div().span9(div({
           "class": 'messages'
         }).foreach(messages, function(message) {
@@ -78,10 +78,11 @@
         }, messageText).span9().on('keydown', function() {
           return currentUser.lastTyped = Date.now();
         }), button.primary('Send', function() {
+          currentUser.lastTyped = 0;
           return messages.add(message(currentUser, messageText("")));
         })).span12()));
       };
-      return body(div.container.fluid(div.row.fluid(leftPanel(), rightPanel())));
+      return body(div.container.fluid(div.row.fluid(userList(), chatMessages())));
     }));
   };
 
