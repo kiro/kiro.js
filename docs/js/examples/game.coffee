@@ -14,36 +14,35 @@ docs.examples.game = -> section(h1("Game"),
 
     getId = (item) -> item.id
 
+    initialState = -> ((value: state.EMPTY, mark: false for j in [0...3]) for i in [0...3])
+
     currentPlayer = null
-    player = (name) -> object(id: guid(), name: name, lastSeen: Date.now())
+    player = (name) ->
+      object(id: guid(), name: name, lastSeen: Date.now())
 
-    currentPlayer = player('Player' + Math.floor(Math.random() * 1000))
-    players = collection([currentPlayer]).filter()
-    pusher(players, 'players', getId)
-
-    if docs.examples.lastUserUpdate
-      window.clearInterval(docs.examples.lastUserUpdate)
-
-    docs.examples.lastUserUpdate = window.setInterval(->
-      currentPlayer.lastSeen = Date.now()
-    , 5 * 1000)
-
-    initialState = () -> ((value: state.EMPTY, mark: false for j in [0...3]) for i in [0...3])
-    game = () ->
+    game = (player) ->
       obj = object(
-        id: 1
+        id: guid()
+        players: [player]
         turn: 0
         state: initialState()
         lastSeen: Date.now()
         finished: false
       )
+      window.setInterval((-> obj.lastSeen = Date.now()), 10 * 1000)
       obj
 
-    game = game()
-    games = collection([game])
+    games = collection()
     pusher(games, 'games', getId)
 
     content = model()
+
+    boardFull = (game) ->
+      for i in [0...3]
+        for j in [0...3]
+          if game.state.at(i).at(j).value != state.EMPTY
+            return false
+      return true
 
     checkFinished = (game) ->
       check = (x, y, dx, dy) ->
@@ -53,9 +52,12 @@ docs.examples.game = -> section(h1("Game"),
             currentState = undefined
 
         if currentState and currentState != state.EMPTY and !game.finished
-          game.finished = true
+          game.finished = game.players.ar(game.turn).name + " won!"
           for k in [0...3]
             game.state.at(y + dy * k).at(x + dx * k).mark = true
+
+      if boardFull
+        game.finished = "Game finished."
 
       for i in [0...3]
         check(i, 0, 0, 1)
@@ -70,7 +72,7 @@ docs.examples.game = -> section(h1("Game"),
 
     myturn = (game) -> game.players.count() > game.turn and game.players.at(game.turn).id == currentPlayer.id
     otherPlayer = (game) -> game.players.at((game.turn + 1) % 2)
-    canPlay = () ->
+    canPlay = (game) ->
       game.players.count() > 1 and (game.players.at(0).id == currentPlayer.id or
       game.players.at(1).id == currentPlayer.id)
 
@@ -78,7 +80,7 @@ docs.examples.game = -> section(h1("Game"),
       h3(map(game, ->
         if game.players.count() <= 1
           "Waiting for other player to join..."
-        else if canPlay()
+        else if canPlay(game)
           game.players.at(0).name + " vs " + game.players.at(1).name
         else
           "Game is full, you can just observe."
@@ -86,9 +88,12 @@ docs.examples.game = -> section(h1("Game"),
 
       h4(map(game, ->
         if game.players.count() >= 2
-          if myturn(game) then "Your turn"
-          else otherPlayer(game).name + "s turn."
-      )).bindVisible(game.players, -> canPlay())
+          if game.finished
+
+          else
+            if myturn(game) then "Your turn"
+            else otherPlayer(game).name + "s turn."
+      )).bindVisible(game.players, -> canPlay(game))
 
       div(class: 'board').foreach(game.state, (row) ->
         div(class: 'board-row').foreach(row, (field) ->
@@ -103,16 +108,65 @@ docs.examples.game = -> section(h1("Game"),
         )
       )
 
-      div(h3(map(bind(game.finished), -> game.players.at(game.turn).name + " won!!!") if game.players.count() > 1),
-        button.primary('Play again!', ->
-          game.state = initialState()
+      div(class: 'padding',
+        button.primary('Play again', ->
           game.finished = false
+          game.state = initialState()
+        ).bindVisible(bind(game.finished))
+
+        button("Go back", ->
+          game.players.remove(currentPlayer)
+          content(gameList())
         )
-        button('Go back', -> content(gameList()))
-      ).bindVisible(bind(game.finished))
+      )
     )
 
-    content(showGame(game))
+    gameList = () ->
+      div(
+        h2("Create new game")
+        button('Create', ->
+          newGame = game(currentPlayer)
+          games.add(newGame)
+          content(showGame(newGame))
+        )
+
+        h2("Or join an existing game")
+        p(span(map(games, -> games.count())), " currently available")
+        table(
+          thead(tr(
+            th("Players").span3(),
+            th("Action"))
+          )).foreach(games, (game) -> tr(
+            td(ul.inline().foreach(game.players, (player) ->
+              li(player.name)
+            )).span3()
+            td(
+              button.primary("Join", ->
+                game.players.add(currentPlayer)
+                content(showGame(game))
+              ).bindVisible(game, -> game.players.count() == 1)
+              button.info("Watch", ->
+                content(showGame(game))
+              ).bindVisible(game, -> game.players.count() == 2)
+            )
+          )
+        )
+      )
+
+    enterPlayerName = () ->
+      playerName = model("")
+      div(
+        h3("Enter player name")
+        form.inline(
+          input.text(playerName)
+          button.primary("Enter", ->
+            currentPlayer = player(playerName())
+            content(gameList())
+          )
+        )
+      )
+
+    content(enterPlayerName())
 
     body(div(content))
   )

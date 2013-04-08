@@ -4,7 +4,15 @@ models = window.BC.namespace("models")
 
 $.extend(this, bootstrap)
 
+oldSetInterval = window.setInterval
+previousInterval = null
+window.setInterval = (fn, time) ->
+  previousInterval = oldSetInterval.call(window, fn, time)
+
 docs.example = (title, description, content, attr = {}) ->
+  if previousInterval
+    window.clearInterval(previousInterval)
+
   div(attr,
     h2(title),
     p(description),

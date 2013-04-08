@@ -103,4 +103,25 @@
     height: 58px;
     width: 58px;
     float: left;
+    text-align: center;
 }
+
+.icon4 {
+    font-size: 58px;
+}
+
+.icon-circle-blank {
+    color: #add8e6;
+}
+
+.icon-remove {
+    color: #f08080;
+}
+
+.mark {
+    background-color: #ffffe0;
+}
+
+.padding {
+    padding: 10px;
+ }

@@ -158,6 +158,8 @@ window.BC.define('models', (models) ->
       else
         result
 
+    collection.indexOf = (item) -> _.indexOf(items, item)
+
     # Returns the item at index
     collection.at = (index) -> items[index]
 
@@ -170,6 +172,13 @@ window.BC.define('models', (models) ->
     collection.sort = (f = defaultCompare) ->
       compareFunction = f
       update(-> action(actions.UPDATE_VIEW, items))
+
+    collection.sortBy = (field) ->
+      collection.sort((item1, item2) ->
+        if field(item1) < field(item2) then -1
+        else if field(item1) > field(item2) then 1
+        else 0
+      )
 
     collection.contains = (item) -> _.contains(items, item)
 

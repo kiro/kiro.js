@@ -50,16 +50,10 @@ docs.examples.projects = -> section(h1("Projects"),
         ))
       )
 
-      div(input.text(placeholder: 'Text'))
+      div(input.text(id: 'kiro', placeholder: 'Text'))
 
-    app = Sammy('#projects', ->
-      this.get('#/examples/projects/', -> content(projectList()))
-      this.get('#/examples/projects/edit/:id', -> content(editProject(this.params['id'])))
-      this.get('#/examples/projects/new', -> content(addProject()))
-    )
 
-    app.run("#/examples/projects/")
-
+    content(projectList())
     body(
       content
     )

@@ -24,13 +24,8 @@ docs.examples.chat = -> section(h1("Chat"),
       typedBefore: 1000
     )
 
-    # This is done so that if the chat app is instantiated multiple times,
-    # it clears the update for the previous instance.
     presense = (currentUser, collection) ->
-      if docs.examples.lastUserUpdate
-        window.clearInterval(docs.examples.lastUserUpdate)
-
-      docs.examples.lastUserUpdate = window.setInterval((->
+      window.setInterval((->
         currentUser.ping++
         currentUser.typedBefore = Date.now() - lastTyped)
       , 10 * 1000)
@@ -39,7 +34,7 @@ docs.examples.chat = -> section(h1("Chat"),
       pusher(users, 'users', ((item) -> item._id), 5)
       users.filter((user) -> user._id != currentUser._id and
         (!lastSeen[user._id] or (Date.now() - lastSeen[user._id]) < 15 * 1000))
-      users.subscribe(collection.actionHandler(update: (user) ->  lastSeen[user._id] = Date.now()))
+      users.subscribe(collection.actionHandler(update: (user) -> lastSeen[user._id] = Date.now()))
 
     users = collection([currentUser])
     presense(currentUser, users)

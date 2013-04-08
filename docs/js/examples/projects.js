@@ -16,7 +16,7 @@
 
   docs.examples.projects = function() {
     return section(h1("Projects"), docs.code.projects(), example("Javascript projects", "Blatantly stolen from angularjs.", function() {
-      var addProject, app, byId, content, editProject, projectForm, projectList, projects;
+      var addProject, byId, content, editProject, projectForm, projectList, projects;
       byId = function(id) {
         return function(item) {
           return item._id === id;
@@ -84,21 +84,11 @@
           }), "Edit"));
         }));
         return div(input.text({
+          id: 'kiro',
           placeholder: 'Text'
         }));
       };
-      app = Sammy('#projects', function() {
-        this.get('#/examples/projects/', function() {
-          return content(projectList());
-        });
-        this.get('#/examples/projects/edit/:id', function() {
-          return content(editProject(this.params['id']));
-        });
-        return this.get('#/examples/projects/new', function() {
-          return content(addProject());
-        });
-      });
-      app.run("#/examples/projects/");
+      content(projectList());
       return body(content);
     }, {
       id: 'projects'

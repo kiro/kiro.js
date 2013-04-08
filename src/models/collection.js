@@ -191,6 +191,9 @@
           return result;
         }
       };
+      collection.indexOf = function(item) {
+        return _.indexOf(items, item);
+      };
       collection.at = function(index) {
         return items[index];
       };
@@ -210,6 +213,17 @@
         compareFunction = f;
         return update(function() {
           return action(actions.UPDATE_VIEW, items);
+        });
+      };
+      collection.sortBy = function(field) {
+        return collection.sort(function(item1, item2) {
+          if (field(item1) < field(item2)) {
+            return -1;
+          } else if (field(item1) > field(item2)) {
+            return 1;
+          } else {
+            return 0;
+          }
         });
       };
       collection.contains = function(item) {

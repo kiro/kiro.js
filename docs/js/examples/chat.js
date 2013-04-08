@@ -47,10 +47,7 @@
       });
       presense = function(currentUser, collection) {
         var lastSeen;
-        if (docs.examples.lastUserUpdate) {
-          window.clearInterval(docs.examples.lastUserUpdate);
-        }
-        docs.examples.lastUserUpdate = window.setInterval((function() {
+        window.setInterval((function() {
           currentUser.ping++;
           return currentUser.typedBefore = Date.now() - lastTyped;
         }), 10 * 1000);
