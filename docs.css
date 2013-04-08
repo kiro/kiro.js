@@ -1302,8 +1302,57 @@ form.bs-docs-example {
     margin-bottom: 10px;
 }
 
+.short {
+    height: 100px;
+}
+
 .padded {
     padding-bottom: 10px;
+}
+
+.board {
+    overflow: hidden;
+    padding-left: 30px;
+}
+
+.board-row {
+    overflow: hidden;
+}
+
+.field {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d3d3d3;
+    height: 58px;
+    width: 58px;
+    float: left;
+    text-align: center;
+}
+
+.icon4 {
+    font-size: 58px;
+}
+
+.icon-circle-blank {
+    color: #add8e6;
+}
+
+.icon-remove {
+    color: #f08080;
+}
+
+.mark {
+    background-color: #ffffe0;
+}
+
+.padding {
+    padding: 10px;
+ }
+
+#move-btn {
+    border-radius: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
 }
 
 #outer {
