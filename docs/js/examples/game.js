@@ -73,7 +73,7 @@
         var i, j, _i, _j;
         for (i = _i = 0; _i < 3; i = ++_i) {
           for (j = _j = 0; _j < 3; j = ++_j) {
-            if (game.state.at(i).at(j).value !== state.EMPTY) {
+            if (game.state.at(i).at(j).value === state.EMPTY) {
               return false;
             }
           }
@@ -91,7 +91,7 @@
             }
           }
           if (currentState && currentState !== state.EMPTY && !game.finished) {
-            game.finished = game.players.ar(game.turn).name + " won!";
+            game.finished = game.players.at(game.turn).name + " won!";
             _results = [];
             for (k = _j = 0; _j < 3; k = ++_j) {
               _results.push(game.state.at(y + dy * k).at(x + dx * k).mark = true);
@@ -99,7 +99,7 @@
             return _results;
           }
         };
-        if (boardFull) {
+        if (boardFull(game)) {
           game.finished = "Game finished.";
         }
         for (i = _i = 0; _i < 3; i = ++_i) {
@@ -139,7 +139,7 @@
         })), h4(map(game, function() {
           if (game.players.count() >= 2) {
             if (game.finished) {
-
+              return game.finished;
             } else {
               if (myturn(game)) {
                 return "Your turn";

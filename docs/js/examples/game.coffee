@@ -40,7 +40,7 @@ docs.examples.game = -> section(h1("Game"),
     boardFull = (game) ->
       for i in [0...3]
         for j in [0...3]
-          if game.state.at(i).at(j).value != state.EMPTY
+          if game.state.at(i).at(j).value == state.EMPTY
             return false
       return true
 
@@ -52,11 +52,11 @@ docs.examples.game = -> section(h1("Game"),
             currentState = undefined
 
         if currentState and currentState != state.EMPTY and !game.finished
-          game.finished = game.players.ar(game.turn).name + " won!"
+          game.finished = game.players.at(game.turn).name + " won!"
           for k in [0...3]
             game.state.at(y + dy * k).at(x + dx * k).mark = true
 
-      if boardFull
+      if boardFull(game)
         game.finished = "Game finished."
 
       for i in [0...3]
@@ -89,7 +89,7 @@ docs.examples.game = -> section(h1("Game"),
       h4(map(game, ->
         if game.players.count() >= 2
           if game.finished
-
+            game.finished
           else
             if myturn(game) then "Your turn"
             else otherPlayer(game).name + "s turn."
