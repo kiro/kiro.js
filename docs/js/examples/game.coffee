@@ -120,8 +120,6 @@ docs.examples.game = -> section(h1("Game"),
           content(gameList())
         )
       )
-
-      pre(code(map(game, -> JSON.stringify(game, null, 4))))
     )
 
     gameList = () ->

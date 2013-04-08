@@ -183,9 +183,7 @@
         }).bindVisible(bind(game.finished)), button("Go back", function() {
           game.players.remove(matchField(getId, currentPlayer));
           return content(gameList());
-        })), pre(code(map(game, function() {
-          return JSON.stringify(game, null, 4);
-        }))));
+        })));
       };
       gameList = function() {
         return div(h2("Create new game"), button('Create', function() {
