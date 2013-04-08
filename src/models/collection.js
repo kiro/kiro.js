@@ -33,7 +33,7 @@
       REMOVE: 'remove',
       UPDATE: 'update'
     };
-    return models.collection = function(initial, o) {
+    models.collection = function(initial, o) {
       var action, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, storeHandlers, toPredicate, update;
       if (initial == null) {
         initial = [];
@@ -215,17 +215,6 @@
           return action(actions.UPDATE_VIEW, items);
         });
       };
-      collection.sortBy = function(field) {
-        return collection.sort(function(item1, item2) {
-          if (field(item1) < field(item2)) {
-            return -1;
-          } else if (field(item1) > field(item2)) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-      };
       collection.contains = function(item) {
         return _.contains(items, item);
       };
@@ -271,6 +260,27 @@
         return _results;
       };
       return $.extend(collection, o);
+    };
+    models.compareField = function(field) {
+      return function(item1, item2) {
+        if (field(item1) < field(item2)) {
+          return -1;
+        } else if (field(item1) > field(item2)) {
+          return 1;
+        } else {
+          return 0;
+        }
+      };
+    };
+    models.matchField = function(field, item1) {
+      return function(item2) {
+        return field(item1) === field(item2);
+      };
+    };
+    return models.isEmpty = function(collection) {
+      return map(collection, function() {
+        return collection.count() === 0;
+      });
     };
   });
 

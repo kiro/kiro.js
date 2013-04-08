@@ -114,18 +114,18 @@
       };
       icon = function(value) {
         if (value === state.TIC) {
-          return '<i class="icon-circle-blank"/>';
+          return '<i class="icon-circle-blank tic"/>';
         } else if (value === state.TAC) {
-          return '<i class="icon-remove"/>';
+          return '<i class="icon-remove tac"/>';
         } else {
           return "";
         }
       };
       myturn = function(game) {
-        return game.players.count() > game.turn && game.players.at(game.turn).id === currentPlayer.id;
+        return game.players.count() === 2 && game.players.at(game.turn).id === currentPlayer.id;
       };
       otherPlayer = function(game) {
-        return game.players.at((game.turn + 1) % 2);
+        return game.players.at(game.turn);
       };
       canPlay = function(game) {
         return game.players.count() > 1 && (game.players.at(0).id === currentPlayer.id || game.players.at(1).id === currentPlayer.id);
@@ -181,9 +181,11 @@
           game.finished = false;
           return game.state = initialState();
         }).bindVisible(bind(game.finished)), button("Go back", function() {
-          game.players.remove(currentPlayer);
+          game.players.remove(matchField(getId, currentPlayer));
           return content(gameList());
-        })));
+        })), pre(code(map(game, function() {
+          return JSON.stringify(game, null, 4);
+        }))));
       };
       gameList = function() {
         return div(h2("Create new game"), button('Create', function() {
@@ -196,6 +198,8 @@
         })), " currently available"), table(thead(tr(th("Players").span3(), th("Action")))).foreach(games, function(game) {
           return tr(td(ul.inline().foreach(game.players, function(player) {
             return li(player.name);
+          }), p().muted('No players').bindVisible(game.players, function() {
+            return game.players.count() === 0;
           })).span3(), td(button.primary("Join", function() {
             game.players.add(currentPlayer);
             return content(showGame(game));

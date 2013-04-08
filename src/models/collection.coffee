@@ -173,13 +173,6 @@ window.BC.define('models', (models) ->
       compareFunction = f
       update(-> action(actions.UPDATE_VIEW, items))
 
-    collection.sortBy = (field) ->
-      collection.sort((item1, item2) ->
-        if field(item1) < field(item2) then -1
-        else if field(item1) > field(item2) then 1
-        else 0
-      )
-
     collection.contains = (item) -> _.contains(items, item)
 
     # converts the collection to JSON
@@ -210,4 +203,16 @@ window.BC.define('models', (models) ->
       this.subscribe(handler) for handler in storeHandlers
 
     $.extend(collection, o)
+
+  models.compareField = (field) ->
+    (item1, item2) ->
+      if field(item1) < field(item2) then -1
+      else if field(item1) > field(item2) then 1
+      else 0
+
+  models.matchField = (field, item1) ->
+    (item2) -> field(item1) == field(item2)
+
+  models.isEmpty = (collection) ->
+    map(collection, -> collection.count() == 0)
 )

@@ -110,11 +110,11 @@
     font-size: 58px;
 }
 
-.icon-circle-blank {
+.tic {
     color: #add8e6;
 }
 
-.icon-remove {
+.tac {
     color: #f08080;
 }
 
@@ -134,4 +134,8 @@
 
 .email-actions {
     height: 20px;
+}
+
+.current-player {
+    background-color: #ffffe0;
 }

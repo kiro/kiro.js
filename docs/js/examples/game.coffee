@@ -67,13 +67,13 @@ docs.examples.game = -> section(h1("Game"),
       check(2, 0, -1, 1)
 
     icon = (value) ->
-      if value == state.TIC then '<i class="icon-circle-blank"/>'
-      else if value == state.TAC then '<i class="icon-remove"/>'
+      if value == state.TIC then '<i class="icon-circle-blank tic"/>'
+      else if value == state.TAC then '<i class="icon-remove tac"/>'
       else ""
 
-    myturn = (game) -> game.players.count() > game.turn and
+    myturn = (game) -> game.players.count() == 2 and
       game.players.at(game.turn).id == currentPlayer.id
-    otherPlayer = (game) -> game.players.at((game.turn + 1) % 2)
+    otherPlayer = (game) -> game.players.at(game.turn)
     canPlay = (game) ->
       game.players.count() > 1 and (game.players.at(0).id == currentPlayer.id or
       game.players.at(1).id == currentPlayer.id)
@@ -90,8 +90,7 @@ docs.examples.game = -> section(h1("Game"),
 
       h4(map(game, ->
         if game.players.count() >= 2
-          if game.finished
-            game.finished
+          if game.finished then game.finished
           else
             if myturn(game) then "Your turn"
             else otherPlayer(game).name + "s turn."
@@ -117,10 +116,12 @@ docs.examples.game = -> section(h1("Game"),
         ).bindVisible(bind(game.finished))
 
         button("Go back", ->
-          game.players.remove(currentPlayer)
+          game.players.remove(matchField(getId, currentPlayer))
           content(gameList())
         )
       )
+
+      pre(code(map(game, -> JSON.stringify(game, null, 4))))
     )
 
     gameList = () ->
@@ -139,9 +140,12 @@ docs.examples.game = -> section(h1("Game"),
             th("Players").span3(),
             th("Action"))
           )).foreach(games, (game) -> tr(
-            td(ul.inline().foreach(game.players, (player) ->
-              li(player.name)
-            )).span3()
+            td(
+              ul.inline().foreach(game.players, (player) ->
+                li(player.name)
+              )
+              p().muted('No players').bindVisible(game.players, -> game.players.count() == 0)
+            ).span3()
             td(
               button.primary("Join", ->
                 game.players.add(currentPlayer)

@@ -105,6 +105,7 @@ window.BC.define('models', (models) ->
     if common.isModel(right)
       throw Error("merge is expected to work only with basic json objects.")
 
+    # TODO(kiro): make it to disable only store notifications
     left.disableNotifications()
     for key, value of left
       latestObservable = null
