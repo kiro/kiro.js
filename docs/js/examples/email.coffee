@@ -88,15 +88,17 @@ docs.examples.email = -> section(h1("Email"),
 
     rightPanel = () ->
       div().span10(
+        p(class: 'email-actions muted', 'Select an email.')
+          .bindVisible(negate(selectedEmail))
         button.group(
           button(icon.trash, "Delete", ->
             selectedEmail(null).folders(['trash'])
-          ).bindDisabled(negate(selectedEmail))
+          )
            .bindDisabled(selectedEmail,
               -> selectedEmail().folders.contains('trash') if selectedEmail())
 
           dropdown(
-            button(id: 'move-btn', "Move").bindDisabled(negate(selectedEmail))
+            button(id: 'move-btn', "Move")
             (a(folder, moveTo(folder)) for folder in data.folders())
           )
 
@@ -104,15 +106,15 @@ docs.examples.email = -> section(h1("Email"),
             rightContent(sendEmail(email(
               subject: "FW: " + selectedEmail(null).subject
             )))
-          ).bindDisabled(negate(selectedEmail))
+          )
 
           button(icon.pencil, "Reply", ->
             rightContent(sendEmail(email(
               contact_id: selectedEmail().contact_id,
               subject: "RE: " + selectedEmail(null).subject
             )))
-          ).bindDisabled(negate(selectedEmail))
-        )
+          )
+        ).bindVisible(selectedEmail)
         div(rightContent)
       )
 

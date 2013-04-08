@@ -110,15 +110,17 @@
       };
       rightPanel = function() {
         var folder;
-        return div().span10(button.group(button(icon.trash, "Delete", function() {
+        return div().span10(p({
+          "class": 'email-actions muted'
+        }, 'Select an email.').bindVisible(negate(selectedEmail)), button.group(button(icon.trash, "Delete", function() {
           return selectedEmail(null).folders(['trash']);
-        }).bindDisabled(negate(selectedEmail)).bindDisabled(selectedEmail, function() {
+        }).bindDisabled(selectedEmail, function() {
           if (selectedEmail()) {
             return selectedEmail().folders.contains('trash');
           }
         }), dropdown(button({
           id: 'move-btn'
-        }, "Move").bindDisabled(negate(selectedEmail)), (function() {
+        }, "Move"), (function() {
           var _i, _len, _ref, _results;
           _ref = data.folders();
           _results = [];
@@ -131,12 +133,12 @@
           return rightContent(sendEmail(email({
             subject: "FW: " + selectedEmail(null).subject
           })));
-        }).bindDisabled(negate(selectedEmail)), button(icon.pencil, "Reply", function() {
+        }), button(icon.pencil, "Reply", function() {
           return rightContent(sendEmail(email({
             contact_id: selectedEmail().contact_id,
             subject: "RE: " + selectedEmail(null).subject
           })));
-        }).bindDisabled(negate(selectedEmail))), div(rightContent));
+        })).bindVisible(selectedEmail), div(rightContent));
       };
       return body(div.container.fluid(div.row.fluid(leftPanel(), rightPanel())));
     }));

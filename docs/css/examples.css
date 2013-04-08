@@ -131,3 +131,7 @@
     border-left-width: 0px;
     border-right-width: 0px;
 }
+
+.email-actions {
+    height: 20px;
+}
