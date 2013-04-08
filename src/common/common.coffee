@@ -66,7 +66,7 @@ window.BC.define('common', (common) ->
       composite.init(el)
       el
     else if common.isModel(composite)
-      common.element(composite._get)
+      common.element(composite._get())
     else
       throw Error(composite + " is expected to be String, Number, Boolean or composite")
 

@@ -12,7 +12,7 @@
 
   store = window.BC.namespace("store");
 
-  $.extend(this, common, html, bootstrap, models, store);
+  $.extend(this, html, common, bootstrap, models, store);
 
   body(h1("Make something awesome!"));
 

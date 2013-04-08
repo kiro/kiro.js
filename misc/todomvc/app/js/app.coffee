@@ -13,22 +13,21 @@ selectedFilter = model("")
 
 # helpers
 pluralize = (count) -> if count == 1 then "1 item" else count + " items"
-done = (todo) -> todo.completed
-notDone = (todo) -> !todo.completed
+all = -> true
+completed = (todo) -> todo.completed
+active = (todo) -> !todo.completed
 allDone = () -> _.all((todo.completed for todo in todos()))
 
 # controls
 textInput = (config, model, handler) ->
   config['autofocus'] = true
   input.text(config, model)
-    .on('keydown', (e) -> if e.keyCode == 13 then handler())
+    .on('keydown', (e) -> if e.keyCode == ENTER_KEY then handler())
     .on('blur', -> handler())
 
-filter = (name, filter) ->
-  a(name, ->
-    todos.filter(filter)
-    selectedFilter(name)
-  ).bindClass(selectedFilter, -> 'selected' if selectedFilter() == name)
+filter = (hash, name) ->
+  a(href: hash, name, -> location.hash = hash)
+    .bindClass(selectedFilter, -> 'selected' if selectedFilter() == name)
 
 todosHeader = ->
   todoText = model("")
@@ -54,35 +53,35 @@ renderTodo = (todo) ->
     bind(todo.title), -> content(view())
   )
   view = () -> div(class: "view",
-    input.checkbox(class:"toggle", bind(todo.completed))
-      .on('click', -> checkAll(allDone()))
+    input.checkbox({class:"toggle"}, bind(todo.completed))
+      .on('click', -> checkAll(allDone()); return true)
 
-    label(bind(todo.title))
+    label(bind(todo.title)).on('dblclick', -> content(edit()))
     button(class: "destroy", -> todos.remove(todo))
-  ).on('dblclick', -> content(edit()))
+  )
 
   content = model(view())
-  isEdit = false
-  content.subscribe(-> isEdit = !isEdit)
+  editing = false
+  content.subscribe(-> editing = !editing)
 
   li(content)
     .bindClass(bind(todo.completed), -> 'completed' if todo.completed)
-    .bindClass(content, -> 'editing' if isEdit)
+    .bindClass(content, -> 'editing' if editing)
 
 todosFooter = ->
   footer(id: "footer",
     span(id:"todo-count",
-      map(todos, -> pluralize(todos.count(notDone)) + " left")
+      map(todos, -> pluralize(todos.count(active)) + " left")
     )
     ul(id: "filters",
-      li(filter("All", -> true)).addClass('selected')
-      li(filter("Active", notDone))
-      li(filter("Completed", done))
+      li(filter('#/', "All")).addClass('selected')
+      li(filter('#/active', "Active"))
+      li(filter('#/completed', "Completed"))
     )
     button(id: "clear-completed",
-      map(todos, -> "Clear completed (" + todos.count(done) + ")"),
-      -> todos.remove(done)
-    )
+      map(todos, -> "Clear completed (" + todos.total(completed) + ")"),
+      -> todos.remove(completed)
+    ).bindVisible(todos, -> todos.total(completed) > 0)
   ).bindVisible(todos, -> todos.total() > 0)
 
 info = ->
@@ -100,3 +99,11 @@ body(
     info()
   )
 )
+
+app = Sammy('#main', ->
+  this.get('#/', -> selectedFilter('All'); todos.filter(all))
+  this.get('#/active', -> selectedFilter('Active'); todos.filter(active))
+  this.get('#/completed', -> selectedFilter('Completed'); todos.filter(completed))
+)
+
+$(-> app.run('#/'))

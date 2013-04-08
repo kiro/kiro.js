@@ -139,7 +139,7 @@
             };
           });
         },
-        bindAttr: binder('attr'),
+        bindAttr: binder('prop'),
         on: function(events, selector, handler) {
           var _this = this;
           if (!handler) {

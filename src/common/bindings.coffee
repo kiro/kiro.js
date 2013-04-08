@@ -89,7 +89,7 @@ window.BC.define('common', (common) ->
       this.bindAttr(observable, (value) -> disabled: condition(value))
 
     # Binds the attributes of an element
-    bindAttr: binder('attr')
+    bindAttr: binder('prop')
 
     # Adds event handlers, jquery style
     on: (events, selector, handler) ->

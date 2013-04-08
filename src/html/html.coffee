@@ -55,7 +55,9 @@ html.input =
 
     input({type: 'checkbox'}, 'click', ((el) -> $(el).is(':checked')), items...)
       .bindValue(model)
-      .bindAttr(model, -> checked: model.get())
+      .bindAttr(model, ->
+        checked: model.get()
+      )
 
   radio: (items...) ->
     model = getModel(items)

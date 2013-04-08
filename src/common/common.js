@@ -134,7 +134,7 @@
         composite.init(el);
         return el;
       } else if (common.isModel(composite)) {
-        return common.element(composite._get);
+        return common.element(composite._get());
       } else {
         throw Error(composite + " is expected to be String, Number, Boolean or composite");
       }
