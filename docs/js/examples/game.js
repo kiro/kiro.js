@@ -16,7 +16,7 @@
 
   docs.examples.game = function() {
     return section(h1("Game"), docs.code.game(), example("Multiplayer tic tac toe", "Open if different tabs to play the game.", function() {
-      var checkFinished, content, currentPlayer, enterPlayerName, game, gameList, games, getId, icon, myturn, otherPlayer, player, showGame, state;
+      var canPlay, checkFinished, content, currentPlayer, game, games, getId, icon, initialState, myturn, otherPlayer, player, players, showGame, state;
       state = {
         EMPTY: "empty",
         TIC: "tic",
@@ -27,63 +27,69 @@
       };
       currentPlayer = null;
       player = function(name) {
-        var obj;
-        obj = object({
+        return object({
           id: guid(),
           name: name,
           lastSeen: Date.now()
         });
-        return obj;
       };
-      game = function(player) {
-        var i, j, obj;
-        obj = object({
-          id: guid(),
-          players: [player],
-          turn: 0,
-          state: (function() {
-            var _i, _results;
-            _results = [];
-            for (i = _i = 0; _i < 3; i = ++_i) {
-              _results.push((function() {
-                var _j, _results1;
-                _results1 = [];
-                for (j = _j = 0; _j < 3; j = ++_j) {
-                  _results1.push({
-                    value: state.EMPTY
-                  });
-                }
-                return _results1;
-              })());
+      currentPlayer = player('Player' + Math.floor(Math.random() * 1000));
+      players = collection([currentPlayer]).filter();
+      pusher(players, 'players', getId);
+      if (docs.examples.lastUserUpdate) {
+        window.clearInterval(docs.examples.lastUserUpdate);
+      }
+      docs.examples.lastUserUpdate = window.setInterval(function() {
+        return currentPlayer.lastSeen = Date.now();
+      }, 5 * 1000);
+      initialState = function() {
+        var i, j, _i, _results;
+        _results = [];
+        for (i = _i = 0; _i < 3; i = ++_i) {
+          _results.push((function() {
+            var _j, _results1;
+            _results1 = [];
+            for (j = _j = 0; _j < 3; j = ++_j) {
+              _results1.push({
+                value: state.EMPTY,
+                mark: false
+              });
             }
-            return _results;
-          })(),
+            return _results1;
+          })());
+        }
+        return _results;
+      };
+      game = function() {
+        var obj;
+        obj = object({
+          id: 1,
+          turn: 0,
+          state: initialState(),
           lastSeen: Date.now(),
           finished: false
         });
-        setInterval((function() {
-          return obj.lastSeen = Date.now();
-        }), 1000);
         return obj;
       };
-      games = collection();
+      game = game();
+      games = collection([game]);
       pusher(games, 'games', getId);
       content = model();
       checkFinished = function(game) {
         var check, i, _i;
         check = function(x, y, dx, dy) {
           var currentState, k, _i, _j, _results;
-          currentState = game.state.at(y).at(x);
+          currentState = game.state.at(y).at(x).value;
           for (k = _i = 0; _i < 3; k = ++_i) {
-            if (game.state.at(y + dy * k).at(x + dx * k) !== currentState) {
+            if (game.state.at(y + dy * k).at(x + dx * k).value !== currentState) {
               currentState = void 0;
             }
           }
-          if (currentState !== state.NONE && !game.finished) {
+          if (currentState && currentState !== state.EMPTY && !game.finished) {
             game.finished = true;
             _results = [];
             for (k = _j = 0; _j < 3; k = ++_j) {
-              _results.push(game.state.at(y + dy * k).at(x + dx * k).value += " mark");
+              _results.push(game.state.at(y + dy * k).at(x + dx * k).mark = true);
             }
             return _results;
           }
@@ -95,37 +101,44 @@
         check(0, 0, 1, 1);
         return check(2, 0, -1, 1);
       };
-      icon = function(state) {
-        if (state === state.TIC) {
+      icon = function(value) {
+        if (value === state.TIC) {
           return '<i class="icon-circle-blank"/>';
-        } else if (state === state.TAC) {
+        } else if (value === state.TAC) {
           return '<i class="icon-remove"/>';
         } else {
           return "";
         }
       };
       myturn = function(game) {
-        return game.players.at(game.turn).id === currentPlayer.id;
+        return game.players.count() > game.turn && game.players.at(game.turn).id === currentPlayer.id;
       };
       otherPlayer = function(game) {
         return game.players.at((game.turn + 1) % 2);
       };
+      canPlay = function() {
+        return game.players.count() > 1 && (game.players.at(0).id === currentPlayer.id || game.players.at(1).id === currentPlayer.id);
+      };
       showGame = function(game) {
-        return div(h3(map(game.players, function() {
-          if (game.players.count() === 1) {
+        return div(h3(map(game, function() {
+          if (game.players.count() <= 1) {
             return "Waiting for other player to join...";
-          } else {
+          } else if (canPlay()) {
             return game.players.at(0).name + " vs " + game.players.at(1).name;
+          } else {
+            return "Game is full, you can just observe.";
           }
         })), h4(map(game, function() {
-          if (game.players.count() === 2) {
+          if (game.players.count() >= 2) {
             if (myturn(game)) {
               return "Your turn";
             } else {
               return otherPlayer(game).name + "s turn.";
             }
           }
-        })), div({
+        })).bindVisible(game.players, function() {
+          return canPlay();
+        }), div({
           "class": 'board'
         }).foreach(game.state, function(row) {
           return div({
@@ -138,45 +151,25 @@
             })).on('click', function() {
               if (myturn(game) && field.value === state.EMPTY && !game.finished) {
                 field.value = game.turn === 0 ? state.TIC : state.TAC;
-                game.turn = (game.turn + 1) % 2;
-                return checkFinished(game);
+                checkFinished(game);
+                return game.turn = (game.turn + 1) % 2;
+              }
+            }).bindClass(bind(field.mark), function() {
+              if (field.mark) {
+                return "mark";
               }
             });
           });
-        }));
-      };
-      gameList = function() {
-        return div(h2("Create new game"), button('Create', function() {
-          var newGame;
-          newGame = game(currentPlayer);
-          games.add(newGame);
-          return content(showGame(newGame));
-        }), h2("Or join an existing game"), p(span(map(games, function() {
-          return games.count();
-        })), " currently available"), table(thead(tr(th("Players").span3(), th("Action")))).foreach(games, function(game) {
-          return tr(td(ul.inline().foreach(game.players, function(player) {
-            return li(player.name);
-          })).span3(), td(button.primary("Join", function() {
-            game.players.add(currentPlayer);
-            return content(showGame(game));
-          }).bindVisible(game, function() {
-            return game.players.count() === 1;
-          }), button.info("Watch", function() {
-            return content(showGame(game));
-          }).bindVisible(game, function() {
-            return game.players.count() === 2;
-          })));
-        }));
-      };
-      enterPlayerName = function() {
-        var playerName;
-        playerName = model("");
-        return div(h3("Enter player name"), form.inline(input.text(playerName), button.primary("Enter", function() {
-          currentPlayer = player(playerName());
+        }), div(h3(game.players.count() > 1 ? map(bind(game.finished), function() {
+          return game.players.at(game.turn).name + " won!!!";
+        }) : void 0), button.primary('Play again!', function() {
+          game.state = initialState();
+          return game.finished = false;
+        }), button('Go back', function() {
           return content(gameList());
-        })));
+        })).bindVisible(bind(game.finished)));
       };
-      content(enterPlayerName());
+      content(showGame(game));
       return body(div(content));
     }));
   };
