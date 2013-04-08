@@ -22,7 +22,13 @@ docs.examples.chat = -> section(h1("Chat"),
       lastSeen: Date.now()
       lastTyped: 0
     )
-    window.setInterval((-> currentUser.lastSeen = Date.now()), 5 * 1000)
+
+    # This is done so that if the chat app is instantiated multiple times,
+    # it clears the update for the previous instance.
+    if docs.examples.lastUserUpdate
+      window.clearInterval(docs.examples.lastUserUpdate)
+
+    docs.examples.lastUserUpdate = window.setInterval((-> currentUser.lastSeen = Date.now()), 5 * 1000)
 
     users = collection([currentUser])
     pusher(users, 'users', ((item) -> item._id), 2)

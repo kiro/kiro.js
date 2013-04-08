@@ -44,7 +44,10 @@
         lastSeen: Date.now(),
         lastTyped: 0
       });
-      window.setInterval((function() {
+      if (docs.examples.lastUserUpdate) {
+        window.clearInterval(docs.examples.lastUserUpdate);
+      }
+      docs.examples.lastUserUpdate = window.setInterval((function() {
         return currentUser.lastSeen = Date.now();
       }), 5 * 1000);
       users = collection([currentUser]);
