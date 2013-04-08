@@ -212,7 +212,4 @@ window.BC.define('models', (models) ->
 
   models.matchField = (field, item1) ->
     (item2) -> field(item1) == field(item2)
-
-  models.isEmpty = (collection) ->
-    map(collection, -> collection.count() == 0)
 )

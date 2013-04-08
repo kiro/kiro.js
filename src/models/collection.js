@@ -272,15 +272,10 @@
         }
       };
     };
-    models.matchField = function(field, item1) {
+    return models.matchField = function(field, item1) {
       return function(item2) {
         return field(item1) === field(item2);
       };
-    };
-    return models.isEmpty = function(collection) {
-      return map(collection, function() {
-        return collection.count() === 0;
-      });
     };
   });
 
