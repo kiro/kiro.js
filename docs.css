@@ -1333,11 +1333,11 @@ form.bs-docs-example {
     font-size: 58px;
 }
 
-.icon-circle-blank {
+.tic {
     color: #add8e6;
 }
 
-.icon-remove {
+.tac {
     color: #f08080;
 }
 
@@ -1353,6 +1353,14 @@ form.bs-docs-example {
     border-radius: 0px;
     border-left-width: 0px;
     border-right-width: 0px;
+}
+
+.email-actions {
+    height: 20px;
+}
+
+.current-player {
+    background-color: #ffffe0;
 }
 
 #outer {
