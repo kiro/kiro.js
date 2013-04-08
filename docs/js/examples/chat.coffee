@@ -20,24 +20,29 @@ docs.examples.chat = -> section(h1("Chat"),
     currentUser = object(
       _id: Math.floor(Math.random()*1000000),
       name: "User" + Math.floor(Math.random()*1000),
-      lastSeen: Date.now()
+      ping: 0
       typedBefore: 1000
     )
 
     # This is done so that if the chat app is instantiated multiple times,
     # it clears the update for the previous instance.
-    if docs.examples.lastUserUpdate
-      window.clearInterval(docs.examples.lastUserUpdate)
+    presense = (currentUser, collection) ->
+      if docs.examples.lastUserUpdate
+        window.clearInterval(docs.examples.lastUserUpdate)
 
-    docs.examples.lastUserUpdate = window.setInterval((->
-      currentUser.lastSeen = Date.now()
-      currentUser.typedBefore = Date.now() - lastTyped)
-    , 5 * 1000)
+      docs.examples.lastUserUpdate = window.setInterval((->
+        currentUser.ping++
+        currentUser.typedBefore = Date.now() - lastTyped)
+      , 10 * 1000)
+
+      lastSeen = {}
+      pusher(users, 'users', ((item) -> item._id), 5)
+      users.filter((user) -> user._id != currentUser._id and
+        (!lastSeen[user._id] or (Date.now() - lastSeen[user._id]) < 15 * 1000))
+      users.subscribe(collection.actionHandler(update: (user) ->  lastSeen[user._id] = Date.now()))
 
     users = collection([currentUser])
-    pusher(users, 'users', ((item) -> item._id), 5)
-    users.filter((user) -> user._id != currentUser._id and
-      (Date.now() - user.lastSeen) < 10 * 1000)
+    presense(currentUser, users)
 
     messageText = model()
     userList = ->

@@ -25,7 +25,7 @@
 
   docs.examples.chat = function() {
     return section(h1("Chat"), docs.code.chat(), example("Chat app", "You can open the chat example in different tabs.", function() {
-      var chatMessages, currentUser, lastTyped, message, messageText, messages, userList, users;
+      var chatMessages, currentUser, lastTyped, message, messageText, messages, presense, userList, users;
       lastTyped = 0;
       message = function(user, content) {
         return object({
@@ -42,23 +42,33 @@
       currentUser = object({
         _id: Math.floor(Math.random() * 1000000),
         name: "User" + Math.floor(Math.random() * 1000),
-        lastSeen: Date.now(),
+        ping: 0,
         typedBefore: 1000
       });
-      if (docs.examples.lastUserUpdate) {
-        window.clearInterval(docs.examples.lastUserUpdate);
-      }
-      docs.examples.lastUserUpdate = window.setInterval((function() {
-        currentUser.lastSeen = Date.now();
-        return currentUser.typedBefore = Date.now() - lastTyped;
-      }), 5 * 1000);
+      presense = function(currentUser, collection) {
+        var lastSeen;
+        if (docs.examples.lastUserUpdate) {
+          window.clearInterval(docs.examples.lastUserUpdate);
+        }
+        docs.examples.lastUserUpdate = window.setInterval((function() {
+          currentUser.ping++;
+          return currentUser.typedBefore = Date.now() - lastTyped;
+        }), 10 * 1000);
+        lastSeen = {};
+        pusher(users, 'users', (function(item) {
+          return item._id;
+        }), 5);
+        users.filter(function(user) {
+          return user._id !== currentUser._id && (!lastSeen[user._id] || (Date.now() - lastSeen[user._id]) < 15 * 1000);
+        });
+        return users.subscribe(collection.actionHandler({
+          update: function(user) {
+            return lastSeen[user._id] = Date.now();
+          }
+        }));
+      };
       users = collection([currentUser]);
-      pusher(users, 'users', (function(item) {
-        return item._id;
-      }), 5);
-      users.filter(function(user) {
-        return user._id !== currentUser._id && (Date.now() - user.lastSeen) < 10 * 1000;
-      });
+      presense(currentUser, users);
       messageText = model();
       userList = function() {
         return div().span3(input.text(bind(currentUser.name)).span12(), ul.unstyled().foreach(users, function(user) {
