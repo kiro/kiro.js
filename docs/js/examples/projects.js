@@ -16,16 +16,17 @@
 
   docs.examples.projects = function() {
     return section(h1("Projects"), docs.code.projects(), example("Javascript projects", "Blatantly stolen from angularjs.", function() {
-      var addProject, byId, content, editProject, projectForm, projectList, projects;
+      var addProject, byId, content, projectForm, projectList, projects;
       byId = function(id) {
         return function(item) {
-          return item._id === id;
+          return id && item._id.$oid === id.$oid;
         };
       };
       content = model("");
       projects = collection([]);
       mongoLab(projects, 'examples', 'projects');
       projectForm = function(project) {
+        console.log(project);
         return form({
           Name: input.text({
             required: true
@@ -37,26 +38,26 @@
           Description: textarea({
             required: true
           }, bind(project.description)),
-          "": [
+          actions: [
             a({
-              "class": 'btn',
-              href: '#/examples/projects/list'
+              "class": 'btn btn-primary'
             }, "Save", function() {
-              return projects.addOrUpdate(byId(project._id), project);
+              if (!projects.find(byId(project._id))) {
+                projects.add(project);
+              }
+              return content(projectList());
             }), a({
-              "class": 'btn',
-              href: '#/examples/projects/list'
-            }, 'Cancel'), a({
-              "class": 'btn btn-danger',
-              href: '#/examples/projects/list'
+              "class": 'btn'
+            }, 'Cancel', function() {
+              return content(projectList());
+            }), a({
+              "class": 'btn btn-danger'
             }, 'Delete', function() {
-              return projects.remove(byId(project._id));
-            }).bindVisible(bind(project._id))
+              projects.remove(byId(project._id));
+              return content(projectList());
+            })
           ]
         });
-      };
-      editProject = function(id) {
-        return projectForm(projects.find(byId(id)).clone());
       };
       addProject = function() {
         return projectForm(object({
@@ -68,30 +69,24 @@
       projectList = function() {
         var query;
         query = model("");
-        div(input.text({
+        return div(input.text({
           placeholder: "Search"
         }, query).on('keyup', function() {
           return projects.filter(function(item) {
-            return JSON.stringify(item).indexOf(query) !== -1;
+            return JSON.stringify(item).toLowerCase().indexOf(query().toLowerCase()) !== -1;
           });
-        }), table(thead(tr(th(td("Project"), td("Description"), td(a({
-          href: '#/examples/projects/new'
-        }, '+')))))).foreach(projects, function(project) {
+        }), table(thead(tr(th(td("Project"), td("Description"), td(a('+', function() {
+          return content(addProject());
+        })))))).foreach(projects, function(project) {
           return tr(td(a({
             href: project.site
-          }, project.name)), td(project.description), td(a({
-            href: '#/examples/projects/edit/' + project.id
-          }), "Edit"));
-        }));
-        return div(input.text({
-          id: 'kiro',
-          placeholder: 'Text'
+          }, project.name)), td(project.description), td(a('Edit', function() {
+            return content(projectForm(project));
+          })));
         }));
       };
       content(projectList());
-      return body(content);
-    }, {
-      id: 'projects'
+      return body(div(content));
     }));
   };
 

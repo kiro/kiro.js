@@ -33,12 +33,18 @@
       content(docs[first]['index']());
       return docs.currentLocation(location.hash);
     });
-    return this.get('#/:first/:second/', function() {
+    this.get('#/:first/:second/', function() {
       var first, second;
       first = this.params['first'];
       second = this.params['second'];
       content(docs[first].index(docs[first][second]()));
       return docs.currentLocation(location.hash);
+    });
+    this.get('#/examples/projects/edit/:id/', function() {
+      return console.log('mente');
+    });
+    return this.get('#/examples/projects/new/', function() {
+      return console.log('mente');
     });
   });
 

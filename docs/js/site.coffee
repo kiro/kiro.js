@@ -38,6 +38,9 @@ app = Sammy('body', ->
     content(docs[first].index(docs[first][second]()))
     docs.currentLocation(location.hash)
   )
+
+  this.get('#/examples/projects/edit/:id/', -> console.log('mente'))
+  this.get('#/examples/projects/new/', -> console.log('mente'))
 )
 
 app.raise_errors = true

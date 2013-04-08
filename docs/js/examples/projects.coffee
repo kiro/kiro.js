@@ -10,52 +10,54 @@ docs.examples.projects = -> section(h1("Projects"),
   docs.code.projects()
 
   example("Javascript projects", "Blatantly stolen from angularjs.", ->
-    byId = (id) -> (item) -> item._id == id
+    byId = (id) -> (item) -> id and item._id.$oid == id.$oid
     content = model("")
 
     projects = collection([])
     mongoLab(projects, 'examples', 'projects')
 
     projectForm = (project) ->
+      console.log(project)
       form(
         Name: input.text({required: true}, bind(project.name))
         Site: input.text({required: true, type: 'url'}, bind(project.site))
         Description: textarea({required: true}, bind(project.description))
-        "": [
-          a(class: 'btn', href: '#/examples/projects/list', "Save",
-            -> projects.addOrUpdate(byId(project._id), project)),
-          a(class: 'btn', href: '#/examples/projects/list', 'Cancel')
-          a(class: 'btn btn-danger', href: '#/examples/projects/list', 'Delete',
-            -> projects.remove(byId(project._id)))
-            .bindVisible(bind(project._id))
+        actions: [
+          a(class: 'btn btn-primary', "Save", ->
+            if !projects.find(byId(project._id))
+              projects.add(project)
+            content(projectList())
+          )
+          a(class: 'btn', 'Cancel', -> content(projectList()))
+          a(class: 'btn btn-danger', 'Delete', ->
+            projects.remove(byId(project._id))
+            content(projectList())
+          )
         ]
       )
 
-    editProject = (id) -> projectForm(projects.find(byId(id)).clone())
     addProject = () -> projectForm(object(name: "", site: "", description: ""))
 
     projectList = () ->
       query = model("")
       div(
         input.text(placeholder: "Search", query).on('keyup',
-          -> projects.filter((item) -> JSON.stringify(item).indexOf(query) != -1))
+          -> projects.filter((item) -> JSON.stringify(item).toLowerCase().indexOf(query().toLowerCase()) != -1))
         table(thead(tr(th(
           td("Project"),
           td("Description"),
-          td(a({href:'#/examples/projects/new'}, '+'))
+          td(a('+', -> content(addProject())))
         )))).foreach(projects, (project) -> tr(
           td(a({href: project.site}, project.name))
           td(project.description)
-          td(a(href: '#/examples/projects/edit/' + project.id), "Edit")
+          td(a('Edit', -> content(projectForm(project))))
         ))
       )
 
-      div(input.text(id: 'kiro', placeholder: 'Text'))
-
-
     content(projectList())
+
     body(
-      content
+      div(content)
     )
-  , id: 'projects')
+  )
 )
