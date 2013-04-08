@@ -23,7 +23,9 @@
             <copy file="release/kiro.js" todir="@{todir}"/>
             <copy file="${lib.dir}/jquery.js" todir="@{todir}"/>
             <copy file="${lib.dir}/underscore.js" todir="@{todir}"/>
-            <copy file="${lib.dir}/fontawseome/css/font-awesome.css" todir="@{todir}"/>
+            <copy todir="@{todir}/font-awesome">
+                <fileset dir="${lib.dir}/font-awesome"/>
+            </copy>
             <copy todir="@{todir}/bootstrap">
                 <fileset dir="${lib.dir}/bootstrap"/>
             </copy>
