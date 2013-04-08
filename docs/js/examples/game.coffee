@@ -146,7 +146,7 @@ docs.examples.game = -> section(h1("Game"),
               button.primary("Join", ->
                 game.players.add(currentPlayer)
                 content(showGame(game))
-              ).bindVisible(game, -> game.players.count() == 1)
+              ).bindVisible(game, -> game.players.count() < 2)
               button.info("Watch", ->
                 content(showGame(game))
               ).bindVisible(game, -> game.players.count() == 2)

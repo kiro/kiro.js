@@ -200,7 +200,7 @@
             game.players.add(currentPlayer);
             return content(showGame(game));
           }).bindVisible(game, function() {
-            return game.players.count() === 1;
+            return game.players.count() < 2;
           }), button.info("Watch", function() {
             return content(showGame(game));
           }).bindVisible(game, function() {
