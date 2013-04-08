@@ -178,15 +178,15 @@ window.BC.define('models', (models) ->
 
     collection.actionHandler = (handler) ->
       (items, action) ->
-        if action.name == actions.REPLACE_ALL
+        if action.name == actions.REPLACE_ALL and handler.replaceAll
           handler.replaceAll(action.value)
         else if action.name == actions.UPDATE_VIEW and handler.updateView
           handler.updateView(action.value)
-        else if action.name == actions.ADD
+        else if action.name == actions.ADD and handler.add
           handler.add(action.value, action.index)
-        else if action.name == actions.REMOVE
+        else if action.name == actions.REMOVE and handler.remove
           handler.remove(action.value, action.index)
-        else if action.name == actions.UPDATE
+        else if action.name == actions.UPDATE and handler.update
           handler.update(action.value, action.index, action.oldIndex)
 
     storeHandlers = []

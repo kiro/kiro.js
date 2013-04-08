@@ -220,15 +220,15 @@
       };
       collection.actionHandler = function(handler) {
         return function(items, action) {
-          if (action.name === actions.REPLACE_ALL) {
+          if (action.name === actions.REPLACE_ALL && handler.replaceAll) {
             return handler.replaceAll(action.value);
           } else if (action.name === actions.UPDATE_VIEW && handler.updateView) {
             return handler.updateView(action.value);
-          } else if (action.name === actions.ADD) {
+          } else if (action.name === actions.ADD && handler.add) {
             return handler.add(action.value, action.index);
-          } else if (action.name === actions.REMOVE) {
+          } else if (action.name === actions.REMOVE && handler.remove) {
             return handler.remove(action.value, action.index);
-          } else if (action.name === actions.UPDATE) {
+          } else if (action.name === actions.UPDATE && handler.update) {
             return handler.update(action.value, action.index, action.oldIndex);
           }
         };
