@@ -15,10 +15,15 @@
     models = window.BC.namespace("models");
     pusher = new Pusher('9e1249843e69a619bc84');
     channels = {};
-    return store.pusher = function(collection, channelName, id, request_rate) {
+    return store.pusher = function(collection, channelName, id, request_rate, merge) {
       var add, channel, eventHandler, handler, kay, remove, replaceAll, update, value, _i, _len;
       if (request_rate == null) {
-        request_rate = rates.NO_LIMIT;
+        request_rate = NO_LIMIT;
+      }
+      if (merge == null) {
+        merge = function(item1, item2) {
+          return item1.set(item2);
+        };
       }
       channelName = 'private-' + channelName;
       if (channels[channelName]) {

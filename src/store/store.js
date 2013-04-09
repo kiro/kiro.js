@@ -6,12 +6,6 @@
       _this = this;
     models = window.BC.namespace("models");
     rates = window.BC.namespace("rates");
-    store = function(collection, storage, request_rate) {
-      if (request_rate == null) {
-        request_rate = rates.NO_LIMIT;
-      }
-      return collection();
-    };
     return store.mongoLab = function(collection, mongoDatabase, mongoCollection, request_rate) {
       var add, apiKey, baseUrl, getIds, handler, id, initialItems, remove, request, updateCollection, updateItems, url;
       if (request_rate == null) {
@@ -84,12 +78,13 @@
       updateItems = function(items) {
         return request('PUT', items, getIds(items));
       };
+      $.extend(_this, rates);
       return handler = {
-        replaceAll: rate(updateCollection, request_rate, rates.idempotent()),
+        replaceAll: rate(updateCollection, request_rate, idempotent()),
         updateView: (function() {}),
-        add: rate(add, request_rate, rates.aggregate()),
-        remove: rate(remove, request_rate, reates.aggregate()),
-        update: rate(updateItems, request_rate, rates.idempotent(id))
+        add: rate(add, request_rate, aggregate()),
+        remove: rate(remove, request_rate, aggregate()),
+        update: rate(updateItems, request_rate, idempotent(id))
       };
     };
   });
