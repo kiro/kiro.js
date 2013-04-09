@@ -194,8 +194,4 @@ docs.api.collection = -> section(h1("Collection"),
       )
     )
   )
-
-  example("Collection containing models", "", ->
-
-  )
 )

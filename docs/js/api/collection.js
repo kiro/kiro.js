@@ -144,7 +144,7 @@
       }), button('at', function() {
         return result(numbers.at(Number(value(""))));
       })));
-    }), example("Collection containing models", "", function() {}));
+    }));
   };
 
 }).call(this);
