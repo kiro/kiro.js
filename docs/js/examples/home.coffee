@@ -11,7 +11,8 @@ docs.home.index = () -> section(
   div(class: 'hero-unit',
     h1("Enter kiro.js")
     br()
-    a(href: 'bundle.zip', "Download developer bundle")
+    a(href: 'bundle.zip', class: 'btn btn-success btn-large', "Download developer bundle")
+    br()
     div("""<iframe src="http://ghbtns.com/github-btn.html?user=kiro&repo=shihai&type=watch&count=true&size=large"
         allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>""")
   )
