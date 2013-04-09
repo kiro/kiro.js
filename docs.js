@@ -19,10 +19,10 @@
     return div(div().span3(nav(a({
       href: '#/api/model/'
     }, "Model"), a({
-      href: '#/api/bindings/'
-    }, "Bindings"), a({
       href: '#/api/collection/'
-    }, "Collection"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    }, "Collection"), a({
+      href: '#/api/bindings/'
+    }, "Bindings"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);
@@ -41,26 +41,44 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.api.bindings = function() {
-    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
-      var married, sex, text;
+    return section(h1("Bindings"), docs.code.bindings(), p("Each html element has bindings, which allow to bind the value of a certain\nproperty to a model. The bindings update automatically when the model changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
+      var cities, married, password, search, selectedCity, sex, text, textareaValue;
       text = model("initial");
       sex = model("female");
       married = object({
         value: false
       });
-      return body(form.inline(input.text(text), span(text), button.info("Clear", function() {
-        return text("");
-      })), input.radio({
-        name: "sex",
-        value: "male"
-      }, sex), input.radio({
-        name: "sex",
-        value: "female"
-      }, sex), input.radio({
-        name: "sex",
-        value: "other"
-      }, sex), span(sex), input.checkbox(bind(married.value)), span(bind(married.value)));
-    }), example("Html bindings", "Html can accept one model and bind their html content to it.", function() {
+      selectedCity = model('San Francisco');
+      cities = ['London', 'Sofia', 'San Francisco', 'Palo Alto'];
+      password = model("");
+      search = model("");
+      textareaValue = model("");
+      return body(form.horizontal({
+        'Radio': div(input.radio({
+          name: "sex",
+          value: "male"
+        }, sex).inlineLabel("Male"), input.radio({
+          name: "sex",
+          value: "female"
+        }, sex).inlineLabel("Female"), input.radio({
+          name: "sex",
+          value: "other"
+        }, sex).inlineLabel("Other"), h5(sex)),
+        'Checkbox': div(input.checkbox(bind(married.value)).label("Married"), h5(bind(married.value))),
+        'Select': div(select(selectedCity).foreach(cities, function(city) {
+          return option({
+            value: city
+          }, city);
+        }), h5(selectedCity)),
+        'Password': div(input.text({
+          type: 'password'
+        }, password), h5(password)),
+        'Search': div({
+          "class": 'padded'
+        }, input.search(search), h5(search)),
+        'Textarea': div(textarea(textareaValue), h5(textareaValue))
+      }));
+    }), example("Html bindings", "Html element can accept one model and bind their html content to it.", function() {
       var content, i, items, text;
       text = model("");
       content = model();
@@ -71,10 +89,10 @@
       ];
       i = 0;
       content(items[0]);
-      return body(form.inline(input.text(text), h2(text)), button("Next", function() {
+      return body(button("Next", function() {
         return content(items[++i % items.length]);
       }), h6("html"), div(content));
-    }), example(".bindCss", "<code>.bindCss(model, map)</code> binds css properties of an element to a model.\nIt expects the value of the model to be an object whose fields are names of\ncss properties and have corresponding values or it can map a model to css properties.", function() {
+    }), example(".bindCss", "<code>.bindCss(model, map)</code> binds css properties of an element to a model.\nIt expects the map function to return an object whose fields are names of\ncss properties.", function() {
       var f, _i, _results;
       f = model(function(x) {
         return x;
@@ -111,7 +129,7 @@
           };
         });
       }));
-    }), example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model.", function() {
+    }), example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model. The map function is expected to return a class name.", function() {
       var count;
       count = model(0);
       return body(span(count), button("+1", function() {
@@ -121,7 +139,7 @@
           return 'btn-danger';
         }
       }));
-    }), example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled.", function() {
+    }), example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled. The map function is expected to return a boolean.", function() {
       var isThree, number;
       number = model(0);
       isThree = function() {
@@ -132,7 +150,7 @@
       }).bindDisabled(number, isThree), p("That's too many clicks!", button('Reset Clicks', function() {
         return number(0);
       })).bindVisible(number, isThree));
-    }), example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible.", function() {
+    }), example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible. The map function is expected to return a boolean.", function() {
       var visible;
       visible = model(false);
       return body(button.success("Hide", function() {
@@ -144,7 +162,7 @@
           return "Show";
         }
       }), button.primary("Button").bindVisible(visible));
-    }), example(".foreach", "Binds the content of an element to a collection.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection of items</li>\n<li>render(item, index) - takes an element and optional index and renders the item</li>\n</ul>", function() {
+    }), example(".foreach", "Binds the content of an element to a collection. The content is updated efficiently when the\ncollection is changed.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection or array</li>\n<li>render(item, index) - takes an element and optional index and renders the item</li>\n</ul>", function() {
       var numbers;
       numbers = collection([5, 3, 2, 7]);
       return body(div().foreach(numbers, function(number, index) {
@@ -156,7 +174,7 @@
       return body(div("Click me").on('click', function() {
         return clicks(clicks() + 1);
       }), "clicks : ", span(clicks));
-    }), example(".onUpdate", " Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.", function() {
+    }), example(".onUpdate", " Executes a callback when the DOM element is updated if a binding changes.", function() {
       var messages, text;
       text = model("");
       messages = collection(["123", "123", "123", "123"]);
@@ -169,12 +187,13 @@
       }), form.inline(input.text(text), button("Add", function() {
         return messages.add(text(""));
       })));
-    }), example(".onInit", " Executes a callback when a tag eleemnt is created. Useful for calling jquery plugins.", function() {
-      var city;
+    }), example(".onInit", " Executes a callback when a dom element is created. Useful for calling jquery plugins.", function() {
+      var cities, city;
       city = model("");
+      cities = ["Sofia", "London", "San Francisco", "Palo Alto"];
       return body(input.text(city).onInit(function(el) {
         return el.typeahead({
-          source: ["Sofia", "London", "San Francisco", "Palo Alto"]
+          source: cities
         });
       }));
     }));
@@ -198,10 +217,9 @@
   showCollection = function() {};
 
   docs.api.collection = function() {
-    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> Appends an item to the collection. </p>", function() {
-      var numbers, value;
-      numbers = collection([1, 2, 3]);
-      value = model("");
+    return section(h1("Collection"), docs.code.collection(), example("collection", "Collection contains items. If the items are models it subscribes to them\nand the collection is updated when a model changes.\n<p><code>items = collection(array)</code> constructs a new collection</p>\n<p><code>items()</code> returns the values in the collection</p>\n<p><code>items([1, 2, 3])</code> replaces all values in a collection</p>", function() {
+      var items;
+      items = collection([1, 2, 3]);
       showCollection = function(collection) {
         return div({
           "class": 'circles'
@@ -213,18 +231,27 @@
           });
         });
       };
+      return body(showCollection(items), button('Set', function() {
+        return items([4, 5, 6]);
+      }));
+    }), example(".add", "<p><code>.add(value)</code> adds an item to the collection. </p>", function() {
+      var numbers, value;
+      numbers = collection([1, 2, 3]);
+      value = model("");
       return body(showCollection(numbers), form.inline(input.text(value), button.success('Add', function() {
         return numbers.add(value(""));
       })));
-    }), example(".remove", "<p><code>.remove(item)</code> removes item.</p>\n<p><code>.remove(predicate)</code> remove all items that match the predicate.</p>", function() {
+    }), example(".remove", "<p><code>.remove(item)</code> removes item</p>\n<p><code>.remove(predicate)</code> remove all items that match the predicate.</p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);
-      biggerThan = function(number) {
-        return number > limit();
+      biggerThan = function(value) {
+        return function(number) {
+          return number > value;
+        };
       };
       return body(form.inline(button.danger("Remove", function() {
-        return numbers.remove(biggerThan);
+        return numbers.remove(biggerThan(limit()));
       }), " bigger than ", input.text(limit)), "or click on a number to remove it", showCollection(numbers));
     }), example(".clear", "Removes all items from a collection.", function() {
       var numbers;
@@ -232,7 +259,7 @@
       return body(showCollection(numbers), button.danger("clear", function() {
         return numbers.clear();
       }));
-    }), example(".filter", "Filters items from the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>", function() {
+    }), example(".filter", "Filters items in the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all of the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>\n<p><code>.filter(string)</code> filters all objects who don't have string field containing the string</p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);
@@ -269,7 +296,7 @@
       })), p(map(numbers, function() {
         return 'Even ' + numbers.total(even);
       })));
-    }), example(".find", "<p><code>.find(predicate)</code> gets the items matching the predicate.</p>\nIf there is only one match it returns it.\nIf there are multiple matches it returns an array.", function() {
+    }), example(".find", "<p><code>.find(predicate)</code> gets the items matching the predicate.</p>\nIf there is only one match it returns the value.\nIf there are multiple matches it returns an array.", function() {
       var byId, user, users;
       user = function(id, name) {
         return {
@@ -286,47 +313,66 @@
       return body(p(JSON.stringify(users.find(byId(1)))), p(JSON.stringify(users.find(function(item) {
         return item.id > 1;
       }))));
-    }), example(".at", "<p><code>.at(index)</code> gets the element at position index.</p>", function() {
-      var user, users;
-      user = function(id, name) {
-        return {
-          id: id,
-          name: name
-        };
-      };
-      users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")]);
-      return body(p(JSON.stringify(users.at(1))), p(JSON.stringify(users.at(2))));
-    }), example(".sort", "<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order ", function() {
-      var numbers, text;
+    }), example(".sort", "<p>Sorts the elements in the collection and maintains the collection in sorted order.</p>\n<p><code>sort()</code> sorts the items using default ordering.</p>\n<p><code>sort(comparator)</code> sorts the items using a comparator.</p>", function() {
+      var comparator, factor, numbers, text;
       numbers = collection([2, 6, 3]);
       numbers.sort();
+      factor = 1;
+      comparator = function(left, right) {
+        if (left > right) {
+          return 1 * factor;
+        } else if (left < right) {
+          return -1 * factor;
+        } else {
+          return 0;
+        }
+      };
       text = model("");
-      return body("Click on a number to remove it", showCollection(numbers), form.inline(input.text(text), button("Add", function() {
-        return numbers.add(Number(text()));
+      return body("Click on a number to remove it", showCollection(numbers), form.inline(input.text(text), button.primary("Add", function() {
+        return numbers.add(text() ? Number(text("")) : void 0);
+      })), button.warning('Reverse sorting', function() {
+        factor *= -1;
+        return numbers.sort(comparator);
+      }));
+    }), example(".indexOf, .contains, .at", "<p><code>indexOf(item)</code> returns the index of an item in the collection or -1 if it's not present.</p>\n<p><code>contains(item)</code> returns true if an item is in the collection</p>\n<p><code>at(index)</code> returns the item at index</p>", function() {
+      var numbers, result, value;
+      numbers = collection([1, 2, 3, 4, 5]);
+      result = model("");
+      value = model("");
+      return body(showCollection(numbers), p(result), form.inline(input.text(value).span1(), button('indexOf', function() {
+        return result(numbers.indexOf(Number(value(""))));
+      }), button('contains', function() {
+        return result(numbers.contains(Number(value(""))));
+      }), button('at', function() {
+        return result(numbers.at(Number(value(""))));
       })));
-    }), example(".subscribe", "<code>subscribe(handler)</code>Subscribes to changes in the collection. This includes changes to the models\nwithin the collection. The subscription handler receives the items in the collection\nand a string which describes the changed value.", function() {
-      var count, pathModel, player, players, values;
-      player = object({
-        name: "Name",
-        count: 0
-      });
-      count = model(2);
-      pathModel = model("");
-      values = model();
-      players = collection([player, count, 3]);
-      players.subscribe(function(items, path) {
-        pathModel(path);
-        return values(JSON.stringify(items));
-      });
-      return body(form({
-        "Name": input.text(bind(player.name)),
-        "Count": input.text(bind(player.count))
-      }), form.inline(span(count), button("+1", function() {
-        return count(count() + 1);
-      }), button("-1", function() {
-        return count(count() - 1);
-      })), "Path : ", span(pathModel), pre(code(values)));
     }));
+  };
+
+}).call(this);
+// Generated by CoffeeScript 1.4.0
+(function() {
+  var bootstrap, docs, models, store;
+
+  docs = window.BC.namespace("docs");
+
+  docs.api = window.BC.namespace("docs.api");
+
+  bootstrap = window.BC.namespace("bootstrap");
+
+  models = window.BC.namespace("models");
+
+  store = window.BC.namespace("store");
+
+  $.extend(this, bootstrap, models, docs, store);
+
+  docs.api.html = function() {
+    return section(h1("Html templating."), docs.code.html(), p("Building html templates."), example("Tags", "Each html tag has a corresponding function.", function() {
+      return div({
+        id: 'items',
+        "class": 'something'
+      });
+    }), example("Tag builder", "Each tag has a builder methods for customization", function() {}));
   };
 
 }).call(this);
@@ -345,17 +391,16 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.api.model = function() {
-    return section(h1("Model"), docs.code.model(), p("Models constructs observables from values or objects."), example("Model", "Creates an observable value. <code>x = model(value)</code> creates a new observable.\nCalling <code>x()</code> gets the value of the observable. <code>x(newValue)</code> sets\nthe value of the observable. Observable values can be bound to properties of the dom elements\nand they will be automatically updated when the value changes.", function() {
+    return section(h1("Models"), docs.code.model(), example("model", "Creates a model.\n<p><code>x = model(value)</code> creates a new model.</p>\n<p><code>x()</code> gets the value. </p>\n<p><code>x(newValue)</code> sets a new value </p>\n<p>Models can be bound to properties of the dom elements\nand they will be automatically updated when the value changes.<p>", function() {
       var count, text;
       count = model(0);
-      text = model("");
-      count.subscribe(function() {
-        return text("Total count " + count());
+      text = map(count, function() {
+        return "Total count " + count();
       });
       return body(button.primary("+1", function() {
         return count(count() + 1);
       }), span(text));
-    }), example("Object", "Using <code>object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects are also converted to observable\nand nested arrays to collection, the objects it arrays are also converted to\nobservables. To get the observable for a field <code>bind(obj.field)</code> must\nbe used. Changes to a field within the object are propagated upwards,\nso if you subscribe to an object changes to all fields and subfields will\nresult calling the subscription.", function() {
+    }), example("object", "<p><code>object(obj)</code> - converts a javascript object to a model</p>\n<p>It creates a model for the object itself and for each field recursively.\n   All fields and subfields can be bound to. Arrays are converted to collections.</p>\n<p> <code>obj.field += 1</code> fields can be accessed normally. </p>\n<p> <code>bind(obj.field)</code> returns the model for a field. </p>\n\n<p> If a field or sub field in an object is changed, the change is propagated through all models up to the root object.<p>", function() {
       var location, obj;
       obj = object({
         name: "Kiril Minkov",
@@ -373,7 +418,9 @@
         "Cool": input.checkbox(bind(obj.cool)),
         "Age": input.text(bind(obj.age)),
         "Locations": [
-          div().foreach(obj.locations, function(location) {
+          div({
+            "class": 'padded'
+          }).foreach(obj.locations, function(location) {
             return span(type.label(location).on('click', function() {
               return obj.locations.remove(location);
             }), "&nbsp;");
@@ -386,17 +433,26 @@
       }), pre(code(map(obj, function() {
         return JSON.stringify(obj, null, 4);
       }))));
-    }), example("Map", "Creates a new model that maps the value of a model. ", function() {
-      var count;
-      count = object({
-        value: 1
-      });
-      return body(button("+1", function() {
-        return count.value++;
-      }).bindDisabled(map(bind(count.value), function() {
-        return count.value > 3;
-      })), span(bind(count.value)));
     }));
+  };
+
+}).call(this);
+// Generated by CoffeeScript 1.4.0
+(function() {
+  var bootstrap, docs, models;
+
+  docs = window.BC.namespace("docs");
+
+  docs.api = window.BC.namespace("docs.api");
+
+  bootstrap = window.BC.namespace("bootstrap");
+
+  models = window.BC.namespace("models");
+
+  $.extend(this, bootstrap, models, docs);
+
+  docs.api.store = function() {
+    return section(h1("Store"), docs.code.store(), p("Storing and syncing collections."), example("model", "Creates an observable value.", function() {}));
   };
 
 }).call(this);
@@ -1101,7 +1157,9 @@
       sendEmail = function(email) {
         var toSelector;
         toSelector = select(bind(email.contact_id)).foreach(data.contacts, function(contact) {
-          return option(contact.email, contact.id);
+          return option({
+            value: contact.id
+          }, contact.email);
         });
         return form.horizontal({
           From: span(currentUser),
@@ -1383,7 +1441,11 @@
         return obj;
       };
       games = collection();
-      pusher(games, 'games', getId);
+      pusher(games, 'games', getId, -1, function(game1, game2) {
+        if (game1.turn === game2.turn) {
+          return game1.set(game2);
+        }
+      });
       content = model();
       boardFull = function(game) {
         var i, j, _i, _j;
@@ -1415,15 +1477,15 @@
             return _results;
           }
         };
-        if (boardFull(game)) {
-          game.finished = "Game finished.";
-        }
         for (i = _i = 0; _i < 3; i = ++_i) {
           check(i, 0, 0, 1);
           check(0, i, 1, 0);
         }
         check(0, 0, 1, 1);
-        return check(2, 0, -1, 1);
+        check(2, 0, -1, 1);
+        if (boardFull(game) && !game.finished) {
+          return game.finished = "Game finished.";
+        }
       };
       icon = function(value) {
         if (value === state.TIC) {
@@ -1556,17 +1618,17 @@
       "class": 'hero-unit'
     }, h1("Enter kiro.js"), br(), a({
       href: 'bundle.zip'
-    }, "Download developer bundle")), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
+    }, "Download developer bundle"), br(), div("<iframe src=\"http://ghbtns.com/github-btn.html?user=kiro&repo=shihai&type=watch&count=true&size=large\"\nallowtransparency=\"true\" frameborder=\"0\" scrolling=\"0\" width=\"170\" height=\"30\"></iframe>")), example("Declarative bindings", "Binds models to html and automatically updates it.", function() {
       var text;
       text = model("World");
       return body(input.text(text), h3(map(text, function() {
         return "Hello " + text();
       })));
-    }), example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", function() {
+    }), example("Bootstrap controls", "Api around bootstrap for building beautiful web apps.", function() {
       var text, user;
       user = object({
-        firstName: "Kiril",
-        lastName: "Minkov"
+        firstName: "Big",
+        lastName: "Sha"
       });
       text = model("");
       return body(h5("Buttons"), button.primary("Primary", function() {
@@ -1595,7 +1657,7 @@
           return td(row + ", " + col);
         });
       }), h5("And more..."));
-    }), example("Html templating", "Allows building responsive html components", function() {
+    }), example("Html templating", "Building responsive widgets.", function() {
       var text, textEdit;
       textEdit = function(text) {
         var content, edit, view;
@@ -1620,7 +1682,7 @@
       };
       text = model("Click to edit");
       return body(textEdit(text));
-    }), example("Todo", "", function() {
+    }), example("Todo", "Classic todo app.", function() {
       var done, notDone, remaining, todo, todoText, todos;
       todo = function(text, done) {
         if (done == null) {
@@ -1642,10 +1704,10 @@
         return todos.count(notDone) + " of " + todos.total() + " remaining";
       };
       todoText = model("");
-      return div(span(map(todos, remaining)), button.link("archive", function() {
+      return body(span(map(todos, remaining)), button.link("archive", function() {
         return todos.remove(done);
-      }), div().foreach(todos, function(todo) {
-        return form.inline(input.checkbox(bind(todo.done)), span(bind(todo.text)));
+      }), ul.unstyled().foreach(todos, function(todo) {
+        return li(input.checkbox(bind(todo.done)).label(span(bind(todo.text))));
       }), form.inline(input.text(todoText), button.primary('Add', function() {
         return todos.add(todo(todoText("")));
       })));
@@ -1980,9 +2042,7 @@
         return div(input.text({
           placeholder: "Search"
         }, query).on('keyup', function() {
-          return projects.filter(function(item) {
-            return JSON.stringify(item).toLowerCase().indexOf(query().toLowerCase()) !== -1;
-          });
+          return projects.filter(query.toLowerCase());
         }), table(thead(tr(th(td("Project"), td("Description"), td(a('+', function() {
           return content(addProject());
         })))))).foreach(projects, function(project) {
