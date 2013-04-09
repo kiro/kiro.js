@@ -17,7 +17,7 @@
       "class": 'hero-unit'
     }, h1("Enter kiro.js"), br(), a({
       href: 'bundle.zip'
-    }, "Download developer bundle")), example("Declarative bindings", "Binds models to html and automatically updates it.", function() {
+    }, "Download developer bundle"), div("<iframe src=\"http://ghbtns.com/github-btn.html?user=kiro&repo=shihai&type=watch&count=true&size=large\"\nallowtransparency=\"true\" frameborder=\"0\" scrolling=\"0\" width=\"170\" height=\"30\"></iframe>")), example("Declarative bindings", "Binds models to html and automatically updates it.", function() {
       var text;
       text = model("World");
       return body(input.text(text), h3(map(text, function() {
@@ -103,10 +103,10 @@
         return todos.count(notDone) + " of " + todos.total() + " remaining";
       };
       todoText = model("");
-      return div(span(map(todos, remaining)), button.link("archive", function() {
+      return body(span(map(todos, remaining)), button.link("archive", function() {
         return todos.remove(done);
-      }), div().foreach(todos, function(todo) {
-        return form.inline(input.checkbox(bind(todo.done)), span(bind(todo.text)));
+      }), ul.unstyled().foreach(todos, function(todo) {
+        return li(input.checkbox(bind(todo.done)).label(span(bind(todo.text))));
       }), form.inline(input.text(todoText), button.primary('Add', function() {
         return todos.add(todo(todoText("")));
       })));

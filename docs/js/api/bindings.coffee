@@ -181,7 +181,7 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".onInit", """ Executes a callback when a dom elemnet is created. Useful for calling jquery plugins.""", ->
+  example(".onInit", """ Executes a callback when a dom element is created. Useful for calling jquery plugins.""", ->
     city = model("")
     cities = ["Sofia", "London", "San Francisco", "Palo Alto"]
     body(

@@ -12,6 +12,8 @@ docs.home.index = () -> section(
     h1("Enter kiro.js")
     br()
     a(href: 'bundle.zip', "Download developer bundle")
+    div("""<iframe src="http://ghbtns.com/github-btn.html?user=kiro&repo=shihai&type=watch&count=true&size=large"
+        allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>""")
   )
 
   example("Declarative bindings", """Binds models to html and automatically updates it.""", ->
@@ -99,13 +101,13 @@ docs.home.index = () -> section(
 
     todoText = model("")
 
-    div(
+    body(
       span(map(todos, remaining)),
       button.link("archive", -> todos.remove(done)),
-      div().foreach(todos, (todo) ->
-        form.inline(
-          input.checkbox(bind(todo.done)),
-          span(bind(todo.text))
+      ul.unstyled().foreach(todos, (todo) ->
+        li(
+          input.checkbox(bind(todo.done))
+            .label(span(bind(todo.text)))
         )
       ),
       form.inline(

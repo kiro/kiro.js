@@ -32,7 +32,7 @@ docs.examples.chat = -> section(h1("Chat"),
 
       lastSeen = {}
       pusher(users, 'users', ((item) -> item._id), 5)
-      # filter the users which haven't been updated in the last 1 seconds
+      # filter the users which haven't been updated in the last 15 seconds
       users.filter((user) -> user._id != currentUser._id and
         (!lastSeen[user._id] or (Date.now() - lastSeen[user._id]) < 15 * 1000))
       # if a user is updated, record the time of update

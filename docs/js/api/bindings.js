@@ -159,7 +159,7 @@
       }), form.inline(input.text(text), button("Add", function() {
         return messages.add(text(""));
       })));
-    }), example(".onInit", " Executes a callback when a dom elemnet is created. Useful for calling jquery plugins.", function() {
+    }), example(".onInit", " Executes a callback when a dom element is created. Useful for calling jquery plugins.", function() {
       var cities, city;
       city = model("");
       cities = ["Sofia", "London", "San Francisco", "Palo Alto"];
