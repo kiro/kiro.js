@@ -55,7 +55,9 @@ docs.examples.email = -> section(h1("Email"),
 
     sendEmail = (email) ->
       toSelector = select(bind(email.contact_id))
-        .foreach(data.contacts, (contact) -> option({value: contact.id}, contact.email))
+        .foreach(data.contacts, (contact) ->
+          option({value: contact.id}, contact.email)
+        )
 
       form.horizontal(
         From: span(currentUser)

@@ -13,7 +13,7 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.api.bindings = function() {
-    return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
+    return section(h1("Bindings"), docs.code.bindings(), p("Each html element has bindings, which allow to bind the value of a certain\nproperty to a model. The bindings update automatically when the model changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
       var cities, married, password, search, selectedCity, sex, text, textareaValue;
       text = model("initial");
       sex = model("female");
@@ -51,7 +51,9 @@
         'Textarea': div(textarea(textareaValue), h5(textareaValue))
       }));
     }), example("Html bindings", "Html element can accept one model and bind their html content to it.", function() {
-      var i, items;
+      var content, i, items, text;
+      text = model("");
+      content = model();
       items = [
         button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(text), button.info("Clear", function() {
           return text("");
@@ -132,7 +134,7 @@
           return "Show";
         }
       }), button.primary("Button").bindVisible(visible));
-    }), example(".foreach", "Binds the content of an element to a collection.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection of items</li>\n<li>render(item, index) - takes an element and optional index and renders the item</li>\n</ul>", function() {
+    }), example(".foreach", "Binds the content of an element to a collection. The content is updated efficiently when the\ncollection is changed.\n<code>.foreach(collection, render)</code>\n<ul>Parameters\n<li>collection - collection or array</li>\n<li>render(item, index) - takes an element and optional index and renders the item</li>\n</ul>", function() {
       var numbers;
       numbers = collection([5, 3, 2, 7]);
       return body(div().foreach(numbers, function(number, index) {

@@ -8,9 +8,8 @@ $.extend(this, bootstrap, models, docs)
 docs.api.bindings = -> section(h1("Bindings"),
   docs.code.bindings()
 
-  p("""Each html element offers number of bindings, which allow to bind the value of a certain
-      property to a model. The values of the bindings update automatically when the
-      model changes.
+  p("""Each html element has bindings, which allow to bind the value of a certain
+      property to a model. The bindings update automatically when the model changes.
     """)
   example("Value bindings", """
     Input elements can accept one model and bind their value to it.
@@ -62,10 +61,15 @@ docs.api.bindings = -> section(h1("Bindings"),
   )
 
   example("Html bindings", """Html element can accept one model and bind their html content to it.""", ->
+    text = model("")
+    content = model()
     items = [
       button.warning("Button"),
       "<h2>Test</h2>",
-      form.inline(input.text(text), button.info("Clear", -> text("")))
+      form.inline(
+        input.text(text),
+        button.info("Clear", -> text(""))
+      )
     ]
     i = 0
     content(items[0])
@@ -133,10 +137,11 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".foreach", """Binds the content of an element to a collection.
+  example(".foreach", """Binds the content of an element to a collection. The content is updated efficiently when the
+                      collection is changed.
                       <code>.foreach(collection, render)</code>
                       <ul>Parameters
-                      <li>collection - collection of items</li>
+                      <li>collection - collection or array</li>
                       <li>render(item, index) - takes an element and optional index and renders the item</li>
                       </ul>
                       """, ->

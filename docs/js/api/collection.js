@@ -15,7 +15,7 @@
   showCollection = function() {};
 
   docs.api.collection = function() {
-    return section(h1("Collection"), docs.code.collection(), example("collection", "collection is a function.\n<p><code>items = collection(array)</code> constructs a new collection</p>\n<p><code>items()</code> returns the values in the collection</p>\n<p><code>items([1, 2, 3])</code> replaces all values in a collection</p>", function() {
+    return section(h1("Collection"), docs.code.collection(), example("collection", "Collection contains items. If the items are models it subscribes to them\nand the collection is updated when a model changes.\n<p><code>items = collection(array)</code> constructs a new collection</p>\n<p><code>items()</code> returns the values in the collection</p>\n<p><code>items([1, 2, 3])</code> replaces all values in a collection</p>", function() {
       var items;
       items = collection([1, 2, 3]);
       showCollection = function(collection) {
@@ -144,7 +144,7 @@
       }), button('at', function() {
         return result(numbers.at(Number(value(""))));
       })));
-    }));
+    }), example("Collection containing models", "", function() {}));
   };
 
 }).call(this);

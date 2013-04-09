@@ -11,7 +11,8 @@ docs.api.collection = -> section(h1("Collection"),
   docs.code.collection()
 
   example("collection", """
-                        collection is a function.
+                        Collection contains items. If the items are models it subscribes to them
+                        and the collection is updated when a model changes.
                         <p><code>items = collection(array)</code> constructs a new collection</p>
                         <p><code>items()</code> returns the values in the collection</p>
                         <p><code>items([1, 2, 3])</code> replaces all values in a collection</p>
@@ -192,5 +193,9 @@ docs.api.collection = -> section(h1("Collection"),
         button('at', -> result(numbers.at(Number(value("")))))
       )
     )
+  )
+
+  example("Collection containing models", "", ->
+
   )
 )
