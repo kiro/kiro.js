@@ -1436,7 +1436,9 @@
           finished: false
         });
         window.setInterval((function() {
-          return obj.lastSeen = Date.now();
+          if (obj.players.count() < 2) {
+            return obj.lastSeen = Date.now();
+          }
         }), 10 * 1000);
         return obj;
       };
