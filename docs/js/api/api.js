@@ -19,10 +19,10 @@
     return div(div().span3(nav(a({
       href: '#/api/model/'
     }, "Model"), a({
-      href: '#/api/bindings/'
-    }, "Bindings"), a({
       href: '#/api/collection/'
-    }, "Collection"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
+    }, "Collection"), a({
+      href: '#/api/bindings/'
+    }, "Bindings"), docs.toLi).addClass('nav-list bs-docs-sidenav sidenav affix')), div().span9(content));
   };
 
 }).call(this);

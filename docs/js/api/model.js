@@ -13,17 +13,16 @@
   $.extend(this, bootstrap, models, docs);
 
   docs.api.model = function() {
-    return section(h1("Model"), docs.code.model(), p("Models constructs observables from values or objects."), example("Model", "Creates an observable value. <code>x = model(value)</code> creates a new observable.\nCalling <code>x()</code> gets the value of the observable. <code>x(newValue)</code> sets\nthe value of the observable. Observable values can be bound to properties of the dom elements\nand they will be automatically updated when the value changes.", function() {
+    return section(h1("Models"), docs.code.model(), example("model", "Creates an observable value.\n<p><code>x = model(value)</code> creates a new observable.</p>\n<p><code>x()</code> gets the value. </p>\n<p><code>x(newValue)</code> sets a new value </p>\n<p>Observable values can be bound to properties of the dom elements\nand they will be automatically updated when the value changes.<p>", function() {
       var count, text;
       count = model(0);
-      text = model("");
-      count.subscribe(function() {
-        return text("Total count " + count());
+      text = map(count, function() {
+        return "Total count " + count();
       });
       return body(button.primary("+1", function() {
         return count(count() + 1);
       }), span(text));
-    }), example("Object", "Using <code>object(obj)</code> makes a new object each field of\nwhich is observable. Nested objects are also converted to observable\nand nested arrays to collection, the objects it arrays are also converted to\nobservables. To get the observable for a field <code>bind(obj.field)</code> must\nbe used. Changes to a field within the object are propagated upwards,\nso if you subscribe to an object changes to all fields and subfields will\nresult calling the subscription.", function() {
+    }), example("object", "<p><code>object(obj)</code> - converts a javascript object to observable</p>\n<p>It creates a model for the object itself and for each field recursively.\n   All fields and subfields can be bound to. Arrays are converted to collections.</p>\n<p> <code>obj.field += 1</code> fields can be accessed normally. </p>\n<p> <code>bind(obj.field)</code> returns the model for a field. </p>\n\n<p> If a field or sub field in an object is changed, the change is propagated through all observables up to the root object.<p>", function() {
       var location, obj;
       obj = object({
         name: "Kiril Minkov",
@@ -54,16 +53,6 @@
       }), pre(code(map(obj, function() {
         return JSON.stringify(obj, null, 4);
       }))));
-    }), example("Map", "Creates a new model that maps the value of a model. ", function() {
-      var count;
-      count = object({
-        value: 1
-      });
-      return body(button("+1", function() {
-        return count.value++;
-      }).bindDisabled(map(bind(count.value), function() {
-        return count.value > 3;
-      })), span(bind(count.value)));
     }));
   };
 

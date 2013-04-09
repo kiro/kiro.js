@@ -15,10 +15,9 @@
   showCollection = function() {};
 
   docs.api.collection = function() {
-    return section(h1("Collection"), docs.code.collection(), p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> "), example(".add", "<p><code>.add(value)</code> Appends an item to the collection. </p>", function() {
-      var numbers, value;
-      numbers = collection([1, 2, 3]);
-      value = model("");
+    return section(h1("Collection"), docs.code.collection(), example("collection", "collection is a function.\n<p><code>items = collection(array)</code> constructs a new collection</p>\n<p><code>items()</code> returns the values in the collection</p>\n<p><code>items([1, 2, 3])</code> replaces all values in a collection</p>", function() {
+      var items;
+      items = collection([1, 2, 3]);
       showCollection = function(collection) {
         return div({
           "class": 'circles'
@@ -30,18 +29,27 @@
           });
         });
       };
+      return body(showCollection(items), button('Set', function() {
+        return items([4, 5, 6]);
+      }));
+    }), example(".add", "<p><code>.add(value)</code> adds an item to the collection. </p>", function() {
+      var numbers, value;
+      numbers = collection([1, 2, 3]);
+      value = model("");
       return body(showCollection(numbers), form.inline(input.text(value), button.success('Add', function() {
         return numbers.add(value(""));
       })));
-    }), example(".remove", "<p><code>.remove(item)</code> removes item.</p>\n<p><code>.remove(predicate)</code> remove all items that match the predicate.</p>", function() {
+    }), example(".remove", "<p><code>.remove(item)</code> removes item</p>\n<p><code>.remove(predicate)</code> remove all items that match the predicate.</p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);
-      biggerThan = function(number) {
-        return number > limit();
+      biggerThan = function(value) {
+        return function(number) {
+          return number > value;
+        };
       };
       return body(form.inline(button.danger("Remove", function() {
-        return numbers.remove(biggerThan);
+        return numbers.remove(biggerThan(limit()));
       }), " bigger than ", input.text(limit)), "or click on a number to remove it", showCollection(numbers));
     }), example(".clear", "Removes all items from a collection.", function() {
       var numbers;
@@ -49,7 +57,7 @@
       return body(showCollection(numbers), button.danger("clear", function() {
         return numbers.clear();
       }));
-    }), example(".filter", "Filters items from the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>", function() {
+    }), example(".filter", "Filters items in the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all of the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);
@@ -86,7 +94,7 @@
       })), p(map(numbers, function() {
         return 'Even ' + numbers.total(even);
       })));
-    }), example(".find", "<p><code>.find(predicate)</code> gets the items matching the predicate.</p>\nIf there is only one match it returns it.\nIf there are multiple matches it returns an array.", function() {
+    }), example(".find", "<p><code>.find(predicate)</code> gets the items matching the predicate.</p>\nIf there is only one match it returns the value.\nIf there are multiple matches it returns an array.", function() {
       var byId, user, users;
       user = function(id, name) {
         return {
@@ -103,46 +111,39 @@
       return body(p(JSON.stringify(users.find(byId(1)))), p(JSON.stringify(users.find(function(item) {
         return item.id > 1;
       }))));
-    }), example(".at", "<p><code>.at(index)</code> gets the element at position index.</p>", function() {
-      var user, users;
-      user = function(id, name) {
-        return {
-          id: id,
-          name: name
-        };
-      };
-      users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")]);
-      return body(p(JSON.stringify(users.at(1))), p(JSON.stringify(users.at(2))));
-    }), example(".sort", "<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order ", function() {
-      var numbers, text;
+    }), example(".sort", "<p>Sorts the elements in the collection and maintains the collection in sorted order.</p>\n<p><code>sort()</code> sorts the items using default ordering.</p>\n<p><code>sort(comparator)</code> sorts the items using a comparator.</p>", function() {
+      var comparator, factor, numbers, text;
       numbers = collection([2, 6, 3]);
       numbers.sort();
+      factor = 1;
+      comparator = function(left, right) {
+        if (left > right) {
+          return 1 * factor;
+        } else if (left < right) {
+          return -1 * factor;
+        } else {
+          return 0;
+        }
+      };
       text = model("");
-      return body("Click on a number to remove it", showCollection(numbers), form.inline(input.text(text), button("Add", function() {
-        return numbers.add(Number(text()));
+      return body("Click on a number to remove it", showCollection(numbers), form.inline(input.text(text), button.primary("Add", function() {
+        return numbers.add(text() ? Number(text("")) : void 0);
+      })), button.warning('Reverse sorting', function() {
+        factor *= -1;
+        return numbers.sort(comparator);
+      }));
+    }), example(".indexOf, .contains, .at", "<p><code>indexOf(item)</code> returns the index of an item in the collection or -1 if it's not present.</p>\n<p><code>contains(item)</code> returns true if an item is in the collection</p>\n<p><code>at(index)</code> returns the item at index</p>", function() {
+      var numbers, result, value;
+      numbers = collection([1, 2, 3, 4, 5]);
+      result = model("");
+      value = model("");
+      return body(showCollection(numbers), p(result), form.inline(input.text(value).span1(), button('indexOf', function() {
+        return result(numbers.indexOf(Number(value(""))));
+      }), button('contains', function() {
+        return result(numbers.contains(Number(value(""))));
+      }), button('at', function() {
+        return result(numbers.at(Number(value(""))));
       })));
-    }), example(".subscribe", "<code>subscribe(handler)</code>Subscribes to changes in the collection. This includes changes to the models\nwithin the collection. The subscription handler receives the items in the collection\nand a string which describes the changed value.", function() {
-      var count, pathModel, player, players, values;
-      player = object({
-        name: "Name",
-        count: 0
-      });
-      count = model(2);
-      pathModel = model("");
-      values = model();
-      players = collection([player, count, 3]);
-      players.subscribe(function(items, path) {
-        pathModel(path);
-        return values(JSON.stringify(items));
-      });
-      return body(form({
-        "Name": input.text(bind(player.name)),
-        "Count": input.text(bind(player.count))
-      }), form.inline(span(count), button("+1", function() {
-        return count(count() + 1);
-      }), button("-1", function() {
-        return count(count() - 1);
-      })), "Path : ", span(pathModel), pre(code(values)));
     }));
   };
 

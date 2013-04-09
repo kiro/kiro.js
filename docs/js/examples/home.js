@@ -17,17 +17,17 @@
       "class": 'hero-unit'
     }, h1("Enter kiro.js"), br(), a({
       href: 'bundle.zip'
-    }, "Download developer bundle")), example("Declarative bindings", "Allows to bind the values of html properties to models.", function() {
+    }, "Download developer bundle")), example("Declarative bindings", "Binds models to html and automatically updates it.", function() {
       var text;
       text = model("World");
       return body(input.text(text), h3(map(text, function() {
         return "Hello " + text();
       })));
-    }), example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", function() {
+    }), example("Bootstrap controls", "Api around bootstrap for building beautiful web apps.", function() {
       var text, user;
       user = object({
-        firstName: "Kiril",
-        lastName: "Minkov"
+        firstName: "Big",
+        lastName: "Sha"
       });
       text = model("");
       return body(h5("Buttons"), button.primary("Primary", function() {
@@ -56,7 +56,7 @@
           return td(row + ", " + col);
         });
       }), h5("And more..."));
-    }), example("Html templating", "Allows building responsive html components", function() {
+    }), example("Html templating", "Building responsive widgets.", function() {
       var text, textEdit;
       textEdit = function(text) {
         var content, edit, view;
@@ -81,7 +81,7 @@
       };
       text = model("Click to edit");
       return body(textEdit(text));
-    }), example("Todo", "", function() {
+    }), example("Todo", "Classic todo app.", function() {
       var done, notDone, remaining, todo, todoText, todos;
       todo = function(text, done) {
         if (done == null) {

@@ -10,8 +10,8 @@ docs.api.index = (content = docs.api.model()) ->
     div().span3(
       nav(
         a(href: '#/api/model/', "Model")
-        a(href: '#/api/bindings/', "Bindings")
         a(href: '#/api/collection/', "Collection")
+        a(href: '#/api/bindings/', "Bindings")
         docs.toLi
       ).addClass('nav-list bs-docs-sidenav sidenav affix')
     )

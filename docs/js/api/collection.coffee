@@ -9,11 +9,14 @@ showCollection = ->
 
 docs.api.collection = -> section(h1("Collection"),
   docs.code.collection()
-  p("Collection is a function and it's value can be set using <code>collection([1, 2, 3])</code> and get using <code>collection()</code> ")
 
-  example(".add", """<p><code>.add(value)</code> Appends an item to the collection. </p>""", ->
-    numbers = collection([1, 2, 3])
-    value = model("")
+  example("collection", """
+                        collection is a function.
+                        <p><code>items = collection(array)</code> constructs a new collection</p>
+                        <p><code>items()</code> returns the values in the collection</p>
+                        <p><code>items([1, 2, 3])</code> replaces all values in a collection</p>
+                        """, ->
+    items = collection([1, 2, 3])
 
     # This function will be used in all examples
     showCollection = (collection) ->
@@ -21,6 +24,16 @@ docs.api.collection = -> section(h1("Collection"),
         .foreach(collection, (item) ->
           div(class: 'circle', item).on('click', -> collection.remove(item))
         )
+
+    body(
+      showCollection(items)
+      button('Set', -> items([4, 5, 6]))
+    )
+  )
+
+  example(".add", """<p><code>.add(value)</code> adds an item to the collection. </p>""", ->
+    numbers = collection([1, 2, 3])
+    value = model("")
 
     body(
       showCollection(numbers)
@@ -31,16 +44,16 @@ docs.api.collection = -> section(h1("Collection"),
     )
   )
 
-  example(".remove", """<p><code>.remove(item)</code> removes item.</p>
+  example(".remove", """<p><code>.remove(item)</code> removes item</p>
                         <p><code>.remove(predicate)</code> remove all items that match the predicate.</p>""", ->
     numbers = collection([1, 2, 3, 4, 5, 6])
     limit = model(3)
 
-    biggerThan = (number) -> number > limit()
+    biggerThan = (value) -> ((number) -> number > value)
 
     body(
       form.inline(
-        button.danger("Remove", -> numbers.remove(biggerThan)),
+        button.danger("Remove", -> numbers.remove(biggerThan(limit()))),
         " bigger than ",
         input.text(limit)
       ),
@@ -59,8 +72,8 @@ docs.api.collection = -> section(h1("Collection"),
   )
 
   example(".filter", """
-                    Filters items from the collection. The filtered items are not removed and
-                    once a new filter is set it's applied on all the initial items.
+                    Filters items in the collection. The filtered items are not removed and
+                    once a new filter is set it's applied on all of the initial items.
 
                     <p><code>.filter(predicate)</code> filters all items that match the predicate </p>
                     """, ->
@@ -115,7 +128,7 @@ docs.api.collection = -> section(h1("Collection"),
   )
 
   example(".find", """<p><code>.find(predicate)</code> gets the items matching the predicate.</p>
-                      If there is only one match it returns it.
+                      If there is only one match it returns the value.
                       If there are multiple matches it returns an array.
                    """, ->
     user = (id, name) ->
@@ -131,57 +144,50 @@ docs.api.collection = -> section(h1("Collection"),
     )
   )
 
-  example(".at", """<p><code>.at(index)</code> gets the element at position index.</p>""", ->
-    user = (id, name) ->
-      id: id
-      name: name
-
-    users = collection([user(1, "Check"), user(2, "Test user"), user(3, "User 123")])
-
-    body(
-      p(JSON.stringify(users.at(1)))
-      p(JSON.stringify(users.at(2)))
-    )
-  )
-
-  example(".sort", """<code>sort([optional]comparator)</code> Sorts the elements in the collection and maintains the collection in sorted order """, ->
+  example(".sort", """<p>Sorts the elements in the collection and maintains the collection in sorted order.</p>
+                      <p><code>sort()</code> sorts the items using default ordering.</p>
+                      <p><code>sort(comparator)</code> sorts the items using a comparator.</p>
+                   """, ->
     numbers = collection([2, 6, 3])
     numbers.sort()
+
+    factor = 1
+    comparator = (left, right) ->
+      if left > right then 1 * factor
+      else if left < right then -1 * factor
+      else 0
 
     text = model("")
     body(
       "Click on a number to remove it"
       showCollection(numbers)
-      form.inline(input.text(text), button("Add", -> numbers.add(Number(text()))))
+      form.inline(input.text(text), button.primary("Add", -> numbers.add(Number(text("")) if text())))
+      button.warning('Reverse sorting', ->
+        factor *= -1
+        numbers.sort(comparator)
+      )
     )
   )
 
-  example(".subscribe", """<code>subscribe(handler)</code>Subscribes to changes in the collection. This includes changes to the models
-                        within the collection. The subscription handler receives the items in the collection
-                        and a string which describes the changed value.""", ->
-    player = object(name: "Name", count: 0)
-    count = model(2)
-    pathModel = model("")
-    values = model()
+  example(".indexOf, .contains, .at", """
+                                 <p><code>indexOf(item)</code> returns the index of an item in the collection or -1 if it's not present.</p>
+                                 <p><code>contains(item)</code> returns true if an item is in the collection</p>
+                                 <p><code>at(index)</code> returns the item at index</p>
+                                 """, ->
 
-    players = collection([player, count, 3])
-    players.subscribe((items, path) ->
-      pathModel(path)
-      values(JSON.stringify(items))
-    )
+    numbers = collection([1, 2, 3, 4, 5])
+    result = model("")
+    value = model("")
 
     body(
-      form(
-        "Name": input.text(bind(player.name))
-        "Count": input.text(bind(player.count))
-      )
+      showCollection(numbers)
+      p(result)
       form.inline(
-        span(count),
-        button("+1", -> count(count() + 1))
-        button("-1", -> count(count() - 1))
+        input.text(value).span1()
+        button('indexOf', -> result(numbers.indexOf(Number(value("")))))
+        button('contains', -> result(numbers.contains(Number(value("")))))
+        button('at', -> result(numbers.at(Number(value("")))))
       )
-      "Path : ", span(pathModel)
-      pre(code(values))
     )
   )
 )

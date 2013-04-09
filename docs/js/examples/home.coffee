@@ -14,7 +14,7 @@ docs.home.index = () -> section(
     a(href: 'bundle.zip', "Download developer bundle")
   )
 
-  example("Declarative bindings", """Allows to bind the values of html properties to models.""", ->
+  example("Declarative bindings", """Binds models to html and automatically updates it.""", ->
     text = model("World")
     body(
       input.text(text)
@@ -22,10 +22,10 @@ docs.home.index = () -> section(
     )
   )
 
-  example("Bootstrap controls", "Succint api around bootstrap controls allows building quick prototypes and web apps.", ->
+  example("Bootstrap controls", "Api around bootstrap for building beautiful web apps.", ->
     user = object(
-      firstName: "Kiril"
-      lastName: "Minkov"
+      firstName: "Big"
+      lastName: "Sha"
     )
 
     text = model("")
@@ -66,7 +66,7 @@ docs.home.index = () -> section(
     )
   )
 
-  example("Html templating", "Allows building responsive html components", ->
+  example("Html templating", "Building responsive widgets.", ->
     textEdit = (text) ->
       edit = () -> input.text({autofocus: true}, text)
         .on('blur', -> content(view()))
@@ -76,7 +76,6 @@ docs.home.index = () -> section(
         .on('click', -> content(edit()))
 
       content = model(view())
-
       div(content)
 
     text = model("Click to edit")
@@ -86,7 +85,7 @@ docs.home.index = () -> section(
     )
   )
 
-  example("Todo", "", ->
+  example("Todo", "Classic todo app.", ->
     todo = (text, done = false) -> object(
       text: text
       done: done
