@@ -1617,7 +1617,8 @@
     return section(docs.code.home(), div({
       "class": 'hero-unit'
     }, h1("Enter kiro.js"), br(), a({
-      href: 'bundle.zip'
+      href: 'bundle.zip',
+      "class": 'btn btn-success btn-large'
     }, "Download developer bundle"), br(), div("<iframe src=\"http://ghbtns.com/github-btn.html?user=kiro&repo=shihai&type=watch&count=true&size=large\"\nallowtransparency=\"true\" frameborder=\"0\" scrolling=\"0\" width=\"170\" height=\"30\"></iframe>")), example("Declarative bindings", "Binds models to html and automatically updates it.", function() {
       var text;
       text = model("World");
