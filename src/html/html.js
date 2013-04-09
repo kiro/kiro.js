@@ -164,6 +164,9 @@
   };
 
   html.body = function(composite) {
+    if (common.isModel(composite)) {
+      composite = html.div(composite);
+    }
     return $('body').html(common.element(composite));
   };
 
@@ -183,10 +186,6 @@
     }, items);
   };
 
-  html.option = function(text, value) {
-    return tag('option', {
-      value: value
-    })(text);
-  };
+  html.option = tag('option');
 
 }).call(this);

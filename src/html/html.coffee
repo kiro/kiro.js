@@ -108,6 +108,8 @@ html.a = (args...) ->
   tag('a', {href:'#'})(args...).on('click', click)
 
 html.body = (composite) ->
+  if common.isModel(composite)
+    composite = html.div(composite)
   $('body').html(
     common.element(composite)
   )
@@ -119,7 +121,7 @@ html.select = (items...) ->
     .on('change', (e) -> e.data.publish($(this).val()) )
   )
 html.select.multiple = (items...) -> bootstrap.select(multiple: 'multiple', items)
-html.option = (text, value) -> tag('option', value: value)(text)
+html.option = tag('option')
 
 #html.img
 #html.select
