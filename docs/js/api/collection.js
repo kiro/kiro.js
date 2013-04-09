@@ -57,7 +57,7 @@
       return body(showCollection(numbers), button.danger("clear", function() {
         return numbers.clear();
       }));
-    }), example(".filter", "Filters items in the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all of the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>", function() {
+    }), example(".filter", "Filters items in the collection. The filtered items are not removed and\nonce a new filter is set it's applied on all of the initial items.\n\n<p><code>.filter(predicate)</code> filters all items that match the predicate </p>\n<p><code>.filter(string)</code> filters all items whose json representation contains string</p>", function() {
       var biggerThan, limit, numbers;
       numbers = collection([1, 2, 3, 4, 5, 6]);
       limit = model(3);

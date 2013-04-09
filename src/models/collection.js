@@ -145,7 +145,20 @@
         });
       };
       collection.filter = function(arg) {
-        filter = toPredicate(arg);
+        if (_.isString(arg)) {
+          filter = function(item) {
+            var key, value;
+            for (key in item) {
+              value = item[key];
+              if (_.isString(value) && value.indexOf(arg) !== -1) {
+                return false;
+              }
+            }
+            return true;
+          };
+        } else {
+          filter = toPredicate(arg);
+        }
         return update(function() {
           return action(actions.UPDATE_VIEW, items);
         });

@@ -41,10 +41,8 @@ docs.examples.projects = -> section(h1("Projects"),
     projectList = () ->
       query = model("")
       div(
-        input.text(placeholder: "Search", query).on('keyup',
-          -> projects.filter((item) ->
-            JSON.stringify(item).toLowerCase()
-              .indexOf(query().toLowerCase()) != -1))
+        input.text(placeholder: "Search", query)
+          .on('keyup', -> projects.filter(query.toLowerCase()))
         table(thead(tr(th(
           td("Project"),
           td("Description"),

@@ -118,7 +118,14 @@ window.BC.define('models', (models) ->
     #
     # arg can be a function or a value
     collection.filter = (arg) ->
-      filter = toPredicate(arg)
+      if _.isString(arg)
+        filter = (item) ->
+          for key, value of item
+            if _.isString(value) and value.indexOf(arg) != -1
+              return false
+          return true
+      else
+        filter = toPredicate(arg)
       update(-> action(actions.UPDATE_VIEW, items))
 
     # Counts the elements in the collection

@@ -77,6 +77,7 @@ docs.api.collection = -> section(h1("Collection"),
                     once a new filter is set it's applied on all of the initial items.
 
                     <p><code>.filter(predicate)</code> filters all items that match the predicate </p>
+                    <p><code>.filter(string)</code> filters all items whose json representation contains string</p>
                     """, ->
     numbers = collection([1, 2, 3, 4, 5, 6])
     limit = model(3)

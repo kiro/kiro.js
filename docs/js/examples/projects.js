@@ -72,9 +72,7 @@
         return div(input.text({
           placeholder: "Search"
         }, query).on('keyup', function() {
-          return projects.filter(function(item) {
-            return JSON.stringify(item).toLowerCase().indexOf(query().toLowerCase()) !== -1;
-          });
+          return projects.filter(query.toLowerCase());
         }), table(thead(tr(th(td("Project"), td("Description"), td(a('+', function() {
           return content(addProject());
         })))))).foreach(projects, function(project) {
