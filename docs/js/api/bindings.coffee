@@ -18,28 +18,50 @@ docs.api.bindings = -> section(h1("Bindings"),
     text = model("initial")
     sex = model("female")
     married = object(value: false)
+    selectedCity = model('San Francisco')
+    cities = ['London', 'Sofia', 'San Francisco', 'Palo Alto']
+    password = model("")
+    search = model("")
+    textareaValue = model("")
 
     body(
-      form.inline(
-        input.text(text)
-        span(text)
-        button.info("Clear", -> text(""))
+      form.horizontal(
+        'Radio' : div(
+          input.radio({name: "sex", value: "male"}, sex).inlineLabel("Male")
+          input.radio({name: "sex", value: "female"}, sex).inlineLabel("Female")
+          input.radio({name: "sex", value: "other"}, sex).inlineLabel("Other")
+          h5(sex)
+        )
+
+        'Checkbox' : div(
+          input.checkbox(bind(married.value)).label("Married")
+          h5(bind(married.value))
+        )
+
+        'Select' : div(
+          select(selectedCity).foreach(cities, (city) -> option(value: city, city))
+          h5(selectedCity)
+        )
+
+        'Password' : div(
+          input.text(type: 'password', password)
+          h5(password)
+        )
+
+        'Search' : div(class: 'padded',
+          input.search(search)
+          h5(search)
+        )
+
+        'Textarea' : div(
+          textarea(textareaValue)
+          h5(textareaValue)
+        )
       )
-
-      input.radio({name: "sex", value: "male"}, sex)
-      input.radio({name: "sex", value: "female"}, sex)
-      input.radio({name: "sex", value: "other"}, sex)
-      span(sex)
-
-      input.checkbox(bind(married.value))
-      span(bind(married.value))
     )
   )
 
-  example("Html bindings", """Html can accept one model and bind their html content to it.""", ->
-    text = model("")
-    content = model()
-
+  example("Html bindings", """Html element can accept one model and bind their html content to it.""", ->
     items = [
       button.warning("Button"),
       "<h2>Test</h2>",
@@ -49,10 +71,6 @@ docs.api.bindings = -> section(h1("Bindings"),
     content(items[0])
 
     body(
-      form.inline(
-        input.text(text)
-        h2(text)
-      )
       button("Next", -> content(items[++i % items.length]))
       h6("html")
       div(content)
@@ -60,8 +78,8 @@ docs.api.bindings = -> section(h1("Bindings"),
   )
 
   example(".bindCss", """<code>.bindCss(model, map)</code> binds css properties of an element to a model.
-                      It expects the value of the model to be an object whose fields are names of
-                      css properties and have corresponding values or it can map a model to css properties.""", ->
+                      It expects the map function to return an object whose fields are names of
+                      css properties.""", ->
     f = model((x) -> x)
 
     body(
@@ -81,7 +99,7 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model.", ->
+  example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model. The map function is expected to return a class name.", ->
     count = model(0)
 
     body(
@@ -91,7 +109,7 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled.", ->
+  example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled. The map function is expected to return a boolean.", ->
     number = model(0)
 
     isThree = -> number() == 3
@@ -105,7 +123,7 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible.", ->
+  example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible. The map function is expected to return a boolean.", ->
     visible = model(false)
 
     body(
@@ -148,7 +166,7 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".onUpdate", """ Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.""", ->
+  example(".onUpdate", """ Executes a callback when the DOM element is updated if a binding changes.""", ->
     text = model("")
     messages = collection(["123", "123", "123", "123"])
     body(
@@ -158,11 +176,12 @@ docs.api.bindings = -> section(h1("Bindings"),
     )
   )
 
-  example(".onInit", """ Executes a callback when a tag eleemnt is created. Useful for calling jquery plugins.""", ->
+  example(".onInit", """ Executes a callback when a dom elemnet is created. Useful for calling jquery plugins.""", ->
     city = model("")
-
+    cities = ["Sofia", "London", "San Francisco", "Palo Alto"]
     body(
-        input.text(city).onInit((el) -> el.typeahead(source: ["Sofia", "London", "San Francisco", "Palo Alto"]))
+        input.text(city)
+          .onInit((el) -> el.typeahead(source: cities))
     )
   )
 )

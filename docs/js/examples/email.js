@@ -71,7 +71,9 @@
       sendEmail = function(email) {
         var toSelector;
         toSelector = select(bind(email.contact_id)).foreach(data.contacts, function(contact) {
-          return option(contact.email, contact.id);
+          return option({
+            value: contact.id
+          }, contact.email);
         });
         return form.horizontal({
           From: span(currentUser),

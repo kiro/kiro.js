@@ -49,7 +49,7 @@ docs.api.model = -> section(h1("Models"),
         "Cool": input.checkbox(bind(obj.cool))
         "Age": input.text(bind(obj.age))
         "Locations" : [
-          div().foreach(obj.locations, (location) ->
+          div(class: 'padded').foreach(obj.locations, (location) ->
             span(
               type.label(location).on('click', -> obj.locations.remove(location))
               "&nbsp;"

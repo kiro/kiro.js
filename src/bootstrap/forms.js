@@ -128,15 +128,7 @@
         multiple: 'multiple'
       });
     };
-    bootstrap.option = function(text, value, selected) {
-      if (selected == null) {
-        selected = false;
-      }
-      return tag('option', {
-        value: value,
-        selected: selected
-      })(text);
-    };
+    bootstrap.option = tag('option');
     bootstrap.textarea = function() {
       var items, model;
       items = 1 <= arguments.length ? __slice.call(arguments, 0) : [];

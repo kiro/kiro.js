@@ -161,7 +161,10 @@ docs.api.collection = -> section(h1("Collection"),
     body(
       "Click on a number to remove it"
       showCollection(numbers)
-      form.inline(input.text(text), button.primary("Add", -> numbers.add(Number(text("")) if text())))
+      form.inline(
+        input.text(text),
+        button.primary("Add", -> numbers.add(Number(text("")) if text()))
+      )
       button.warning('Reverse sorting', ->
         factor *= -1
         numbers.sort(comparator)

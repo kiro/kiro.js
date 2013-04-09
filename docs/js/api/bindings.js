@@ -14,28 +14,44 @@
 
   docs.api.bindings = function() {
     return section(h1("Bindings"), docs.code.bindings(), p("Each html element offers number of bindings, which allow to bind the value of a certain\nproperty to a model. The values of the bindings update automatically when the\nmodel changes."), example("Value bindings", "Input elements can accept one model and bind their value to it.", function() {
-      var married, sex, text;
+      var cities, married, password, search, selectedCity, sex, text, textareaValue;
       text = model("initial");
       sex = model("female");
       married = object({
         value: false
       });
-      return body(form.inline(input.text(text), span(text), button.info("Clear", function() {
-        return text("");
-      })), input.radio({
-        name: "sex",
-        value: "male"
-      }, sex), input.radio({
-        name: "sex",
-        value: "female"
-      }, sex), input.radio({
-        name: "sex",
-        value: "other"
-      }, sex), span(sex), input.checkbox(bind(married.value)), span(bind(married.value)));
-    }), example("Html bindings", "Html can accept one model and bind their html content to it.", function() {
-      var content, i, items, text;
-      text = model("");
-      content = model();
+      selectedCity = model('San Francisco');
+      cities = ['London', 'Sofia', 'San Francisco', 'Palo Alto'];
+      password = model("");
+      search = model("");
+      textareaValue = model("");
+      return body(form.horizontal({
+        'Radio': div(input.radio({
+          name: "sex",
+          value: "male"
+        }, sex).inlineLabel("Male"), input.radio({
+          name: "sex",
+          value: "female"
+        }, sex).inlineLabel("Female"), input.radio({
+          name: "sex",
+          value: "other"
+        }, sex).inlineLabel("Other"), h5(sex)),
+        'Checkbox': div(input.checkbox(bind(married.value)).label("Married"), h5(bind(married.value))),
+        'Select': div(select(selectedCity).foreach(cities, function(city) {
+          return option({
+            value: city
+          }, city);
+        }), h5(selectedCity)),
+        'Password': div(input.text({
+          type: 'password'
+        }, password), h5(password)),
+        'Search': div({
+          "class": 'padded'
+        }, input.search(search), h5(search)),
+        'Textarea': div(textarea(textareaValue), h5(textareaValue))
+      }));
+    }), example("Html bindings", "Html element can accept one model and bind their html content to it.", function() {
+      var i, items;
       items = [
         button.warning("Button"), "<h2>Test</h2>", form.inline(input.text(text), button.info("Clear", function() {
           return text("");
@@ -43,10 +59,10 @@
       ];
       i = 0;
       content(items[0]);
-      return body(form.inline(input.text(text), h2(text)), button("Next", function() {
+      return body(button("Next", function() {
         return content(items[++i % items.length]);
       }), h6("html"), div(content));
-    }), example(".bindCss", "<code>.bindCss(model, map)</code> binds css properties of an element to a model.\nIt expects the value of the model to be an object whose fields are names of\ncss properties and have corresponding values or it can map a model to css properties.", function() {
+    }), example(".bindCss", "<code>.bindCss(model, map)</code> binds css properties of an element to a model.\nIt expects the map function to return an object whose fields are names of\ncss properties.", function() {
       var f, _i, _results;
       f = model(function(x) {
         return x;
@@ -83,7 +99,7 @@
           };
         });
       }));
-    }), example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model.", function() {
+    }), example(".bindClass", "<code>.bindClass(model, map)</code> binds a class to a model. The map function is expected to return a class name.", function() {
       var count;
       count = model(0);
       return body(span(count), button("+1", function() {
@@ -93,7 +109,7 @@
           return 'btn-danger';
         }
       }));
-    }), example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled.", function() {
+    }), example(".bindDisabled", "<code>.bindDisabled(model, map)</code> Binds whether an element is disabled. The map function is expected to return a boolean.", function() {
       var isThree, number;
       number = model(0);
       isThree = function() {
@@ -104,7 +120,7 @@
       }).bindDisabled(number, isThree), p("That's too many clicks!", button('Reset Clicks', function() {
         return number(0);
       })).bindVisible(number, isThree));
-    }), example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible.", function() {
+    }), example(".bindVisible", "<code>.bindVisible(model, map)</code> Binds whether an element is visible. The map function is expected to return a boolean.", function() {
       var visible;
       visible = model(false);
       return body(button.success("Hide", function() {
@@ -128,7 +144,7 @@
       return body(div("Click me").on('click', function() {
         return clicks(clicks() + 1);
       }), "clicks : ", span(clicks));
-    }), example(".onUpdate", " Executes a callback when the DOM element is updated if a binding changes. Useful when want to do some jquery manipulation after an update.", function() {
+    }), example(".onUpdate", " Executes a callback when the DOM element is updated if a binding changes.", function() {
       var messages, text;
       text = model("");
       messages = collection(["123", "123", "123", "123"]);
@@ -141,12 +157,13 @@
       }), form.inline(input.text(text), button("Add", function() {
         return messages.add(text(""));
       })));
-    }), example(".onInit", " Executes a callback when a tag eleemnt is created. Useful for calling jquery plugins.", function() {
-      var city;
+    }), example(".onInit", " Executes a callback when a dom elemnet is created. Useful for calling jquery plugins.", function() {
+      var cities, city;
       city = model("");
+      cities = ["Sofia", "London", "San Francisco", "Palo Alto"];
       return body(input.text(city).onInit(function(el) {
         return el.typeahead({
-          source: ["Sofia", "London", "San Francisco", "Palo Alto"]
+          source: cities
         });
       }));
     }));

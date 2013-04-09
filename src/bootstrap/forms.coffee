@@ -75,7 +75,7 @@ window.BC.define('bootstrap', (bootstrap) ->
     )
   bootstrap.select.multiple = (model) ->
     bootstrap.select(model, {multiple: 'multiple'})
-  bootstrap.option = (text, value, selected = false) -> tag('option', {value: value, selected: selected})(text)
+  bootstrap.option = tag('option')
 
   # Textarea
   bootstrap.textarea = (items...) ->

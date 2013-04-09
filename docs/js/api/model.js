@@ -40,7 +40,9 @@
         "Cool": input.checkbox(bind(obj.cool)),
         "Age": input.text(bind(obj.age)),
         "Locations": [
-          div().foreach(obj.locations, function(location) {
+          div({
+            "class": 'padded'
+          }).foreach(obj.locations, function(location) {
             return span(type.label(location).on('click', function() {
               return obj.locations.remove(location);
             }), "&nbsp;");
