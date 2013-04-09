@@ -142,7 +142,8 @@ docs.examples.game = -> section(h1("Game"),
               ul.inline().foreach(game.players, (player) ->
                 li(player.name)
               )
-              p().muted('No players').bindVisible(game.players, -> game.players.count() == 0)
+              p().muted('No players')
+                .bindVisible(game.players, -> game.players.count() == 0)
             ).span3()
             td(
               button.primary("Join", ->
