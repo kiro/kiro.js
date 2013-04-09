@@ -70,7 +70,11 @@
         return obj;
       };
       games = collection();
-      pusher(games, 'games', getId);
+      pusher(games, 'games', getId, -1, function(game1, game2) {
+        if (game1.turn === game2.turn) {
+          return game1.set(game2);
+        }
+      });
       content = model();
       boardFull = function(game) {
         var i, j, _i, _j;
@@ -102,15 +106,15 @@
             return _results;
           }
         };
-        if (boardFull(game)) {
-          game.finished = "Game finished.";
-        }
         for (i = _i = 0; _i < 3; i = ++_i) {
           check(i, 0, 0, 1);
           check(0, i, 1, 0);
         }
         check(0, 0, 1, 1);
-        return check(2, 0, -1, 1);
+        check(2, 0, -1, 1);
+        if (boardFull(game) && !game.finished) {
+          return game.finished = "Game finished.";
+        }
       };
       icon = function(value) {
         if (value === state.TIC) {

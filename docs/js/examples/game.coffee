@@ -34,7 +34,7 @@ docs.examples.game = -> section(h1("Game"),
       obj
 
     games = collection()
-    pusher(games, 'games', getId)
+    pusher(games, 'games', getId, -1, (game1, game2) -> if game1.turn == game2.turn then game1.set(game2))
 
     content = model()
 
@@ -57,14 +57,14 @@ docs.examples.game = -> section(h1("Game"),
           for k in [0...3]
             game.state.at(y + dy * k).at(x + dx * k).mark = true
 
-      if boardFull(game)
-        game.finished = "Game finished."
-
       for i in [0...3]
         check(i, 0, 0, 1)
         check(0, i, 1, 0)
       check(0, 0, 1, 1)
       check(2, 0, -1, 1)
+
+      if boardFull(game) and !game.finished
+        game.finished = "Game finished."
 
     icon = (value) ->
       if value == state.TIC then '<i class="icon-circle-blank tic"/>'
