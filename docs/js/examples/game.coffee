@@ -34,7 +34,7 @@ docs.examples.game = -> section(h1("Game"),
       obj
 
     games = collection()
-    pusher(games, 'games', getId, -1, (game1, game2) -> if game1.turn == game2.turn then game1.set(game2))
+    pusher(games, 'games', getId)
 
     content = model()
 

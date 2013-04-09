@@ -70,11 +70,7 @@
         return obj;
       };
       games = collection();
-      pusher(games, 'games', getId, -1, function(game1, game2) {
-        if (game1.turn === game2.turn) {
-          return game1.set(game2);
-        }
-      });
+      pusher(games, 'games', getId);
       content = model();
       boardFull = function(game) {
         var i, j, _i, _j;

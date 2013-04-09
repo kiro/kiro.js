@@ -13,8 +13,7 @@ window.BC.define('store', (store) ->
   pusher = new Pusher('9e1249843e69a619bc84')
   channels = {}
 
-  store.pusher = (collection, channelName, id, request_rate = NO_LIMIT,
-                  merge = (item1, item2) -> item1.set(item2)) ->
+  store.pusher = (collection, channelName, id, request_rate = rates.NO_LIMIT) ->
     channelName = 'private-' + channelName
     if channels[channelName]
       for kay, value in bindings
