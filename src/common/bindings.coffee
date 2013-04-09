@@ -160,13 +160,13 @@ window.BC.define('common', (common) ->
           add(value, index)
 
       if _.isFunction(collection.subscribe)
-        collection.subscribe(
+        collection.subscribe( collection.actionHandler(
           replaceAll: renderAll
           updateView: renderAll
           add: add
           remove: removeItems
           update: updateItem
-        )
+        ))
       this
 
     # Gets the jquery dom element of the html element, sued mostly for testing, in practice

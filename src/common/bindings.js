@@ -255,13 +255,13 @@
             }
           };
           if (_.isFunction(collection.subscribe)) {
-            collection.subscribe({
+            collection.subscribe(collection.actionHandler({
               replaceAll: renderAll,
               updateView: renderAll,
               add: add,
               remove: removeItems,
               update: updateItem
-            });
+            }));
           }
           return this;
         },

@@ -185,7 +185,7 @@ window.BC.define('models', (models) ->
     # converts the collection to JSON
     collection.toJSON = () -> items
 
-    actionHandler = (handler) ->
+    collection.actionHandler = (handler) ->
       (items, action) ->
         if action.name == actions.REPLACE_ALL and handler.replaceAll
           handler.replaceAll(action.value)
@@ -200,8 +200,8 @@ window.BC.define('models', (models) ->
 
     storeHandlers = []
     collection.subscribeStore = (handler) ->
-      handler = this.subscribe(handler)
       storeHandlers.push(handler)
+      this.subscribe(handler)
 
     collection.disableStoreNotifications = () ->
       this.unsubscribe(handler) for handler in storeHandlers
@@ -210,14 +210,6 @@ window.BC.define('models', (models) ->
       this.subscribe(handler) for handler in storeHandlers
 
     $.extend(collection, o)
-
-    oldSubscribe = collection.subscribe
-    collection.subscribe = (handler) ->
-      handler = actionHandler(handler)
-      oldSubscribe.call(collection, handler)
-      handler
-
-    collection
 
   models.compareField = (field) ->
     (item1, item2) ->

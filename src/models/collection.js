@@ -34,7 +34,7 @@
       UPDATE: 'update'
     };
     models.collection = function(initial, o) {
-      var action, actionHandler, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, oldSubscribe, storeHandlers, toPredicate, update;
+      var action, allItems, callUpdate, collection, compareFunction, defaultCompare, filter, items, storeHandlers, toPredicate, update;
       if (initial == null) {
         initial = [];
       }
@@ -234,7 +234,7 @@
       collection.toJSON = function() {
         return items;
       };
-      actionHandler = function(handler) {
+      collection.actionHandler = function(handler) {
         return function(items, action) {
           if (action.name === actions.REPLACE_ALL && handler.replaceAll) {
             return handler.replaceAll(action.value);
@@ -251,8 +251,8 @@
       };
       storeHandlers = [];
       collection.subscribeStore = function(handler) {
-        handler = this.subscribe(handler);
-        return storeHandlers.push(handler);
+        storeHandlers.push(handler);
+        return this.subscribe(handler);
       };
       collection.disableStoreNotifications = function() {
         var handler, _i, _len, _results;
@@ -272,14 +272,7 @@
         }
         return _results;
       };
-      $.extend(collection, o);
-      oldSubscribe = collection.subscribe;
-      collection.subscribe = function(handler) {
-        handler = actionHandler(handler);
-        oldSubscribe.call(collection, handler);
-        return handler;
-      };
-      return collection;
+      return $.extend(collection, o);
     };
     models.compareField = function(field) {
       return function(item1, item2) {

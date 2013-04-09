@@ -58,11 +58,11 @@
         users.filter(function(user) {
           return user._id !== currentUser._id && (!lastSeen[user._id] || (Date.now() - lastSeen[user._id]) < 15 * 1000);
         });
-        return users.subscribe({
+        return users.subscribe(collection.actionHandler({
           update: function(user) {
             return lastSeen[user._id] = Date.now();
           }
-        });
+        }));
       };
       users = collection([currentUser]);
       presense(currentUser, users);

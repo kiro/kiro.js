@@ -29,12 +29,13 @@ window.BC.define('store', (store) ->
     remove = (items) -> channel.trigger('client-remove', items)
     update = (items) -> channel.trigger('client-update', items)
 
-    handler =
+    handler = collection.actionHandler(
       replaceAll: rate(replaceAll, request_rate, idempotent())
       updateView: (->)
       add: rate(add, request_rate, aggregate())
       remove: rate(remove, request_rate, aggregate())
       update: rate(update, request_rate, idempotent(id))
+    )
 
     channel.bind('pusher:subscription_succeeded', ->
       collection.subscribeStore(handler)

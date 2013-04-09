@@ -36,7 +36,8 @@ docs.examples.chat = -> section(h1("Chat"),
       users.filter((user) -> user._id != currentUser._id and
         (!lastSeen[user._id] or (Date.now() - lastSeen[user._id]) < 15 * 1000))
       # if a user is updated, record the time of update
-      users.subscribe(update: (user) -> lastSeen[user._id] = Date.now())
+      users.subscribe(collection.actionHandler(
+        update: (user) -> lastSeen[user._id] = Date.now()))
 
     users = collection([currentUser])
     presense(currentUser, users)
