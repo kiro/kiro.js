@@ -25,14 +25,23 @@ window.BC.define('bootstrap', (bootstrap) ->
     id = nextId()
     active = once("active")
     links = _.map(tabs, (tab, index) ->
-      a({id: id + "_" + index, 'data-toggle': 'tab'}, tab.name).on('click', tab.click)
+      tab_id = id + "_" + index
+
+      a({id: tab_id, 'data-toggle': 'tab', 'href': '#' + tab_id}, tab.name)
+        .on('click', ->
+           $(this).tab('show')
+           $('#' + id + ' div').removeClass('active')
+           $('#content-' + tab_id).addClass('active')
+
+           tab.click() if tab.click
+        )
     )
     tabList = bootstrap.nav(links...).addClass('nav-tabs')
 
     active = once("active")
-    content = div(class: 'tab-content')
+    content = div({id: id, class: 'tab-content'})
       .foreach(tabs, (tab, index) ->
-        div({id: id + "_" + index, class: 'tab-pane'}, tab.content).addClass(active())
+        div({id: 'content-' + id + "_" + index, class: 'tab-pane'}, tab.content).addClass(active())
       )
 
     $.extend(
