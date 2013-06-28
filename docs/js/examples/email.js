@@ -114,7 +114,7 @@
         var folder;
         return div().span10(p({
           "class": 'email-actions muted'
-        }, 'Select an email.').bindVisible(negate(selectedEmail)), button.group(button(icon.trash, "Delete", function() {
+        }, 'Select an email.').bindVisible(negate(selectedEmail)), button.group(button(icon.trash(), "Delete", function() {
           return selectedEmail(null).folders(['trash']);
         }).bindDisabled(selectedEmail, function() {
           if (selectedEmail()) {
@@ -131,11 +131,11 @@
             _results.push(a(folder, moveTo(folder)));
           }
           return _results;
-        })()), button(icon.forward, "Forward", function() {
+        })()), button(icon.forward(), "Forward", function() {
           return rightContent(sendEmail(email({
             subject: "FW: " + selectedEmail(null).subject
           })));
-        }), button(icon.pencil, "Reply", function() {
+        }), button(icon.pencil(), "Reply", function() {
           return rightContent(sendEmail(email({
             contact_id: selectedEmail().contact_id,
             subject: "RE: " + selectedEmail(null).subject

@@ -62,7 +62,7 @@
     }), example("Button toolbar", "Put groups of button together", function() {
       return body(button.toolbar(button.group(button("1"), button("2"), button("3")), button.group(button("4"), button("5")), button.group(button("6"))));
     }), example("Button group vertical", "Stack buttons vertically", function() {
-      return body(button.group.vertical(button(icon.arrow_down), button(icon.arrow_left), button(icon.arrow_right), button(icon.arrow_up)));
+      return body(button.group.vertical(button(icon.arrow_down()), button(icon.arrow_left()), button(icon.arrow_right()), button(icon.arrow_up())));
     }));
   };
 

@@ -101,10 +101,10 @@ docs.bootstrap.buttons = -> section(h1("Buttons"),
   example("Button group vertical", "Stack buttons vertically", ->
     body(
       button.group.vertical(
-        button(icon.arrow_down)
-        button(icon.arrow_left)
-        button(icon.arrow_right)
-        button(icon.arrow_up)
+        button(icon.arrow_down())
+        button(icon.arrow_left())
+        button(icon.arrow_right())
+        button(icon.arrow_up())
       )
     )
   )

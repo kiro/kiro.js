@@ -112,19 +112,19 @@
           _results = [];
           for (name in icon) {
             value = icon[name];
-            _results.push(value);
+            _results.push(value());
           }
           return _results;
         })()
       ]);
     }), example("Icon buttons", "Examples of using icons", function() {
-      return body(button(icon.asterisk, "Asterisk"), form({
-        "Email": prepend(icon.envelope, input.text())
+      return body(button(icon.asterisk(), "Asterisk"), form({
+        "Email": prepend(icon.envelope(), input.text())
       }), ul({
         "class": "nav nav-list"
       }, li({
         "class": "active"
-      }, a(icon.home, 'Home')), li(a(icon.book, 'Library')), li(a(icon.pencil, "Applications")), li(a("Misc"))));
+      }, a(icon.home(), 'Home')), li(a(icon.book(), 'Library')), li(a(icon.pencil(), "Applications")), li(a("Misc"))));
     }));
   };
 

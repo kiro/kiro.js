@@ -160,21 +160,21 @@ docs.bootstrap.forms = -> section(h1("Forms"),
 
   example("Icons", "Use <code>icon.</code> for the icons ", ->
     body(
-      [value for name, value of icon]
+      [value() for name, value of icon]
     )
   )
 
   example("Icon buttons", "Examples of using icons", ->
     body(
-      button(icon.asterisk, "Asterisk"),
+      button(icon.asterisk(), "Asterisk"),
       form(
-        "Email" : prepend(icon.envelope, input.text())
+        "Email" : prepend(icon.envelope(), input.text())
       )
 
       ul(class: "nav nav-list",
-        li({class: "active"}, a(icon.home, 'Home'))
-        li(a(icon.book, 'Library'))
-        li(a(icon.pencil, "Applications"))
+        li({class: "active"}, a(icon.home(), 'Home'))
+        li(a(icon.book(), 'Library'))
+        li(a(icon.pencil(), "Applications"))
         li(a("Misc"))
       )
     )

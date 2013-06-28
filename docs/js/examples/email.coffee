@@ -93,7 +93,7 @@ docs.examples.email = -> section(h1("Email"),
         p(class: 'email-actions muted', 'Select an email.')
           .bindVisible(negate(selectedEmail))
         button.group(
-          button(icon.trash, "Delete", ->
+          button(icon.trash(), "Delete", ->
             selectedEmail(null).folders(['trash'])
           )
            .bindDisabled(selectedEmail,
@@ -104,13 +104,13 @@ docs.examples.email = -> section(h1("Email"),
             (a(folder, moveTo(folder)) for folder in data.folders())
           )
 
-          button(icon.forward, "Forward", ->
+          button(icon.forward(), "Forward", ->
             rightContent(sendEmail(email(
               subject: "FW: " + selectedEmail(null).subject
             )))
           )
 
-          button(icon.pencil, "Reply", ->
+          button(icon.pencil(), "Reply", ->
             rightContent(sendEmail(email(
               contact_id: selectedEmail().contact_id,
               subject: "RE: " + selectedEmail(null).subject
