@@ -2,7 +2,7 @@ window.BC.define('bootstrap', (bootstrap) ->
 
   common = window.BC.namespace("common")
 
-  icon = (icon) -> "<i class='#{icon}'></i>"
+  icon = (icon) -> tag("i", class:"#{icon}")
 
   bootstrap.icon = tag('i')
   bootstrap.icon.glass = icon('icon-glass')

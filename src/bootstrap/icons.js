@@ -4,7 +4,9 @@
     var common, icon;
     common = window.BC.namespace("common");
     icon = function(icon) {
-      return "<i class='" + icon + "'></i>";
+      return tag("i", {
+        "class": "" + icon
+      });
     };
     bootstrap.icon = tag('i');
     bootstrap.icon.glass = icon('icon-glass');
